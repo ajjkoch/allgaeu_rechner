@@ -40,11 +40,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_sin,SIGNAL(released()),this,SLOT(sin_pressed()));
     connect(ui->pushButton_tan,SIGNAL(released()),this,SLOT(tan_pressed()));
     connect(ui->pushButton_log,SIGNAL(released()),this,SLOT(log_pressed()));
-    connect(ui->pushButton_ln,SIGNAL(released()),this,SLOT(ln_pressed()));
+    connect(ui->pushButton_ln ,SIGNAL(released()),this,SLOT(ln_pressed()));
     connect(ui->pushButton_exp,SIGNAL(released()),this,SLOT(exp_pressed()));
     connect(ui->pushButton_edx,SIGNAL(released()),this,SLOT(edx_pressed()));
     connect(ui->pushButton_mod,SIGNAL(released()),this,SLOT(mod_pressed()));
     connect(ui->pushButton_percent,SIGNAL(released()),this,SLOT(percent_pressed()));
+
+    connect(ui->pushButton_pi          , SIGNAL(released()), this, SLOT(pi_pressed()));
+    connect(ui->pushButton_cursor_left , SIGNAL(clicked()), this, SLOT(move_left_pressed()));
+    connect(ui->pushButton_cursor_right, SIGNAL(clicked()), this, SLOT(move_right_pressed()));
 
     ui->pushButton_plus->setCheckable(true);
     ui->pushButton_minus->setCheckable(true);
@@ -106,6 +110,62 @@ void MainWindow::on_pushButton_clear_released()
     ui->textEdit->clear();
     setRightAlignedText(ui->textEdit,m_strExpression);
 }
+
+void MainWindow::pi_pressed()
+{
+    insertRightAlignedText(ui->textEdit,"pi");
+}
+
+void MainWindow::move_left_pressed()
+{
+    ui->textEdit->setFocus();
+
+    // Get the current cursor from the text edit
+    QTextCursor cursor = ui->textEdit->textCursor();
+
+    // Move the cursor left
+    cursor.movePosition(QTextCursor::Left);
+
+    // Set the modified cursor back to the text edit
+    ui->textEdit->setTextCursor(cursor);
+
+    // Ensure the cursor is visible
+    ui->textEdit->ensureCursorVisible();
+
+    // Set the cursor visible
+    ui->textEdit->setCursorWidth(1); // Ensure cursor width is set to a visible size
+
+    // Update the text edit to reflect changes
+    ui->textEdit->repaint();
+
+    ui->textEdit->setFocus();
+}
+
+void MainWindow::move_right_pressed()
+{
+    ui->textEdit->setFocus();
+
+    // Get the current cursor from the text edit
+    QTextCursor cursor = ui->textEdit->textCursor();
+
+    // Move the cursor right
+    cursor.movePosition(QTextCursor::Right);
+
+    // Set the modified cursor back to the text edit
+    ui->textEdit->setTextCursor(cursor);
+
+    // Ensure the cursor is visible
+    ui->textEdit->ensureCursorVisible();
+
+    // Set the cursor visible
+    ui->textEdit->setCursorWidth(1); // Ensure cursor width is set to a visible size
+
+    // Update the text edit to reflect changes
+    ui->textEdit->repaint();
+
+    ui->textEdit->setFocus();
+}
+
 
 void MainWindow::on_pushButton_equals_released()
 {

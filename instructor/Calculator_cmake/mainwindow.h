@@ -50,5 +50,8 @@ private slots:
     void percent_pressed();
     void erase_left_pressed();
     void power_pressed();
+    void pi_pressed();
+    void move_left_pressed();
+    void move_right_pressed();
 };
 #endif // MAINWINDOW_H
