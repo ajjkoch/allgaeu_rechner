@@ -47,6 +47,7 @@ private slots:
     void log_pressed();
     void ln_pressed();
     void mod_pressed();
+    void edx_pressed();
     void inv_pressed();
     void percent_pressed();
     void erase_left_pressed();

@@ -336,11 +336,26 @@ private:
                 ++pos;
                 return std::exp(arg);
             }
+            else if (funcName == "edx") {
+                if (expression[pos] != '(') {
+                    throw std::invalid_argument("Expected '(' after edx");
+                }
+                ++pos;
+                double arg = evaluateExpression(expression, pos);
+                skipWhitespace(expression, pos);
+                if (pos >= expression.size() || expression[pos] != ')') {
+                    throw std::invalid_argument("Mismatched parenthesis in exp");
+                }
+                if(arg == 0) {
+                    return 0;
+                }
+                ++pos;
+                return 1/arg;
+            }
             else {
                 throw std::invalid_argument("Unknown function: " + funcName);
             }
         }
-
         else {
             throw std::invalid_argument("Invalid character: " + std::string(1, ch));
         }

@@ -34,6 +34,7 @@ set(PROJECT_SOURCES
     mainwindow.h
     mainwindow.cpp
     mainwindow.ui
+    ../../common/Util.h
 )
 
 qt_add_executable( ${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} )

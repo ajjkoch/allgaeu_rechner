@@ -26,16 +26,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton_plusminus,SIGNAL(released()),this,SLOT(unary_operation_pressed()));
 
-    connect(ui->pushButton_plus,SIGNAL(released()),this,SLOT(binary_operation_pressed()));
-    connect(ui->pushButton_minus,SIGNAL(released()),this,SLOT(binary_operation_pressed()));
+    connect(ui->pushButton_plus   ,SIGNAL(released()),this,SLOT(binary_operation_pressed()));
+    connect(ui->pushButton_minus  ,SIGNAL(released()),this,SLOT(binary_operation_pressed()));
     connect(ui->pushButton_divided,SIGNAL(released()),this,SLOT(binary_operation_pressed()));
-    connect(ui->pushButton_mul,SIGNAL(released()),this,SLOT(binary_operation_pressed()));
+    connect(ui->pushButton_mul    ,SIGNAL(released()),this,SLOT(binary_operation_pressed()));
 
-    connect(ui->pushButton_bracket_left,SIGNAL(released()),this,SLOT(left_bracked_pressed()));
-    connect(ui->pushButton_bracket_right,SIGNAL(released()),this,SLOT(right_bracked_pressed()));
-    connect(ui->pushButton_sqrt,SIGNAL(released()),this,SLOT(sqrt_pressed()));
-    connect(ui->pushButton_x2, SIGNAL(released()), this, SLOT(power_pressed()));
-    connect(ui->pushButton_erase_left,SIGNAL(released()),this,SLOT(erase_left_pressed()));
+    connect(ui->pushButton_bracket_left ,SIGNAL(released()) ,this,SLOT(left_bracked_pressed()));
+    connect(ui->pushButton_bracket_right,SIGNAL(released()) ,this,SLOT(right_bracked_pressed()));
+    connect(ui->pushButton_sqrt         ,SIGNAL(released()) ,this,SLOT(sqrt_pressed()));
+    connect(ui->pushButton_x2           , SIGNAL(released()),this,SLOT(power_pressed()));
+    connect(ui->pushButton_erase_left   ,SIGNAL(released()) ,this,SLOT(erase_left_pressed()));
 
     connect(ui->pushButton_cos,SIGNAL(released()),this,SLOT(cos_pressed()));
     connect(ui->pushButton_sin,SIGNAL(released()),this,SLOT(sin_pressed()));
@@ -44,14 +44,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_ln ,SIGNAL(released()),this,SLOT(ln_pressed()));
     connect(ui->pushButton_inv,SIGNAL(released()),this,SLOT(inv_pressed()));
     connect(ui->pushButton_mod,SIGNAL(released()),this,SLOT(mod_pressed()));
+    connect(ui->pushButton_edx,SIGNAL(released()),this,SLOT(edx_pressed()));
     connect(ui->pushButton_percent,SIGNAL(released()),this,SLOT(percent_pressed()));
 
     connect(ui->pushButton_pi          , SIGNAL(released()), this, SLOT(pi_pressed()));
-    connect(ui->pushButton_cursor_left , SIGNAL(clicked()), this, SLOT(move_left_pressed()));
-    connect(ui->pushButton_cursor_right, SIGNAL(clicked()), this, SLOT(move_right_pressed()));
+    connect(ui->pushButton_cursor_left , SIGNAL(clicked() ), this, SLOT(move_left_pressed()));
+    connect(ui->pushButton_cursor_right, SIGNAL(clicked() ), this, SLOT(move_right_pressed()));
 
     connect(ui->pushButton_changeDegreesMode, SIGNAL(clicked()), this, SLOT(on_degreesMode_pressed()));
-
 
     ui->pushButton_plus->setCheckable(true);
     ui->pushButton_minus->setCheckable(true);
@@ -258,28 +258,34 @@ void MainWindow::sin_pressed()
     QString name = m_isInverted ? "asin(" : "sin(";
     insertRightAlignedText(ui->textEdit,name);
 }
+
 void MainWindow::cos_pressed()
 {
     QString name = m_isInverted ? "acos(" : "cos(";
     insertRightAlignedText(ui->textEdit,name);
 }
+
 void MainWindow::tan_pressed()
 {
     QString name = m_isInverted ? "atan(" : "tan(";
     insertRightAlignedText(ui->textEdit,name);
 }
+
 void MainWindow::log_pressed()
 {
     insertRightAlignedText(ui->textEdit,"log(");
 }
+
 void MainWindow::ln_pressed()
 {
     insertRightAlignedText(ui->textEdit,"ln(");
 }
+
 void MainWindow::mod_pressed()
 {
     insertRightAlignedText(ui->textEdit," mod ");
 }
+
 void MainWindow::inv_pressed()
 {
     if(m_isInverted == false){
@@ -293,6 +299,28 @@ void MainWindow::inv_pressed()
         ui->pushButton_tan->setText("tan");
         m_isInverted = false;
     }
+}
+
+void MainWindow::edx_pressed()
+{
+    try
+    {
+        std::string argu = ui->textEdit->toPlainText().toStdString();
+        std::string exp = "edx("+argu+")";
+        double result = calc.evaluate(exp);
+        if (std::floor(result) == result) {
+            m_strExpression = QString::number(result, 'f', 0); // Display as integer
+        }
+        else {
+            m_strExpression = QString::number(result); // Display with full precision
+        }
+        m_isError = false;
+    } catch (std::exception e) {
+        m_strExpression = e.what();
+        m_isError = true;
+    }
+
+    setRightAlignedText(ui->textEdit,m_strExpression);
 }
 
 void MainWindow::percent_pressed()
