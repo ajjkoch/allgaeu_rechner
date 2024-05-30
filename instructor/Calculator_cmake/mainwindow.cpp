@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_history_back   , SIGNAL(clicked() ), this, SLOT(history_back_pressed()));
     connect(ui->pushButton_history_forward, SIGNAL(clicked() ), this, SLOT(history_forward_pressed()));
 
-    connect(ui->pushButton_changeDegreesMode, SIGNAL(clicked()), this, SLOT(on_degreesMode_pressed()));
+    connect(ui->pushButton_changeDegreesMode, SIGNAL(clicked()), this, SLOT(degreesMode_pressed()));
 
 
     connect(ui->pushButton_decimal, SIGNAL(clicked()), this, SLOT(decimal_pressed()));
