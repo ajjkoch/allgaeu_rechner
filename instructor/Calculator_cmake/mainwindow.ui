@@ -735,7 +735,7 @@ QPushButton:pressed {
        </widget>
       </item>
       <item row="7" column="3">
-       <widget class="QPushButton" name="pushButton_exp">
+       <widget class="QPushButton" name="pushButton_inv">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
           <horstretch>0</horstretch>
@@ -754,7 +754,7 @@ QPushButton:pressed {
 }</string>
         </property>
         <property name="text">
-         <string>exp</string>
+         <string>inv</string>
         </property>
        </widget>
       </item>
@@ -928,7 +928,7 @@ QPushButton:pressed {
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QPushButton" name="pushButton_empty_1">
+       <widget class="QPushButton" name="pushButton_changeDegreesMode">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
           <horstretch>0</horstretch>
@@ -947,7 +947,7 @@ QPushButton:pressed {
 }</string>
         </property>
         <property name="text">
-         <string/>
+         <string>grad</string>
         </property>
        </widget>
       </item>

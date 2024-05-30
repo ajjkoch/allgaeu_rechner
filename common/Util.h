@@ -19,9 +19,12 @@ static double sie_mod(double x, double y)
     return x;
 }
 
+
 static bool compareDoubles(double a, double b, double epsilon = 1e-9) {
     return fabs(a - b) < epsilon;
 }
+
+static bool m_isGrad = true;
 
 class Calculator {
 
@@ -31,11 +34,36 @@ public:
         return evaluateExpression(expression, pos);
     }
 
+    static void setDegMode(bool isGrad)
+    {
+        m_isGrad = isGrad;
+    }
+
 private:
     static double evaluateExpression(const std::string& expression, size_t& pos) {
         double result = parseAdditionSubtraction(expression, pos);
         skipWhitespace(expression, pos);
         return result;
+    }
+
+    static double converGradtoRad(double arg)
+    {
+        return arg * M_PI / 180.0;
+    }
+
+    static double convertRadtoGrad(double arg)
+    {
+        return arg / M_PI * 180;
+    }
+
+    static double convertToRadIfGrad(double arg)
+    {
+        return m_isGrad ? converGradtoRad(arg) : arg;
+    }
+
+    static double convertToGradifGrad(double arg)
+    {
+        return m_isGrad ? convertRadtoGrad(arg) : arg;
     }
 
     static double parseAdditionSubtraction(const std::string& expression, size_t& pos) {
@@ -169,25 +197,6 @@ private:
                 pos += endPos;
                 return value;
         }
-        // else if (ch == 'p') {
-        //     if (expression.substr(pos, 2) == "pi") {
-        //         double result = M_PI;
-        //         ++pos;
-        //         // Check if there's a numerical constant before 'pi'
-        //         if ( (pos < expression.size()) && std::isdigit(expression[pos])) {
-        //             // Parse the numerical constant and multiply with pi
-        //             size_t endPos;
-        //             double constant = std::stod(expression.substr(pos), &endPos);
-        //             result *= constant;
-        //             pos += endPos;
-        //         }
-        //         return result;
-        //     }
-        //     else {
-        //         throw std::invalid_argument("Unknown constant: " + expression.substr(pos, 2));
-        //     }
-        // }
-
         else if (std::isalpha(ch)) {
             std::string funcName = "";
             while (pos < expression.size() && std::isalpha(expression[pos])) {
@@ -239,7 +248,7 @@ private:
                 }
                 ++pos;
                 double arg = evaluateExpression(expression, pos);
-                arg = arg * M_PI / 180.0; // Convert degrees to radians
+                arg = convertToRadIfGrad(arg); // Convert degrees to radians
                 skipWhitespace(expression, pos);
                 if (pos >= expression.size() || expression[pos] != ')') {
                     throw std::invalid_argument("Mismatched parenthesis in sin");
@@ -253,7 +262,7 @@ private:
                 }
                 ++pos;
                 double arg = evaluateExpression(expression, pos);
-                arg = arg * M_PI / 180.0; // Convert degrees to radians
+                arg = convertToRadIfGrad(arg); // Convert degrees to radians
                 skipWhitespace(expression, pos);
                 if (pos >= expression.size() || expression[pos] != ')') {
                     throw std::invalid_argument("Mismatched parenthesis in cos");
@@ -267,13 +276,52 @@ private:
                 }
                 ++pos;
                 double arg = evaluateExpression(expression, pos);
-                arg = arg * M_PI / 180.0; // Convert degrees to radians
+                arg = convertToRadIfGrad(arg); // Convert degrees to radians
                 skipWhitespace(expression, pos);
                 if (pos >= expression.size() || expression[pos] != ')') {
                     throw std::invalid_argument("Mismatched parenthesis in tan");
                 }
                 ++pos;
                 return std::tan(arg);
+            }
+            else if (funcName == "asin") {
+                if (expression[pos] != '(') {
+                    throw std::invalid_argument("Expected '(' after sin");
+                }
+                ++pos;
+                double arg = evaluateExpression(expression, pos);
+                skipWhitespace(expression, pos);
+                if (pos >= expression.size() || expression[pos] != ')') {
+                    throw std::invalid_argument("Mismatched parenthesis in sin");
+                }
+                ++pos;
+                return convertToGradifGrad( std::asin(arg) );
+            }
+            else if (funcName == "acos") {
+                if (expression[pos] != '(') {
+                    throw std::invalid_argument("Expected '(' after cos");
+                }
+                ++pos;
+                double arg = evaluateExpression(expression, pos);
+                skipWhitespace(expression, pos);
+                if (pos >= expression.size() || expression[pos] != ')') {
+                    throw std::invalid_argument("Mismatched parenthesis in cos");
+                }
+                ++pos;
+                return convertToGradifGrad( std::acos(arg) );
+            }
+            else if (funcName == "atan") {
+                if (expression[pos] != '(') {
+                    throw std::invalid_argument("Expected '(' after tan");
+                }
+                ++pos;
+                double arg = evaluateExpression(expression, pos);
+                skipWhitespace(expression, pos);
+                if (pos >= expression.size() || expression[pos] != ')') {
+                    throw std::invalid_argument("Mismatched parenthesis in tan");
+                }
+                ++pos;
+                return convertToGradifGrad( std::atan(arg) );
             }
             else if (funcName == "exp") {
                 if (expression[pos] != '(') {
@@ -288,23 +336,6 @@ private:
                 ++pos;
                 return std::exp(arg);
             }
-            else if (funcName == "edx") {
-                if (expression[pos] != '(') {
-                    throw std::invalid_argument("Expected '(' after edx");
-                }
-                ++pos;
-                double arg = evaluateExpression(expression, pos);
-                skipWhitespace(expression, pos);
-                if (pos >= expression.size() || expression[pos] != ')') {
-                    throw std::invalid_argument("Mismatched parenthesis in exp");
-                }
-                if(arg == 0) {
-                    return 0;
-                }
-                ++pos;
-                return 1/arg;
-            }
-
             else {
                 throw std::invalid_argument("Unknown function: " + funcName);
             }
@@ -321,6 +352,7 @@ private:
         }
     }
 };
+
 
 #endif
 

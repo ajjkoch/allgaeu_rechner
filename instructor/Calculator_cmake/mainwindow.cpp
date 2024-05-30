@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_strExpression("")
     , m_isError(false)
     , m_isEvaluated(false)
+    , m_isInverted(false)
 {
     ui->setupUi(this);
 
@@ -41,14 +42,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_tan,SIGNAL(released()),this,SLOT(tan_pressed()));
     connect(ui->pushButton_log,SIGNAL(released()),this,SLOT(log_pressed()));
     connect(ui->pushButton_ln ,SIGNAL(released()),this,SLOT(ln_pressed()));
-    connect(ui->pushButton_exp,SIGNAL(released()),this,SLOT(exp_pressed()));
-    connect(ui->pushButton_edx,SIGNAL(released()),this,SLOT(edx_pressed()));
+    connect(ui->pushButton_inv,SIGNAL(released()),this,SLOT(inv_pressed()));
     connect(ui->pushButton_mod,SIGNAL(released()),this,SLOT(mod_pressed()));
     connect(ui->pushButton_percent,SIGNAL(released()),this,SLOT(percent_pressed()));
 
     connect(ui->pushButton_pi          , SIGNAL(released()), this, SLOT(pi_pressed()));
     connect(ui->pushButton_cursor_left , SIGNAL(clicked()), this, SLOT(move_left_pressed()));
     connect(ui->pushButton_cursor_right, SIGNAL(clicked()), this, SLOT(move_right_pressed()));
+
+    connect(ui->pushButton_changeDegreesMode, SIGNAL(clicked()), this, SLOT(on_degreesMode_pressed()));
+
 
     ui->pushButton_plus->setCheckable(true);
     ui->pushButton_minus->setCheckable(true);
@@ -61,6 +64,18 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_degreesMode_pressed()
+{
+    QString strMode = ui->pushButton_changeDegreesMode->text();
+    if( strMode == "grad"){
+        Calculator::setDegMode(false);
+        ui->pushButton_changeDegreesMode->setText("rad");
+    } else {
+        Calculator::setDegMode(true);
+        ui->pushButton_changeDegreesMode->setText("grad");
+    }
 }
 
 void MainWindow::digit_pressed()
@@ -240,15 +255,18 @@ void MainWindow::power_pressed()
 
 void MainWindow::sin_pressed()
 {
-    insertRightAlignedText(ui->textEdit,"sin(");
+    QString name = m_isInverted ? "asin(" : "sin(";
+    insertRightAlignedText(ui->textEdit,name);
 }
 void MainWindow::cos_pressed()
 {
-    insertRightAlignedText(ui->textEdit,"cos(");
+    QString name = m_isInverted ? "acos(" : "cos(";
+    insertRightAlignedText(ui->textEdit,name);
 }
 void MainWindow::tan_pressed()
 {
-    insertRightAlignedText(ui->textEdit,"tan(");
+    QString name = m_isInverted ? "atan(" : "tan(";
+    insertRightAlignedText(ui->textEdit,name);
 }
 void MainWindow::log_pressed()
 {
@@ -262,30 +280,19 @@ void MainWindow::mod_pressed()
 {
     insertRightAlignedText(ui->textEdit," mod ");
 }
-void MainWindow::exp_pressed()
+void MainWindow::inv_pressed()
 {
-    insertRightAlignedText(ui->textEdit,"edx");
-}
-void MainWindow::edx_pressed()
-{
-    try
-    {
-        std::string argu = ui->textEdit->toPlainText().toStdString();
-        std::string exp = "edx("+argu+")";
-        double result = calc.evaluate(exp);
-        if (std::floor(result) == result) {
-            m_strExpression = QString::number(result, 'f', 0); // Display as integer
-        }
-        else {
-            m_strExpression = QString::number(result); // Display with full precision
-        }
-        m_isError = false;
-    } catch (std::exception e) {
-        m_strExpression = e.what();
-        m_isError = true;
+    if(m_isInverted == false){
+        ui->pushButton_sin->setText("asin");
+        ui->pushButton_cos->setText("acos");
+        ui->pushButton_tan->setText("atan");
+        m_isInverted = true;
+    }else{
+        ui->pushButton_sin->setText("sin");
+        ui->pushButton_cos->setText("cos");
+        ui->pushButton_tan->setText("tan");
+        m_isInverted = false;
     }
-
-    setRightAlignedText(ui->textEdit,m_strExpression);
 }
 
 void MainWindow::percent_pressed()

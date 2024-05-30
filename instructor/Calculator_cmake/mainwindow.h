@@ -26,10 +26,12 @@ private:
     Calculator calc;
     bool m_isError;
     bool m_isEvaluated;
+    bool m_isInverted;
     void setRightAlignedText(QTextEdit *textEdit, const QString &text);
     void insertRightAlignedText(QTextEdit *textEdit, const QString &text);
 
 private slots:
+    void on_degreesMode_pressed();
     void digit_pressed();
     void on_pushButton_decimal_released();
     void unary_operation_pressed();
@@ -45,8 +47,7 @@ private slots:
     void log_pressed();
     void ln_pressed();
     void mod_pressed();
-    void exp_pressed();
-    void edx_pressed();
+    void inv_pressed();
     void percent_pressed();
     void erase_left_pressed();
     void power_pressed();

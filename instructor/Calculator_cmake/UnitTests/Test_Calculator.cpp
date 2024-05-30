@@ -98,6 +98,8 @@ void CalculatorTests::test_pi()
 
 void CalculatorTests::test_sin()
 {
+    Calculator::setDegMode(true);
+
     {
         std::string expression = "sin(180)";
         double result = Calculator::evaluate(expression);
@@ -114,21 +116,62 @@ void CalculatorTests::test_sin()
         double result = Calculator::evaluate(expression);
         QCOMPARE(result, std::sqrt(2)/2.0);
     }
+
+    Calculator::setDegMode(false);
+
+    {
+        std::string expression = "sin(pi)";
+        double result = Calculator::evaluate(expression);
+        //QCOMPARE(result, 0); // this fails because it compares an integer to a fractional value.
+        QCOMPARE(result, 0.0); // so use a fractional value for the compare
+    }
+    {
+        std::string expression = "sin(pi/2)";
+        double result = Calculator::evaluate(expression);
+        QCOMPARE(result, 1.0);
+    }
+    {
+        std::string expression = "sin(pi/4)";
+        double result = Calculator::evaluate(expression);
+        QCOMPARE(result, std::sqrt(2)/2.0);
+    }
+
+    Calculator::setDegMode(false);
 }
 
 void CalculatorTests::test_cos()
 {
+    Calculator::setDegMode(true);
+
     {
-        std::string expression = "cos(0)";
+        std::string expression = "cos(90)";
         double result = Calculator::evaluate(expression);
-        QCOMPARE(result, 1.0); // so use a fractional value for the compare
+        QCOMPARE(result, 0.0); // so use a fractional value for the compare
+    }
+
+    Calculator::setDegMode(false);
+
+    {
+        std::string expression = "cos(pi)";
+        double result = Calculator::evaluate(expression);
+        QCOMPARE(result, -1.0); // so use a fractional value for the compare
     }
 }
 
 void CalculatorTests::test_tan()
 {
+    Calculator::setDegMode(true);
+
     {
         std::string expression = "tan(60)";
+        double result = Calculator::evaluate(expression);
+        QCOMPARE(result, std::sqrt(3)); // so use a fractional value for the compare
+    }
+
+    Calculator::setDegMode(false);
+
+    {
+        std::string expression = "tan(pi/3)";
         double result = Calculator::evaluate(expression);
         QCOMPARE(result, std::sqrt(3)); // so use a fractional value for the compare
     }
@@ -208,6 +251,9 @@ void CalculatorTests::test_ln()
 
 void CalculatorTests::test_expression()
 {
+
+    Calculator::setDegMode(true);
+
     {
         std::string expression = "-1+pi/2+3";
         double result = Calculator::evaluate(expression);
@@ -234,94 +280,6 @@ void CalculatorTests::test_expression()
         QCOMPARE(result, 50+std::sqrt(3));
     }
 }
-
-/*/
-void TestQString::Test_QtCalculator()
-{
-    {
-        QString expression = "(((2+3)/5)*7)^2";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 49);
-    }
-    {
-        QString expression = "((1.41415 + 10) / 3.457) - 5";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, -1.6982499276829621);
-    }
-    {
-        QString expression = "9^3";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 729);
-    }
-    {
-        QString expression = "3^4";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 81);
-    }
-    {
-        QString expression = "10^9";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 1000000000);
-    }
-    {
-        QString expression = "10^(-9)";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 0.000000001);
-    }
-    {
-        QString expression = "10^-9";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 0.000000001);
-    }
-    {
-        QString expression = "(((2+3)/5)*7)^2 + ln(10) + sin(90)";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 52.302585093);
-    }
-    {
-        QString expression = "(((2+3)/5)*7)^2 + log(10) + sin(90)";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 51);
-    }
-    {
-        QString expression = "sin(180)";
-        double result = QtCalculator::evaluate(expression);
-        //QCOMPARE(result, 0); // this fails because it compares an integer to a fractional value.
-        QCOMPARE(result, 0.0); // so use a fractional value for the compare
-    }
-    {
-        QString expression = "sin(90)";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 1.0);
-    }
-    {
-        QString expression = "log(10)";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 1);
-    }
-    {
-        QString expression = "sqrt(9)";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 3);
-    }
-    {
-        QString expression = "sqrt(100)";
-        double result = QtCalculator::evaluate(expression);
-        QCOMPARE(result, 10);
-    }
-    {
-        QString expression = "sqrt(2)";
-        double expected = 1.414213562;
-        double result = QtCalculator::evaluate(expression);
-        //QCOMPARE(result, expected); // does not work due to floating point errors // fuzzy compare, always false. compares floats.
-        //QVERIFY(std::abs(result - expected) < 1e-9); // Adjust tolerance as needed // lost actual and expected value
-        //QVERIFY2(compareDoubles(result, expected), ("Actual: " + std::to_string(result) + ", Expected: " + std::to_string(expected)).c_str()); // less precision. only 6 digits
-        std::stringstream message;
-        message << "Actual: " << std::fixed << std::setprecision(9) << result << ", Expected: " << std::fixed << std::setprecision(9) << expected;
-        QVERIFY2(compareDoubles(result, expected), message.str().c_str());
-    }
-}
-//*/
 
 QTEST_APPLESS_MAIN(CalculatorTests)
 

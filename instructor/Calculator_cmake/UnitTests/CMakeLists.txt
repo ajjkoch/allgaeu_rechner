@@ -15,6 +15,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # adapt names here
 set(CLASSNAME MyTest)
-set(SOURCES ../Util.h Test_Calculator.cpp )
+set(SOURCES ../../../common/Util.h Test_Calculator.cpp )
 
 include(../../../common/test_common.cmake)
