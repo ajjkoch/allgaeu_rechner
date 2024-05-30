@@ -24,7 +24,8 @@ static bool compareDoubles(double a, double b, double epsilon = 1e-9) {
     return fabs(a - b) < epsilon;
 }
 
-static bool m_isGrad = true;
+static bool gs_isGrad = true;
+static bool gs_isInvered = false;
 
 class Calculator {
 
@@ -36,7 +37,12 @@ public:
 
     static void setDegMode(bool isGrad)
     {
-        m_isGrad = isGrad;
+        gs_isGrad = isGrad;
+    }
+
+    static void setInverted(bool isInverted)
+    {
+        gs_isInvered = isInverted;
     }
 
 private:
@@ -58,12 +64,12 @@ private:
 
     static double convertToRadIfGrad(double arg)
     {
-        return m_isGrad ? converGradtoRad(arg) : arg;
+        return gs_isGrad ? converGradtoRad(arg) : arg;
     }
 
     static double convertToGradifGrad(double arg)
     {
-        return m_isGrad ? convertRadtoGrad(arg) : arg;
+        return gs_isGrad ? convertRadtoGrad(arg) : arg;
     }
 
     static double parseAdditionSubtraction(const std::string& expression, size_t& pos) {
@@ -79,10 +85,6 @@ private:
 
             if(opName == "mod")
             {
-                if (expression[pos] != ' ') {
-                    throw std::invalid_argument("Expected ' ' after mod");
-                }
-
                 double right = parseMultiplicationDivision(expression, pos);
                 skipWhitespace(expression, pos);
 
@@ -114,7 +116,7 @@ private:
         double left = parseExponentiation(expression, pos);
         skipWhitespace(expression, pos);
 
-        while (pos < expression.size() && (expression[pos] == '*' || expression[pos] == '/'))
+        while (pos < expression.size() && (expression[pos] == '*' || expression[pos] == '/' || expression[pos] == '%'))
         {
             char op = expression[pos];
 
@@ -131,6 +133,15 @@ private:
                     throw std::invalid_argument("Division by zero");
                 }
                 left /= right;
+            }
+            if(op == '%')
+            {
+                if(gs_isInvered)
+                {
+                    left /= (right/100);
+                } else {
+                    left *= (right/100);
+                }
             }
         }
 

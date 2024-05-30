@@ -169,7 +169,7 @@ QPushButton:pressed {
         <property name="styleSheet">
          <string notr="true">QPushButton {
 	font: 24pt &quot;Tahoma&quot;;
-  	background-color: rgb(204, 204, 255);
+  	background-color: rgb(252, 241, 194);
   	border: 1px solid gray;
 }
 QPushButton:pressed {
@@ -193,7 +193,7 @@ QPushButton:pressed {
         <property name="styleSheet">
          <string notr="true">QPushButton {
 	font: 24pt &quot;Tahoma&quot;;
-  	background-color: rgb(204, 204, 255);
+  	background-color: rgb(252, 241, 194);
   	border: 1px solid gray;
 }
 QPushButton:pressed {
@@ -569,7 +569,7 @@ QPushButton:pressed {
         <property name="styleSheet">
          <string notr="true">QPushButton {
 	font: 24pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
+	background-color: rgb(252, 241, 194);
 	border: 1px solid gray;
 }
 QPushButton:pressed {
@@ -745,12 +745,12 @@ QPushButton:pressed {
         <property name="styleSheet">
          <string notr="true">QPushButton {
 	font: 24pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
+	background-color: rgb(252, 241, 194);
 	border: 1px solid gray;
 }
 QPushButton:pressed {
     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
+                                      stop: 0 #BEBEBE, stop: 1 #fcd303);
 }</string>
         </property>
         <property name="text">
@@ -938,7 +938,7 @@ QPushButton:pressed {
         <property name="styleSheet">
          <string notr="true">QPushButton {
 	font: 24pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
+	background-color: rgb(252, 241, 194);
 	border: 1px solid gray;
 }
 QPushButton:pressed {
@@ -962,7 +962,7 @@ QPushButton:pressed {
         <property name="styleSheet">
          <string notr="true">QPushButton {
 	font: 24pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
+	background-color: rgb(252, 241, 194);
 	border: 1px solid gray;
 }
 QPushButton:pressed {

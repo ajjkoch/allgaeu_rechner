@@ -26,6 +26,7 @@ private slots:
     void test_power();
     void test_log();
     void test_ln();
+    void test_percent();
     void test_expression();
 };
 
@@ -37,6 +38,37 @@ void CalculatorTests::test_addition()
 {
     double res = Calculator::evaluate("3+4");
     QCOMPARE(res, 7);
+}
+
+void CalculatorTests::test_percent()
+{
+    Calculator::setInverted(false);
+
+    {
+        double res = Calculator::evaluate("100%15");
+        QCOMPARE(res, 15);
+    }
+    {
+        double res = Calculator::evaluate("551%10");
+        QCOMPARE(res, 55.1);
+    }
+    {
+        double res = Calculator::evaluate("551%1");
+        QCOMPARE(res, 5.51);
+    }
+
+    Calculator::setInverted(true);
+
+    {
+        double res = Calculator::evaluate("15%15");
+        QCOMPARE(res, 100);
+    }
+    {
+        double res = Calculator::evaluate(" 5.51%1");
+        QCOMPARE(res, 551);
+    }
+
+    Calculator::setInverted(false);
 }
 
 void CalculatorTests::test_subtraction()

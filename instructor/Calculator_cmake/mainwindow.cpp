@@ -292,13 +292,16 @@ void MainWindow::inv_pressed()
         ui->pushButton_sin->setText("asin");
         ui->pushButton_cos->setText("acos");
         ui->pushButton_tan->setText("atan");
+        ui->pushButton_percent->setText("1/%");
         m_isInverted = true;
     }else{
         ui->pushButton_sin->setText("sin");
         ui->pushButton_cos->setText("cos");
         ui->pushButton_tan->setText("tan");
+        ui->pushButton_percent->setText("%");
         m_isInverted = false;
     }
+    Calculator::setInverted(m_isInverted);
 }
 
 void MainWindow::edx_pressed()
@@ -325,34 +328,32 @@ void MainWindow::edx_pressed()
 
 void MainWindow::percent_pressed()
 {
-    try
-    {
-        std::string argu = ui->textEdit->toPlainText().toStdString();
-
-        size_t size = argu.length();
-        double dVal = std::stod(argu,&size);
-
-        double result = dVal / 100;
-
-        if (std::floor(result) == result) {
-            m_strExpression = QString::number(result, 'f', 0); // Display as integer
-        }
-        else {
-            m_strExpression = QString::number(result); // Display with full precision
-        }
-        m_isError = false;
-    } catch (std::exception e) {
-        m_strExpression = e.what();
-        m_isError = true;
-    }
-
-    setRightAlignedText(ui->textEdit,m_strExpression);
+    insertRightAlignedText(ui->textEdit,"%");
 }
 
 void MainWindow::erase_left_pressed()
 {
-    m_strExpression.remove(m_strExpression.length()-1,1);
-    setRightAlignedText(ui->textEdit,m_strExpression);
+    // Get the cursor position
+    QTextCursor cursor = ui->textEdit->textCursor();
+    int pos = cursor.position();
+
+    // Check if the cursor is not at the beginning
+    if (pos > 0) {
+        // Move the cursor to the position before the current one and select the character to delete
+        cursor.setPosition(pos - 1, QTextCursor::KeepAnchor);
+
+        // Remove the selected text
+        cursor.removeSelectedText();
+
+        // Update the text edit with the new cursor
+        ui->textEdit->setTextCursor(cursor);
+
+        // Update the internal string representation
+        m_strExpression = ui->textEdit->toPlainText();
+
+        // Set the text to be right-aligned if needed
+        //setRightAlignedText(ui->textEdit, m_strExpression);
+    }
 }
 
 void MainWindow::insertRightAlignedText(QTextEdit *textEdit, const QString &text) {
