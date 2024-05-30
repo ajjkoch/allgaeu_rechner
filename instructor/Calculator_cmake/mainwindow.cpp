@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_isError(false)
     , m_isEvaluated(false)
     , m_isInverted(false)
+    , m_hpos(0)
 {
     ui->setupUi(this);
 
@@ -51,7 +52,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_cursor_left , SIGNAL(clicked() ), this, SLOT(move_left_pressed()));
     connect(ui->pushButton_cursor_right, SIGNAL(clicked() ), this, SLOT(move_right_pressed()));
 
+    connect(ui->pushButton_history_back   , SIGNAL(clicked() ), this, SLOT(history_back_pressed()));
+    connect(ui->pushButton_history_forward, SIGNAL(clicked() ), this, SLOT(history_forward_pressed()));
+
     connect(ui->pushButton_changeDegreesMode, SIGNAL(clicked()), this, SLOT(on_degreesMode_pressed()));
+
+
+    connect(ui->pushButton_decimal, SIGNAL(clicked()), this, SLOT(decimal_pressed()));
+
+    connect(ui->pushButton_clear, SIGNAL(clicked()), this, SLOT(clear_pressed()));
+    connect(ui->pushButton_equals, SIGNAL(clicked()), this, SLOT(equals_pressed()));
 
     ui->pushButton_plus->setCheckable(true);
     ui->pushButton_minus->setCheckable(true);
@@ -66,7 +76,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_degreesMode_pressed()
+void MainWindow::degreesMode_pressed()
 {
     QString strMode = ui->pushButton_changeDegreesMode->text();
     if( strMode == "grad"){
@@ -80,19 +90,19 @@ void MainWindow::on_degreesMode_pressed()
 
 void MainWindow::digit_pressed()
 {
-    if(m_isError) on_pushButton_clear_released();
+    if(m_isError) clear_pressed();
     insertRightAlignedText(ui->textEdit,((QPushButton*)sender())->text());
 }
 
-void MainWindow::on_pushButton_decimal_released()
+void MainWindow::decimal_pressed()
 {
-    if (m_isError) on_pushButton_clear_released();
+    if (m_isError) clear_pressed();
     insertRightAlignedText(ui->textEdit,".");
 }
 
 void MainWindow::unary_operation_pressed()
 {
-    if (m_isError) on_pushButton_clear_released();
+    if (m_isError) clear_pressed();
 
     QPushButton*button = (QPushButton*)sender();
     if(button->text() == "+/-")
@@ -113,7 +123,7 @@ void MainWindow::unary_operation_pressed()
     }
 }
 
-void MainWindow::on_pushButton_clear_released()
+void MainWindow::clear_pressed()
 {
     ui->pushButton_plus->setChecked(false);
     ui->pushButton_minus->setChecked(false);
@@ -181,12 +191,32 @@ void MainWindow::move_right_pressed()
     ui->textEdit->setFocus();
 }
 
+void MainWindow::history_back_pressed()
+{
+    if(m_history.empty()) return;
+    if(m_hpos <= 0 ) m_hpos = 0; else m_hpos--;
 
-void MainWindow::on_pushButton_equals_released()
+    QString hentry = m_history[m_hpos];
+    ui->textEdit->clear();
+    setRightAlignedText(ui->textEdit,hentry);
+}
+
+void MainWindow::history_forward_pressed()
+{
+    if(m_history.empty()) return;
+    if(m_hpos >= (m_history.size()-1)) m_hpos = m_history.size()-1; else m_hpos++;
+
+    QString hentry = m_history[m_hpos];
+    ui->textEdit->clear();
+    setRightAlignedText(ui->textEdit,hentry);
+}
+
+void MainWindow::equals_pressed()
 {
     try
     {
         m_strExpression = ui->textEdit->toPlainText();
+        m_history.append(m_strExpression);
 
         double result = calc.evaluate(m_strExpression.toStdString());
         if (std::floor(result) == result) {
@@ -196,8 +226,8 @@ void MainWindow::on_pushButton_equals_released()
             m_strExpression = QString::number(result); // Display with full precision
         }
 
-        //m_strExpression = QString::asprintf("%0.2f", calc.evaluate(m_strExpression.toStdString()) );
-
+        m_history.append(m_strExpression);
+        m_hpos = m_history.size()-1;
         m_isError = false;
     } catch (std::exception e) {
         m_strExpression = e.what();
@@ -209,7 +239,7 @@ void MainWindow::on_pushButton_equals_released()
 
 void MainWindow::binary_operation_pressed()
 {
-    if (m_isError) on_pushButton_clear_released();
+    if (m_isError) clear_pressed();
 
     if(ui->pushButton_plus->isChecked())
     {

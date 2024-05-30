@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QPlainTextEdit>
+#include <QString>
+#include <QList>
 
 #include "../../common/Util.h"
 
@@ -27,16 +29,18 @@ private:
     bool m_isError;
     bool m_isEvaluated;
     bool m_isInverted;
+    int m_hpos;
+    QVector<QString> m_history;
     void setRightAlignedText(QTextEdit *textEdit, const QString &text);
     void insertRightAlignedText(QTextEdit *textEdit, const QString &text);
 
 private slots:
-    void on_degreesMode_pressed();
+    void degreesMode_pressed();
     void digit_pressed();
-    void on_pushButton_decimal_released();
+    void decimal_pressed();
     void unary_operation_pressed();
-    void on_pushButton_clear_released();
-    void on_pushButton_equals_released();
+    void clear_pressed();
+    void equals_pressed();
     void binary_operation_pressed();
     void left_bracked_pressed();
     void right_bracked_pressed();
@@ -55,5 +59,7 @@ private slots:
     void pi_pressed();
     void move_left_pressed();
     void move_right_pressed();
+    void history_back_pressed();
+    void history_forward_pressed();
 };
 #endif // MAINWINDOW_H
