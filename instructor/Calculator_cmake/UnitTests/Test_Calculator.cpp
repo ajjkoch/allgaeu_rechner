@@ -27,6 +27,7 @@ private slots:
     void test_log();
     void test_ln();
     void test_percent();
+    void test_faculty();
     void test_expression();
 };
 
@@ -87,6 +88,35 @@ void CalculatorTests::test_divition()
 {
     double res = Calculator::evaluate("4/2.0");
     QCOMPARE(res, 2.0);
+}
+
+void CalculatorTests::test_faculty()
+{
+    {
+        std::string expression = "3!";
+        double result = Calculator::evaluate(expression);
+        QCOMPARE(result, 6);
+    }
+    {
+        std::string expression = "7!";
+        double result = Calculator::evaluate(expression);
+        QCOMPARE(result, 5040);
+    }
+    {
+        std::string expression = "12!";
+        double result = Calculator::evaluate(expression);
+        QCOMPARE(result, 479001600);
+    }
+    {
+        std::string expression = "-1!";
+        double result = Calculator::evaluate(expression);
+        QCOMPARE(result, 0);
+    }
+    {
+        std::string expression = "26!";
+        double result = Calculator::evaluate(expression);
+        QCOMPARE(result, 4.032914611266057e26);
+    }
 }
 
 void CalculatorTests::test_pi()

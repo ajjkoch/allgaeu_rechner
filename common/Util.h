@@ -19,6 +19,15 @@ static double sie_mod(double x, double y)
     return x;
 }
 
+static double facultyRecursive(int n) {
+    if (n < 0) {
+        return 0;
+    } else if (n == 0 || n == 1) {
+        return 1;
+    } else {
+        return n * facultyRecursive(n - 1);
+    }
+}
 
 static bool compareDoubles(double a, double b, double epsilon = 1e-9) {
     return fabs(a - b) < epsilon;
@@ -30,7 +39,7 @@ static bool gs_isInvered = false;
 class Calculator {
 
 public:
-    static double evaluate(const std::string& expression) {
+    static long double evaluate(const std::string& expression) {
         size_t pos = 0;
         return evaluateExpression(expression, pos);
     }
@@ -116,9 +125,17 @@ private:
         double left = parseExponentiation(expression, pos);
         skipWhitespace(expression, pos);
 
-        while (pos < expression.size() && (expression[pos] == '*' || expression[pos] == '/' || expression[pos] == '%'))
+
+        while (pos < expression.size() && (expression[pos] == '*' || expression[pos] == '/' || expression[pos] == '%' || expression[pos] == '!'))
         {
             char op = expression[pos];
+
+            // unary operation
+            if(op == '!')
+            {
+                left = facultyRecursive(left);
+                return left;
+            }
 
             ++pos;
 
@@ -143,6 +160,7 @@ private:
                     left *= (right/100);
                 }
             }
+
         }
 
         return left;
@@ -181,6 +199,7 @@ private:
             ++pos;
             return value;
         }
+
         // check for a constant with an multiplikator in front like 2pi
         if( (pos+2 < expression.size()))
         {
