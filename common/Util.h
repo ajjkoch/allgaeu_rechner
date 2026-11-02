@@ -11,6 +11,12 @@
 #include <utility>
 
 // Compatibility helpers used by older code and tests.
+/**
+ * @brief Calculates the floating-point remainder of two values.
+ * @param x Dividend.
+ * @param y Divisor; zero causes std::domain_error.
+ * @return The remainder as produced by std::fmod.
+ */
 static double sie_mod(double x, double y)
 {
     if (y == 0.0) {
@@ -19,6 +25,14 @@ static double sie_mod(double x, double y)
     return std::fmod(x, y);
 }
 
+/**
+ * @brief Calculates the factorial of a non-negative integer.
+ * @param n Integer whose factorial is calculated.
+ * @return n! as a double (0! and 1! are 1).
+ * @throws std::domain_error if n is negative.
+ * @throws std::overflow_error if the result is not finite.
+ * @note Kept as a compatibility helper; the implementation is iterative.
+ */
 static double facultyRecursive(int n)
 {
     if (n < 0) {
@@ -35,6 +49,13 @@ static double facultyRecursive(int n)
     return result;
 }
 
+/**
+ * @brief Tests whether two floating-point values differ by at most epsilon.
+ * @param a First value.
+ * @param b Second value.
+ * @param epsilon Maximum accepted absolute difference (default: 1e-9).
+ * @return true if |a - b| <= epsilon; otherwise false.
+ */
 static bool compareDoubles(double a, double b, double epsilon = 1e-9)
 {
     return std::fabs(a - b) <= epsilon;
@@ -59,17 +80,32 @@ static bool compareDoubles(double a, double b, double epsilon = 1e-9)
 class Calculator
 {
 public:
+    /**
+     * @brief Parses and evaluates a mathematical expression.
+     * @param expression Expression text in the calculator's supported syntax.
+     * @return Evaluated result, converted to long double for the public API.
+     * @throws std::invalid_argument for empty, malformed or unknown expressions.
+     * @throws std::domain_error for undefined mathematical operations.
+     * @throws std::overflow_error when an intermediate or final result overflows.
+     * @throws std::length_error when the parser nesting limit is exceeded.
+     */
     long double evaluate(const std::string& expression) const
     {
         Parser parser(expression, m_degrees, m_inverted);
         return parser.parse();
     }
 
+    /** @brief Selects the angle unit used by trigonometric functions.
+     * @param isDegrees true for degrees (default), false for radians.
+     */
     void setDegMode(bool isDegrees)
     {
         m_degrees = isDegrees;
     }
 
+    /** @brief Enables or disables inverse calculator-key behavior.
+     * @param isInverted true enables inverse percentage calculation.
+     */
     void setInverted(bool isInverted)
     {
         m_inverted = isInverted;
@@ -90,6 +126,10 @@ private:
         {
         }
 
+        /** @brief Evaluates the complete expression and rejects trailing input.
+         * @return The calculated value.
+         * @throws std::invalid_argument if the expression is empty or contains trailing/invalid input.
+         */
         double parse()
         {
             skipWhitespace();
@@ -116,6 +156,12 @@ private:
         static constexpr std::size_t maxRecursionDepth = 256;
         std::size_t m_recursionDepth = 0;
 
+        /**
+         * @brief RAII guard that bounds recursive parser calls.
+         * Increments the shared depth on construction and decrements it on destruction,
+         * including when parsing exits by throwing an exception.
+         * @throws std::length_error if maxRecursionDepth would be exceeded.
+         */
         class RecursionGuard
         {
         public:
@@ -139,16 +185,19 @@ private:
             std::size_t& m_depth;
         };
 
+        /** @brief Returns whether the parser reached the end of the expression. */
         bool atEnd() const
         {
             return m_position >= m_expression.size();
         }
 
+        /** @brief Returns the current character, or '\0' at end of input. */
         char current() const
         {
             return atEnd() ? '\0' : m_expression[m_position];
         }
 
+        /** @brief Advances the input position over whitespace characters. */
         void skipWhitespace()
         {
             while (!atEnd() &&
@@ -157,6 +206,9 @@ private:
             }
         }
 
+        /** @brief Consumes the expected character after optional whitespace.
+         * @return true if the character was present and consumed.
+         */
         bool consume(char expected)
         {
             skipWhitespace();
@@ -167,6 +219,10 @@ private:
             return true;
         }
 
+        /** @brief Consumes a keyword, requiring an alphabetic word boundary.
+         * @param word Keyword to match.
+         * @return true if the keyword was present and consumed.
+         */
         bool consumeWord(const std::string& word)
         {
             skipWhitespace();
@@ -184,6 +240,9 @@ private:
             return true;
         }
 
+        /** @brief Validates a computed result before it is returned or reused.
+         * @throws std::overflow_error for infinity and std::domain_error for NaN.
+         */
         static double checked(double value)
         {
             if (std::isinf(value)) {
@@ -195,6 +254,7 @@ private:
             return value;
         }
 
+        /** @brief Parses left-associative addition and subtraction. */
         double parseAdditionSubtraction()
         {
             double left = parseMultiplicationDivision();
@@ -210,6 +270,9 @@ private:
             }
         }
 
+        /** @brief Parses multiplication, division, modulo and percentage operations.
+         * @throws std::domain_error for division or modulo by zero.
+         */
         double parseMultiplicationDivision()
         {
             double left = parseUnary();
@@ -253,6 +316,9 @@ private:
 
         // Unary signs bind less tightly than exponentiation:
         // -2^2 is -(2^2), while 2^-2 is valid.
+        /** @brief Parses unary signs, which bind less tightly than exponentiation.
+         * @throws std::length_error if recursive expression nesting is excessive.
+         */
         double parseUnary()
         {
             RecursionGuard recursionGuard(m_recursionDepth);
@@ -267,6 +333,7 @@ private:
 
         // Calling parseUnary for the exponent makes exponentiation
         // right-associative and permits negative exponents.
+        /** @brief Parses exponentiation with right associativity and signed exponents. */
         double parsePower()
         {
             const double base = parsePostfix();
@@ -281,6 +348,10 @@ private:
             return base;
         }
 
+        /** @brief Parses postfix factorial operators.
+         * @throws std::domain_error unless the operand is a non-negative integer.
+         * @throws std::overflow_error when the factorial exceeds the supported range.
+         */
         double parsePostfix()
         {
             double value = parsePrimary();
@@ -302,6 +373,9 @@ private:
             return value;
         }
 
+        /** @brief Parses a number, pi, parenthesized expression or function call.
+         * @throws std::length_error if recursive nesting exceeds the parser limit.
+         */
         double parsePrimary()
         {
             RecursionGuard recursionGuard(m_recursionDepth);
@@ -358,6 +432,10 @@ private:
                 "Invalid character: " + std::string(1, current()));
         }
 
+        /** @brief Parses and evaluates a named single-argument mathematical function.
+         * @throws std::invalid_argument for unknown functions or malformed calls.
+         * @throws std::domain_error when the function argument is outside its domain.
+         */
         double parseFunction()
         {
             const std::size_t start = m_position;
@@ -434,6 +512,12 @@ private:
             throw std::invalid_argument("Unknown function: " + name);
         }
 
+        /** @brief Validates an inverse-trigonometric argument in the interval [-1, 1].
+         * @param value Argument to validate.
+         * @param name Function name used in the diagnostic message.
+         * @return The unchanged argument.
+         * @throws std::domain_error if value is outside [-1, 1].
+         */
         static double requireUnitInterval(double value, const std::string& name)
         {
             if (value < -1.0 || value > 1.0) {
@@ -442,6 +526,10 @@ private:
             return value;
         }
 
+        /** @brief Converts an angle to radians when degree mode is active.
+         * @param value Angle in the currently selected input unit.
+         * @return Angle in radians; degree values are reduced modulo 360 first.
+         */
         double toRadians(double value) const
         {
             // Reduce degrees before conversion to avoid overflow and retain
@@ -449,11 +537,16 @@ private:
             return m_degrees ? std::remainder(value, 360.0) * pi() / 180.0 : value;
         }
 
+        /** @brief Converts radians to degrees when degree mode is active.
+         * @param value Angle in radians.
+         * @return Angle in the currently selected output unit.
+         */
         double fromRadians(double value) const
         {
             return m_degrees ? value * 180.0 / pi() : value;
         }
 
+        /** @brief Returns pi, calculated from acos(-1). */
         static double pi()
         {
             return std::acos(-1.0);
