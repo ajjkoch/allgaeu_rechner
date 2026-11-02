@@ -17,9 +17,9 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 COMPONENTS Core Widgets Quick Test Designer REQUIRED)
+find_package(Qt6 6 REQUIRED COMPONENTS Core Widgets)
 
-include_directories(CMAKE_CURRENT_SOURCE_DIR)
+include(GNUInstallDirs)
 
 message(NOTICE "\n--------------------------------------------------------------------------------")
 message(NOTICE "   project version: ${PROJECT_VERSION}")
@@ -40,20 +40,16 @@ set(PROJECT_SOURCES
 qt_add_executable( ${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} )
 
 target_include_directories( ${PROJECT_NAME}
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE ${Qt6Widgets_INCLUDE_DIRS}
-)
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries( ${PROJECT_NAME} PUBLIC
     Qt6::Core
-    Qt6::Widgets
-    Qt6::Test
-    Qt6::Quick
-)
+    Qt6::Widgets)
 
 install( TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 qt_finalize_executable( ${PROJECT_NAME} )
