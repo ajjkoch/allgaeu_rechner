@@ -22,6 +22,9 @@ private slots:
     void squareRootAndPower();
     void tangentInDegrees();
     void radiansMode();
+    void logarithmFunctions();
+    void reciprocalOperation();
+    void mathematicalFunctionErrors();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -404,6 +407,105 @@ void CalculatorGuiTests::radiansMode()
     QCOMPARE(display->toPlainText(), QString("sin(pi/2)"));
     QTest::mouseClick(equals, Qt::LeftButton);
     QVERIFY(qAbs(display->toPlainText().toDouble() - 1.0) < 1e-12);
+}
+
+
+void CalculatorGuiTests::logarithmFunctions()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *log = window.findChild<QPushButton *>("pushButton_log");
+    auto *ln = window.findChild<QPushButton *>("pushButton_ln");
+    auto *one = window.findChild<QPushButton *>("pushButton_1");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *two = window.findChild<QPushButton *>("pushButton_2");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+
+    QVERIFY(display);
+    QVERIFY(log);
+    QVERIFY(ln);
+    QVERIFY(one);
+    QVERIFY(zero);
+    QVERIFY(two);
+    QVERIFY(right);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    QTest::mouseClick(log, Qt::LeftButton);
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("log(100)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("2"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    QTest::mouseClick(ln, Qt::LeftButton);
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("ln(1)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("0"));
+}
+
+void CalculatorGuiTests::reciprocalOperation()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *four = window.findChild<QPushButton *>("pushButton_4");
+    auto *reciprocal = window.findChild<QPushButton *>("pushButton_edx");
+
+    QVERIFY(display);
+    QVERIFY(four);
+    QVERIFY(reciprocal);
+
+    QTest::mouseClick(four, Qt::LeftButton);
+    QTest::mouseClick(reciprocal, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - 0.25) < 1e-12);
+}
+
+void CalculatorGuiTests::mathematicalFunctionErrors()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *sqrt = window.findChild<QPushButton *>("pushButton_sqrt");
+    auto *minus = window.findChild<QPushButton *>("pushButton_minus");
+    auto *nine = window.findChild<QPushButton *>("pushButton_9");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+    auto *seven = window.findChild<QPushButton *>("pushButton_7");
+
+    QVERIFY(display);
+    QVERIFY(sqrt);
+    QVERIFY(minus);
+    QVERIFY(nine);
+    QVERIFY(right);
+    QVERIFY(equals);
+    QVERIFY(clear);
+    QVERIFY(seven);
+
+    QTest::mouseClick(sqrt, Qt::LeftButton);
+    QTest::mouseClick(minus, Qt::LeftButton);
+    QTest::mouseClick(nine, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("sqrt(-9)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(display->toPlainText() != QString("sqrt(-9)"));
+    QVERIFY(!display->toPlainText().isEmpty());
+
+    QTest::mouseClick(seven, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("7"));
+
 }
 
 QTEST_MAIN(CalculatorGuiTests)
