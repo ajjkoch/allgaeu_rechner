@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <QButtonGroup>
 #include <QTextBlockFormat>
+#include <QSignalBlocker>
 
 /**
  * @brief Constructs the calculator window and wires UI controls to slots.
@@ -17,6 +18,12 @@ MainWindow::MainWindow(QWidget *parent)
     , m_hpos(0)
 {
     ui->setupUi(this);
+
+    // Keep the internal expression synchronized when the user edits the display directly.
+    connect(ui->textEdit, &QTextEdit::textChanged, this, [this]() {
+        m_strExpression = ui->textEdit->toPlainText();
+        m_isError = false;
+    });
 
     // Use button IDs to identify digit buttons without relying on sender().
     auto *digitButtons = new QButtonGroup(this);
@@ -419,6 +426,7 @@ void MainWindow::insertRightAlignedText(QTextEdit *textEdit, const QString &text
  * @param text Replacement text.
  */
 void MainWindow::setRightAlignedText(QTextEdit *textEdit, const QString &text) {
+    const QSignalBlocker signalBlocker(textEdit);
     m_strExpression = text;
     textEdit->clear();
 
