@@ -15,6 +15,10 @@ private slots:
     void directDisplayEditing();
     void errorRecovery();
     void historyNavigation();
+    void signToggle();
+    void parenthesesAndMultiplication();
+    void percentageOperation();
+    void trigonometricFunctions();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -149,6 +153,143 @@ void CalculatorGuiTests::historyNavigation()
 
     QTest::mouseClick(historyForward, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("4"));
+}
+
+void CalculatorGuiTests::signToggle()
+{
+    MainWindow window;
+    window.show();
+
+    auto *five = window.findChild<QPushButton *>("pushButton_5");
+    auto *sign = window.findChild<QPushButton *>("pushButton_plusminus");
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(five);
+    QVERIFY(sign);
+    QVERIFY(display);
+    QVERIFY(equals);
+
+    QTest::mouseClick(five, Qt::LeftButton);
+    QTest::mouseClick(sign, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("-5"));
+
+    QTest::mouseClick(sign, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("5"));
+
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("5"));
+}
+
+void CalculatorGuiTests::parenthesesAndMultiplication()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *left = window.findChild<QPushButton *>("pushButton_bracket_left");
+    auto *two = window.findChild<QPushButton *>("pushButton_2");
+    auto *plus = window.findChild<QPushButton *>("pushButton_plus");
+    auto *three = window.findChild<QPushButton *>("pushButton_3");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *multiply = window.findChild<QPushButton *>("pushButton_mul");
+    auto *four = window.findChild<QPushButton *>("pushButton_4");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(left);
+    QVERIFY(two);
+    QVERIFY(plus);
+    QVERIFY(three);
+    QVERIFY(right);
+    QVERIFY(multiply);
+    QVERIFY(four);
+    QVERIFY(equals);
+
+    QTest::mouseClick(left, Qt::LeftButton);
+    QTest::mouseClick(two, Qt::LeftButton);
+    QTest::mouseClick(plus, Qt::LeftButton);
+    QTest::mouseClick(three, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QTest::mouseClick(multiply, Qt::LeftButton);
+    QTest::mouseClick(four, Qt::LeftButton);
+
+    QCOMPARE(display->toPlainText(), QString("(2+3)*4"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("20"));
+}
+
+void CalculatorGuiTests::percentageOperation()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *one = window.findChild<QPushButton *>("pushButton_1");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *five = window.findChild<QPushButton *>("pushButton_5");
+    auto *percent = window.findChild<QPushButton *>("pushButton_percent");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(one);
+    QVERIFY(zero);
+    QVERIFY(five);
+    QVERIFY(percent);
+    QVERIFY(equals);
+
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(percent, Qt::LeftButton);
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(five, Qt::LeftButton);
+
+    QCOMPARE(display->toPlainText(), QString("100%15"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("15"));
+}
+
+void CalculatorGuiTests::trigonometricFunctions()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *sin = window.findChild<QPushButton *>("pushButton_sin");
+    auto *one = window.findChild<QPushButton *>("pushButton_1");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *nine = window.findChild<QPushButton *>("pushButton_9");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
+
+    QVERIFY(display);
+    QVERIFY(sin);
+    QVERIFY(one);
+    QVERIFY(zero);
+    QVERIFY(nine);
+    QVERIFY(right);
+    QVERIFY(equals);
+    QVERIFY(inverse);
+
+    // The default angle mode is degrees: sin(90) = 1.
+    QTest::mouseClick(sin, Qt::LeftButton);
+    QTest::mouseClick(nine, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("sin(90)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("1"));
+
+    // Inverse sine is also expressed in degrees by default: asin(1) = 90.
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QTest::mouseClick(sin, Qt::LeftButton);
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("asin(1)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("90"));
 }
 
 QTEST_MAIN(CalculatorGuiTests)
