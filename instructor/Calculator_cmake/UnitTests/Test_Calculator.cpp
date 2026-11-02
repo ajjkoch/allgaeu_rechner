@@ -47,6 +47,7 @@ private slots:
     void test_numeric_underflow();
     void test_small_nonzero_operands();
     void test_arithmetic_overflow_and_underflow();
+    void test_parser_recursion_limits();
 
 private:
     Calculator m_calculator;
@@ -575,6 +576,30 @@ void CalculatorTests::test_arithmetic_overflow_and_underflow()
     // relative precision. Allow for that input quantization here.
     QVERIFY(std::fabs(m_calculator.evaluate("1e308%1e-320") / 1e-14 - 1.0) < 2e-5);
     QVERIFY(std::fabs(m_calculator.evaluate("1e-320%1e308") / 1e-14 - 1.0) < 2e-5);
+}
+
+void CalculatorTests::test_parser_recursion_limits()
+{
+    // A depth below the limit remains valid.
+    const std::string nested = std::string(100, '(') + "1" + std::string(100, ')');
+    QCOMPARE(m_calculator.evaluate(nested), 1.0);
+
+    // Excessive nesting and recursive unary/power chains fail predictably.
+    const std::string deepParentheses =
+        std::string(300, '(') + "1" + std::string(300, ')');
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(deepParentheses), std::length_error);
+
+    const std::string deepFunctions =
+        std::string(300, "sqrt(") + "1" + std::string(300, ')');
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(deepFunctions), std::length_error);
+
+    const std::string deepUnary = std::string(300, '-') + "1";
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(deepUnary), std::length_error);
+
+    const std::string deepPowers = std::string("1^") + std::string(300, '1');
+    // The exponent chain is right-recursive; this input must be rejected
+    // before it can exhaust the call stack.
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(deepPowers), std::length_error);
 }
 
 void CalculatorTests::test_calculator_instances_are_independent()
