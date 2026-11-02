@@ -27,6 +27,8 @@ private slots:
     void test_tan();
     void test_sqrt();
     void test_power();
+    void test_power_edge_cases();
+    void test_factorial_boundaries();
     void test_log();
     void test_ln();
     void test_percent();
@@ -313,6 +315,31 @@ void CalculatorTests::test_power()
         double result = m_calculator.evaluate(expression);
         QCOMPARE(result, 0.000000001);
     }
+}
+
+
+void CalculatorTests::test_power_edge_cases()
+{
+    QCOMPARE(m_calculator.evaluate("(-2)^3"), -8.0);
+    QCOMPARE(m_calculator.evaluate("(-2)^4"), 16.0);
+
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("(-2)^0.5"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("0^-1"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("0^(-2)"), std::domain_error);
+
+    QCOMPARE(m_calculator.evaluate("10^-400"), 0.0);
+    QCOMPARE(m_calculator.evaluate("(-10)^-400"), 0.0);
+}
+
+void CalculatorTests::test_factorial_boundaries()
+{
+    const double factorial170 = m_calculator.evaluate("170!");
+    QVERIFY(std::isfinite(factorial170));
+    QVERIFY(factorial170 > 0.0);
+
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("171!"), std::overflow_error);
+    QCOMPARE(m_calculator.evaluate("0!"), 1.0);
+    QCOMPARE(m_calculator.evaluate("1!"), 1.0);
 }
 
 void CalculatorTests::test_log()
