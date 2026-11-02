@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 #include <QVector>
+#include <QEvent>
 
 #include "../../common/Util.h"
 
@@ -24,6 +25,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     /** @brief Releases the generated UI object owned by this window. */
     ~MainWindow();
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     Ui::MainWindow *ui;
