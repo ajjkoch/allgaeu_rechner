@@ -29,6 +29,10 @@ private slots:
     void test_percent();
     void test_faculty();
     void test_expression();
+    void test_operator_precedence();
+    void test_modulo();
+    void test_invalid_expressions();
+    void test_domain_errors();
 };
 
 CalculatorTests::CalculatorTests() {}
@@ -341,6 +345,43 @@ void CalculatorTests::test_expression()
         double result = Calculator::evaluate(expression);
         QCOMPARE(result, 50+std::sqrt(3));
     }
+}
+
+
+void CalculatorTests::test_operator_precedence()
+{
+    QCOMPARE(Calculator::evaluate("-2^2"), -4.0);
+    QCOMPARE(Calculator::evaluate("(-2)^2"), 4.0);
+    QCOMPARE(Calculator::evaluate("2^-2"), 0.25);
+    QCOMPARE(Calculator::evaluate("2^3^2"), 512.0);
+}
+
+void CalculatorTests::test_modulo()
+{
+    QCOMPARE(Calculator::evaluate("5 mod 2"), 1.0);
+    QCOMPARE(Calculator::evaluate("5 mod 2 + 1"), 2.0);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("5 mod 0"), std::domain_error);
+}
+
+void CalculatorTests::test_invalid_expressions()
+{
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate(""), std::invalid_argument);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("2+3abc"), std::invalid_argument);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("()"), std::invalid_argument);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("(2+3"), std::invalid_argument);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("2+"), std::invalid_argument);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("unknown(2)"), std::invalid_argument);
+}
+
+void CalculatorTests::test_domain_errors()
+{
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("1/0"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("sqrt(-1)"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("ln(0)"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("log(-1)"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("asin(2)"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("5.5!"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(Calculator::evaluate("(-1)!"), std::domain_error);
 }
 
 QTEST_APPLESS_MAIN(CalculatorTests)
