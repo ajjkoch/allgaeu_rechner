@@ -29,7 +29,8 @@ private:
     Ui::MainWindow *ui;
     QString m_strExpression;
     Calculator calc;
-    bool m_isError;    bool m_isInverted;
+    bool m_isError;
+    bool m_isInverted;
     int m_hpos;
     QVector<QString> m_history;
     /** @brief Replaces the editor contents and right-aligns the text.
@@ -55,7 +56,8 @@ private slots:
     /** @brief Clears the expression, display error state and selected binary operator buttons. */
     void clear_pressed();
     /** @brief Evaluates the displayed expression, stores history and displays the result or error. */
-    void equals_pressed();    /** @brief Inserts an opening parenthesis. */
+    void equals_pressed();
+    /** @brief Inserts an opening parenthesis. */
     void left_bracked_pressed();
     /** @brief Inserts a closing parenthesis. */
     void right_bracked_pressed();
