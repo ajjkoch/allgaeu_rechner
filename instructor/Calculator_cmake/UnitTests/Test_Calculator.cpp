@@ -571,8 +571,10 @@ void CalculatorTests::test_arithmetic_overflow_and_underflow()
 
     // The percentage result is representable even though dividing the
     // smaller operand by 100 first would underflow it to zero.
-    QVERIFY(std::fabs(m_calculator.evaluate("1e308%1e-320") / 1e-14 - 1.0) < 1e-12);
-    QVERIFY(std::fabs(m_calculator.evaluate("1e-320%1e308") / 1e-14 - 1.0) < 1e-12);
+    // 1e-320 is subnormal, so its decimal representation has limited
+    // relative precision. Allow for that input quantization here.
+    QVERIFY(std::fabs(m_calculator.evaluate("1e308%1e-320") / 1e-14 - 1.0) < 2e-5);
+    QVERIFY(std::fabs(m_calculator.evaluate("1e-320%1e308") / 1e-14 - 1.0) < 2e-5);
 }
 
 void CalculatorTests::test_calculator_instances_are_independent()
