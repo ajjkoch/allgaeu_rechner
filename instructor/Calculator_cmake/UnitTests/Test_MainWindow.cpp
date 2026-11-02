@@ -44,6 +44,8 @@ private slots:
     void keyboardDecimalAndParentheses();
     void keyboardNegativeSign();
     void keyboardEnterEvaluates();
+    void angleModeCanToggleBackToDegrees();
+    void inverseTrigonometricFunctionsInRadians();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -1077,6 +1079,112 @@ void CalculatorGuiTests::keyboardEnterEvaluates()
 
     QTest::keyClick(display, Qt::Key_Enter);
     QCOMPARE(display->toPlainText(), QString("15"));
+}
+
+
+void CalculatorGuiTests::angleModeCanToggleBackToDegrees()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *mode = window.findChild<QPushButton *>("pushButton_changeDegreesMode");
+    auto *sin = window.findChild<QPushButton *>("pushButton_sin");
+    auto *pi = window.findChild<QPushButton *>("pushButton_pi");
+    auto *divide = window.findChild<QPushButton *>("pushButton_divided");
+    auto *two = window.findChild<QPushButton *>("pushButton_2");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+
+    QVERIFY(display);
+    QVERIFY(mode);
+    QVERIFY(sin);
+    QVERIFY(pi);
+    QVERIFY(divide);
+    QVERIFY(two);
+    QVERIFY(right);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    QCOMPARE(mode->text(), QString("grad"));
+
+    // Switch to radians and evaluate sin(pi/2).
+    QTest::mouseClick(mode, Qt::LeftButton);
+    QCOMPARE(mode->text(), QString("rad"));
+    QTest::mouseClick(sin, Qt::LeftButton);
+    QTest::mouseClick(pi, Qt::LeftButton);
+    QTest::mouseClick(divide, Qt::LeftButton);
+    QTest::mouseClick(two, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - 1.0) < 1e-12);
+
+    // Switch back to degrees and verify the original interpretation is restored.
+    QTest::mouseClick(mode, Qt::LeftButton);
+    QCOMPARE(mode->text(), QString("grad"));
+    QTest::mouseClick(clear, Qt::LeftButton);
+    QTest::mouseClick(sin, Qt::LeftButton);
+    QTest::mouseClick(window.findChild<QPushButton *>("pushButton_9"), Qt::LeftButton);
+    QTest::mouseClick(window.findChild<QPushButton *>("pushButton_0"), Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("1"));
+}
+
+void CalculatorGuiTests::inverseTrigonometricFunctionsInRadians()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *mode = window.findChild<QPushButton *>("pushButton_changeDegreesMode");
+    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
+    auto *sin = window.findChild<QPushButton *>("pushButton_sin");
+    auto *cos = window.findChild<QPushButton *>("pushButton_cos");
+    auto *tan = window.findChild<QPushButton *>("pushButton_tan");
+    auto *one = window.findChild<QPushButton *>("pushButton_1");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+
+    QVERIFY(display);
+    QVERIFY(mode);
+    QVERIFY(inverse);
+    QVERIFY(sin);
+    QVERIFY(cos);
+    QVERIFY(tan);
+    QVERIFY(one);
+    QVERIFY(zero);
+    QVERIFY(right);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    QTest::mouseClick(mode, Qt::LeftButton);
+    QCOMPARE(mode->text(), QString("rad"));
+    QTest::mouseClick(inverse, Qt::LeftButton);
+
+    // In radians, inverse trigonometric functions return radian values.
+    QTest::mouseClick(sin, Qt::LeftButton);
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - M_PI_2) < 1e-5);
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    QTest::mouseClick(cos, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - M_PI_2) < 1e-5);
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    QTest::mouseClick(tan, Qt::LeftButton);
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - M_PI_4) < 1e-5);
 }
 
 QTEST_MAIN(CalculatorGuiTests)
