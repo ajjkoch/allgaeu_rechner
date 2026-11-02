@@ -48,7 +48,7 @@ private slots:
     /** @brief Toggles the trigonometric angle unit between degrees and radians. */
     void degreesMode_pressed();
     /** @brief Inserts the digit of the button that emitted the signal. */
-    void digit_pressed();
+    void digit_pressed(int digit);
     /** @brief Inserts a decimal separator at the current cursor position. */
     void decimal_pressed();
     /** @brief Applies the sign-toggle button action to the current expression. */
