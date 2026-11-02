@@ -113,6 +113,32 @@ private:
         bool m_degrees;
         bool m_inverted;
 
+        static constexpr std::size_t maxRecursionDepth = 256;
+        std::size_t m_recursionDepth = 0;
+
+        class RecursionGuard
+        {
+        public:
+            explicit RecursionGuard(std::size_t& depth) : m_depth(depth)
+            {
+                if (++m_depth > maxRecursionDepth) {
+                    --m_depth;
+                    throw std::length_error("Expression nesting limit exceeded");
+                }
+            }
+
+            ~RecursionGuard()
+            {
+                --m_depth;
+            }
+
+            RecursionGuard(const RecursionGuard&) = delete;
+            RecursionGuard& operator=(const RecursionGuard&) = delete;
+
+        private:
+            std::size_t& m_depth;
+        };
+
         bool atEnd() const
         {
             return m_position >= m_expression.size();
@@ -229,6 +255,7 @@ private:
         // -2^2 is -(2^2), while 2^-2 is valid.
         double parseUnary()
         {
+            RecursionGuard recursionGuard(m_recursionDepth);
             if (consume('+')) {
                 return parseUnary();
             }
@@ -277,6 +304,7 @@ private:
 
         double parsePrimary()
         {
+            RecursionGuard recursionGuard(m_recursionDepth);
             skipWhitespace();
             if (atEnd()) {
                 throw std::invalid_argument("Unexpected end of expression");
