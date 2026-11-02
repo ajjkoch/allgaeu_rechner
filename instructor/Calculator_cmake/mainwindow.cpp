@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
         m_isError = false;
     });
 
-    // Use button IDs to identify digit buttons without relying on sender().
+    // Use button IDs to identify digit buttons without inspecting the emitting widget.
     auto *digitButtons = new QButtonGroup(this);
     digitButtons->addButton(ui->pushButton_0, 0);
     digitButtons->addButton(ui->pushButton_1, 1);
