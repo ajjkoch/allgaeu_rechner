@@ -589,14 +589,21 @@ void CalculatorTests::test_parser_recursion_limits()
         std::string(300, '(') + "1" + std::string(300, ')');
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(deepParentheses), std::length_error);
 
-    const std::string deepFunctions =
-        std::string(300, "sqrt(") + "1" + std::string(300, ')');
+    std::string deepFunctions;
+    for (int i = 0; i < 300; ++i) {
+        deepFunctions += "sqrt(";
+    }
+    deepFunctions += "1";
+    deepFunctions += std::string(300, ')');
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(deepFunctions), std::length_error);
 
     const std::string deepUnary = std::string(300, '-') + "1";
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(deepUnary), std::length_error);
 
-    const std::string deepPowers = std::string("1^") + std::string(300, '1');
+    std::string deepPowers = "1";
+    for (int i = 0; i < 300; ++i) {
+        deepPowers += "^1";
+    }
     // The exponent chain is right-recursive; this input must be rejected
     // before it can exhaust the call stack.
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(deepPowers), std::length_error);
