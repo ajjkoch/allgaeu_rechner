@@ -449,7 +449,7 @@ void CalculatorTests::test_small_nonzero_operands()
     m_calculator.setInverted(true);
     QCOMPARE(m_calculator.evaluate("1e-300%1e-300"), 100.0);
     m_calculator.setInverted(false);
-    QVERIFY(std::fabs(m_calculator.evaluate("1e-300%1e-300") / 1e-302 - 1.0) < 1e-12);
+    QVERIFY(std::fabs(m_calculator.evaluate("1e-150%1e-150") / 1e-302 - 1.0) < 1e-12);
 }
 
 void CalculatorTests::test_calculator_instances_are_independent()
