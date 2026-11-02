@@ -80,10 +80,10 @@ void MainWindow::degreesMode_pressed()
 {
     QString strMode = ui->pushButton_changeDegreesMode->text();
     if( strMode == "grad"){
-        Calculator::setDegMode(false);
+        calc.setDegMode(false);
         ui->pushButton_changeDegreesMode->setText("rad");
     } else {
-        Calculator::setDegMode(true);
+        calc.setDegMode(true);
         ui->pushButton_changeDegreesMode->setText("grad");
     }
 }
@@ -331,7 +331,7 @@ void MainWindow::inv_pressed()
         ui->pushButton_percent->setText("%");
         m_isInverted = false;
     }
-    Calculator::setInverted(m_isInverted);
+    calc.setInverted(m_isInverted);
 }
 
 void MainWindow::edx_pressed()
