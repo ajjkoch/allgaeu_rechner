@@ -29,6 +29,12 @@ private slots:
     void moduloOperation();
     void inverseTangentInDegrees();
     void tangentDomainError();
+    void exponentialAndFactorial();
+    void piConstantAndDecimalInput();
+    void inversePercentageMode();
+    void inverseTrigonometricDomainError();
+    void reciprocalOfZeroError();
+    void keyboardEntry();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -630,6 +636,186 @@ void CalculatorGuiTests::tangentDomainError()
 
     QTest::mouseClick(clear, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString());
+}
+
+
+void CalculatorGuiTests::exponentialAndFactorial()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+
+    QVERIFY(display);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    display->setPlainText("exp(1)");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - qExp(1.0)) < 1e-12);
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("5!");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("120"));
+}
+
+void CalculatorGuiTests::piConstantAndDecimalInput()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *pi = window.findChild<QPushButton *>("pushButton_pi");
+    auto *decimal = window.findChild<QPushButton *>("pushButton_decimal");
+    auto *one = window.findChild<QPushButton *>("pushButton_1");
+    auto *five = window.findChild<QPushButton *>("pushButton_5");
+    auto *plus = window.findChild<QPushButton *>("pushButton_plus");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+
+    QVERIFY(display);
+    QVERIFY(pi);
+    QVERIFY(decimal);
+    QVERIFY(one);
+    QVERIFY(five);
+    QVERIFY(plus);
+    QVERIFY(zero);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    QTest::mouseClick(pi, Qt::LeftButton);
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - M_PI) < 1e-12);
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(decimal, Qt::LeftButton);
+    QTest::mouseClick(five, Qt::LeftButton);
+    QTest::mouseClick(plus, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(decimal, Qt::LeftButton);
+    QTest::mouseClick(five, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("1.5+0.5"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("2"));
+}
+
+void CalculatorGuiTests::inversePercentageMode()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
+    auto *percent = window.findChild<QPushButton *>("pushButton_percent");
+    auto *two = window.findChild<QPushButton *>("pushButton_2");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *five = window.findChild<QPushButton *>("pushButton_5");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+
+    QVERIFY(display);
+    QVERIFY(inverse);
+    QVERIFY(percent);
+    QVERIFY(two);
+    QVERIFY(zero);
+    QVERIFY(five);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QCOMPARE(percent->text(), QString("1/%"));
+    QTest::mouseClick(two, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(percent, Qt::LeftButton);
+    QTest::mouseClick(five, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("200%50"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("400"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QCOMPARE(percent->text(), QString("%"));
+    QTest::mouseClick(two, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(percent, Qt::LeftButton);
+    QTest::mouseClick(five, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("100"));
+}
+
+void CalculatorGuiTests::inverseTrigonometricDomainError()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
+    auto *sin = window.findChild<QPushButton *>("pushButton_sin");
+    auto *two = window.findChild<QPushButton *>("pushButton_2");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(inverse);
+    QVERIFY(sin);
+    QVERIFY(two);
+    QVERIFY(right);
+    QVERIFY(equals);
+
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QTest::mouseClick(sin, Qt::LeftButton);
+    QTest::mouseClick(two, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("asin(2)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(display->toPlainText() != QString("asin(2)"));
+    QVERIFY(!display->toPlainText().isEmpty());
+}
+
+void CalculatorGuiTests::reciprocalOfZeroError()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *reciprocal = window.findChild<QPushButton *>("pushButton_edx");
+
+    QVERIFY(display);
+    QVERIFY(zero);
+    QVERIFY(reciprocal);
+
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(reciprocal, Qt::LeftButton);
+    QVERIFY(display->toPlainText() != QString("0"));
+    QVERIFY(!display->toPlainText().isEmpty());
+}
+
+void CalculatorGuiTests::keyboardEntry()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(equals);
+
+    display->setFocus();
+    QTest::keyClicks(display, "12+3");
+    QCOMPARE(display->toPlainText(), QString("12+3"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("15"));
 }
 
 QTEST_MAIN(CalculatorGuiTests)
