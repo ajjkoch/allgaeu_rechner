@@ -34,6 +34,7 @@ private slots:
     void test_modulo();
     void test_invalid_expressions();
     void test_domain_errors();
+    void test_calculator_instances_are_independent();
 
 private:
     Calculator m_calculator;
@@ -395,5 +396,23 @@ void CalculatorTests::test_domain_errors()
 }
 
 QTEST_APPLESS_MAIN(CalculatorTests)
+
+void CalculatorTests::test_calculator_instances_are_independent()
+{
+    Calculator degreesCalculator;
+    Calculator radiansCalculator;
+
+    degreesCalculator.setDegMode(true);
+    radiansCalculator.setDegMode(false);
+
+    QVERIFY(std::fabs(degreesCalculator.evaluate("sin(90)") - 1.0) < 1e-12);
+    QVERIFY(std::fabs(radiansCalculator.evaluate("sin(90)") - std::sin(90.0)) < 1e-12);
+
+    degreesCalculator.setInverted(true);
+    radiansCalculator.setInverted(false);
+
+    QCOMPARE(degreesCalculator.evaluate("15%15"), 100.0);
+    QCOMPARE(radiansCalculator.evaluate("15%15"), 2.25);
+}
 
 #include "Test_Calculator.moc"
