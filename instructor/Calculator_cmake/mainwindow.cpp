@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QDebug>
 #include <QPushButton>
 #include <QButtonGroup>
 
@@ -37,10 +36,22 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton_plusminus, &QPushButton::released, this, &MainWindow::unary_operation_pressed);
 
-    connect(ui->pushButton_plus, &QPushButton::released, this, &MainWindow::binary_operation_pressed);
-    connect(ui->pushButton_minus, &QPushButton::released, this, &MainWindow::binary_operation_pressed);
-    connect(ui->pushButton_divided, &QPushButton::released, this, &MainWindow::binary_operation_pressed);
-    connect(ui->pushButton_mul, &QPushButton::released, this, &MainWindow::binary_operation_pressed);
+    // Keep arithmetic operator selection mutually exclusive.
+    auto *operatorButtons = new QButtonGroup(this);
+    operatorButtons->setExclusive(true);
+    operatorButtons->addButton(ui->pushButton_plus, 0);
+    operatorButtons->addButton(ui->pushButton_minus, 1);
+    operatorButtons->addButton(ui->pushButton_mul, 2);
+    operatorButtons->addButton(ui->pushButton_divided, 3);
+    for (auto *button : operatorButtons->buttons()) {
+        button->setCheckable(true);
+    }
+    connect(operatorButtons, &QButtonGroup::idClicked, this,
+            [this, operatorButtons](int id) {
+                static const QString operators[] = {"+", "-", "*", "/"};
+                insertRightAlignedText(ui->textEdit, operators[id]);
+                operatorButtons->button(id)->setChecked(false);
+            });
 
     connect(ui->pushButton_bracket_left, &QPushButton::released, this, &MainWindow::left_bracked_pressed);
     connect(ui->pushButton_bracket_right, &QPushButton::released, this, &MainWindow::right_bracked_pressed);
@@ -59,11 +70,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_percent, &QPushButton::released, this, &MainWindow::percent_pressed);
 
     connect(ui->pushButton_pi, &QPushButton::released, this, &MainWindow::pi_pressed);
-    connect(ui->pushButton_cursor_left , SIGNAL(clicked() ), this, SLOT(move_left_pressed()));
-    connect(ui->pushButton_cursor_right, SIGNAL(clicked() ), this, SLOT(move_right_pressed()));
+    connect(ui->pushButton_cursor_left, &QPushButton::clicked, this, &MainWindow::move_left_pressed);
+    connect(ui->pushButton_cursor_right, &QPushButton::clicked, this, &MainWindow::move_right_pressed);
 
-    connect(ui->pushButton_history_back   , SIGNAL(clicked() ), this, SLOT(history_back_pressed()));
-    connect(ui->pushButton_history_forward, SIGNAL(clicked() ), this, SLOT(history_forward_pressed()));
+    connect(ui->pushButton_history_back, &QPushButton::clicked, this, &MainWindow::history_back_pressed);
+    connect(ui->pushButton_history_forward, &QPushButton::clicked, this, &MainWindow::history_forward_pressed);
 
     connect(ui->pushButton_changeDegreesMode, &QPushButton::clicked, this, &MainWindow::degreesMode_pressed);
 
@@ -72,11 +83,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton_clear, &QPushButton::clicked, this, &MainWindow::clear_pressed);
     connect(ui->pushButton_equals, &QPushButton::clicked, this, &MainWindow::equals_pressed);
-
-    ui->pushButton_plus->setCheckable(true);
-    ui->pushButton_minus->setCheckable(true);
-    ui->pushButton_divided->setCheckable(true);
-    ui->pushButton_mul->setCheckable(true);
 
     setRightAlignedText(ui->textEdit, m_strExpression);
 }
@@ -119,25 +125,19 @@ void MainWindow::decimal_pressed()
 /** @brief Applies the sign-toggle button action to the current expression. */
 void MainWindow::unary_operation_pressed()
 {
-    if (m_isError) clear_pressed();
-
-    QPushButton*button = (QPushButton*)sender();
-    if(button->text() == "+/-")
-    {
-        if(!m_strExpression.isEmpty())
-        {
-            int pos = m_strExpression.lastIndexOf("-");
-            if( pos != -1)
-            {
-                m_strExpression.remove(pos, 1);
-            }
-            else
-            {
-                m_strExpression.insert(0, "-");
-            }
-        }
-        setRightAlignedText(ui->textEdit,m_strExpression);
+    if (m_isError) {
+        clear_pressed();
     }
+
+    if (!m_strExpression.isEmpty()) {
+        const int minusPosition = m_strExpression.lastIndexOf('-');
+        if (minusPosition != -1) {
+            m_strExpression.remove(minusPosition, 1);
+        } else {
+            m_strExpression.prepend('-');
+        }
+    }
+    setRightAlignedText(ui->textEdit, m_strExpression);
 }
 
 /** @brief Clears the expression, display error state and selected binary operator buttons. */
@@ -253,39 +253,12 @@ void MainWindow::equals_pressed()
         m_history.append(m_strExpression);
         m_hpos = m_history.size()-1;
         m_isError = false;
-    } catch (std::exception e) {
+    } catch (const std::exception& e) {
         m_strExpression = e.what();
         m_isError = true;
     }
 
     setRightAlignedText(ui->textEdit,m_strExpression);
-}
-
-/** @brief Inserts the selected binary arithmetic operator into the expression. */
-void MainWindow::binary_operation_pressed()
-{
-    if (m_isError) clear_pressed();
-
-    if(ui->pushButton_plus->isChecked())
-    {
-        insertRightAlignedText(ui->textEdit,"+");
-        ui->pushButton_plus->setChecked(false);
-    }
-    else if(ui->pushButton_minus->isChecked())
-    {
-        insertRightAlignedText(ui->textEdit,"-");
-        ui->pushButton_minus->setChecked(false);
-    }
-    else if(ui->pushButton_mul->isChecked())
-    {
-        insertRightAlignedText(ui->textEdit,"*");
-        ui->pushButton_mul->setChecked(false);
-    }
-    else if(ui->pushButton_divided->isChecked())
-    {
-        insertRightAlignedText(ui->textEdit,"/");
-        ui->pushButton_divided->setChecked(false);
-    }
 }
 
 /** @brief Inserts an opening parenthesis. */
@@ -375,9 +348,9 @@ void MainWindow::edx_pressed()
 {
     try
     {
-        std::string argu = ui->textEdit->toPlainText().toStdString();
-        std::string exp = "edx("+argu+")";
-        double result = calc.evaluate(exp);
+        const std::string argument = ui->textEdit->toPlainText().toStdString();
+        const std::string expression = "edx(" + argument + ")";
+        double result = calc.evaluate(expression);
         if (std::floor(result) == result) {
             m_strExpression = QString::number(result, 'f', 0); // Display as integer
         }
