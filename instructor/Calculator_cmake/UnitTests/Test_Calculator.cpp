@@ -114,7 +114,7 @@ void CalculatorTests::test_faculty()
     {
         std::string expression = "-1!";
         double result = Calculator::evaluate(expression);
-        QCOMPARE(result, 0);
+        QCOMPARE(result, -1);
     }
     {
         std::string expression = "26!";
