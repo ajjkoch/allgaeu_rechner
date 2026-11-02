@@ -19,6 +19,9 @@ private slots:
     void parenthesesAndMultiplication();
     void percentageOperation();
     void trigonometricFunctions();
+    void squareRootAndPower();
+    void tangentInDegrees();
+    void radiansMode();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -295,6 +298,112 @@ void CalculatorGuiTests::trigonometricFunctions()
     QCOMPARE(display->toPlainText(), QString("asin(1)"));
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("90"));
+}
+
+void CalculatorGuiTests::squareRootAndPower()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *sqrt = window.findChild<QPushButton *>("pushButton_sqrt");
+    auto *power = window.findChild<QPushButton *>("pushButton_x2");
+    auto *three = window.findChild<QPushButton *>("pushButton_3");
+    auto *nine = window.findChild<QPushButton *>("pushButton_9");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+
+    QVERIFY(display);
+    QVERIFY(sqrt);
+    QVERIFY(power);
+    QVERIFY(three);
+    QVERIFY(nine);
+    QVERIFY(right);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    QTest::mouseClick(sqrt, Qt::LeftButton);
+    QTest::mouseClick(nine, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("sqrt(9)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("3"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    QTest::mouseClick(three, Qt::LeftButton);
+    QTest::mouseClick(power, Qt::LeftButton);
+    QTest::mouseClick(three, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("3^3"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("27"));
+}
+
+void CalculatorGuiTests::tangentInDegrees()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *tan = window.findChild<QPushButton *>("pushButton_tan");
+    auto *four = window.findChild<QPushButton *>("pushButton_4");
+    auto *five = window.findChild<QPushButton *>("pushButton_5");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(tan);
+    QVERIFY(four);
+    QVERIFY(five);
+    QVERIFY(right);
+    QVERIFY(equals);
+
+    // The initial angle mode is degrees, so tan(45) is approximately 1.
+    QTest::mouseClick(tan, Qt::LeftButton);
+    QTest::mouseClick(four, Qt::LeftButton);
+    QTest::mouseClick(five, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("tan(45)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - 1.0) < 1e-12);
+}
+
+void CalculatorGuiTests::radiansMode()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *mode = window.findChild<QPushButton *>("pushButton_changeDegreesMode");
+    auto *sin = window.findChild<QPushButton *>("pushButton_sin");
+    auto *pi = window.findChild<QPushButton *>("pushButton_pi");
+    auto *divide = window.findChild<QPushButton *>("pushButton_divided");
+    auto *two = window.findChild<QPushButton *>("pushButton_2");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(mode);
+    QVERIFY(sin);
+    QVERIFY(pi);
+    QVERIFY(divide);
+    QVERIFY(two);
+    QVERIFY(right);
+    QVERIFY(equals);
+
+    QCOMPARE(mode->text(), QString("grad"));
+    QTest::mouseClick(mode, Qt::LeftButton);
+    QCOMPARE(mode->text(), QString("rad"));
+
+    // In radians, sin(pi/2) is exactly 1 within floating-point precision.
+    QTest::mouseClick(sin, Qt::LeftButton);
+    QTest::mouseClick(pi, Qt::LeftButton);
+    QTest::mouseClick(divide, Qt::LeftButton);
+    QTest::mouseClick(two, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("sin(pi/2)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - 1.0) < 1e-12);
 }
 
 QTEST_MAIN(CalculatorGuiTests)
