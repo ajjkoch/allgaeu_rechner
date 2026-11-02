@@ -2,6 +2,7 @@
 
 #include <sstream> // for std::stringstream
 #include <iomanip> // for std::setprecision
+#include <vector>
 
 #include "../../../common/Util.h"
 
@@ -35,6 +36,10 @@ private slots:
     void test_invalid_expressions();
     void test_domain_errors();
     void test_calculator_instances_are_independent();
+    void test_numeric_literals();
+    void test_invalid_numeric_literals_and_implicit_multiplication();
+    void test_numeric_overflow();
+    void test_small_nonzero_operands();
 
 private:
     Calculator m_calculator;
@@ -396,6 +401,56 @@ void CalculatorTests::test_domain_errors()
 }
 
 QTEST_APPLESS_MAIN(CalculatorTests)
+
+
+void CalculatorTests::test_numeric_literals()
+{
+    QCOMPARE(m_calculator.evaluate("1.5e3"), 1500.0);
+    QCOMPARE(m_calculator.evaluate("2E-4"), 0.0002);
+    QCOMPARE(m_calculator.evaluate(".5"), 0.5);
+    QCOMPARE(m_calculator.evaluate("1."), 1.0);
+    QCOMPARE(m_calculator.evaluate("2pi"), 2.0 * std::acos(-1.0));
+}
+
+void CalculatorTests::test_invalid_numeric_literals_and_implicit_multiplication()
+{
+    const std::vector<std::string> invalidExpressions = {
+        ".", "1.2.3", "1e", "1e+", "2 3", "2(3+4)", "pi(2)"
+    };
+
+    for (const std::string& expression : invalidExpressions) {
+        QVERIFY2(
+            [&]() {
+                try {
+                    m_calculator.evaluate(expression);
+                    return false;
+                } catch (const std::invalid_argument&) {
+                    return true;
+                } catch (...) {
+                    return false;
+                }
+            }(),
+            ("Expected invalid_argument for: " + expression).c_str());
+    }
+}
+
+void CalculatorTests::test_numeric_overflow()
+{
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("1e309"), std::overflow_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("10^309"), std::overflow_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("171!"), std::overflow_error);
+}
+
+void CalculatorTests::test_small_nonzero_operands()
+{
+    QCOMPARE(m_calculator.evaluate("1e-300/1e-300"), 1.0);
+    QVERIFY(std::fabs(m_calculator.evaluate("5e-300 mod 2e-300") / 1e-300 - 1.0) < 1e-12);
+
+    m_calculator.setInverted(true);
+    QCOMPARE(m_calculator.evaluate("1e-300%1e-300"), 100.0);
+    m_calculator.setInverted(false);
+    QVERIFY(std::fabs(m_calculator.evaluate("1e-300%1e-300") / 1e-302 - 1.0) < 1e-12);
+}
 
 void CalculatorTests::test_calculator_instances_are_independent()
 {
