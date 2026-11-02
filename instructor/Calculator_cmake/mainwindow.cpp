@@ -225,9 +225,10 @@ void MainWindow::history_back_pressed()
 /** @brief Displays the following entry in the expression/result history. */
 void MainWindow::history_forward_pressed()
 {
-    if(m_history.empty()) return;
+    if (m_history.isEmpty()) return;
     m_hpos = qMin(m_hpos + 1, m_history.size() - 1);
 
+    m_isError = false;
     QString hentry = m_history[m_hpos];
     ui->textEdit->clear();
     setRightAlignedText(ui->textEdit,hentry);
@@ -357,7 +358,7 @@ void MainWindow::edx_pressed()
             m_strExpression = QString::number(result); // Display with full precision
         }
         m_isError = false;
-    } catch (std::exception e) {
+    } catch (const std::exception& e) {
         m_strExpression = e.what();
         m_isError = true;
     }
