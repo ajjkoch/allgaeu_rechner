@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , m_strExpression("")
     , m_isError(false)
-    , m_isEvaluated(false)
     , m_isInverted(false)
     , m_hpos(0)
 {
@@ -96,8 +95,8 @@ MainWindow::~MainWindow()
 /** @brief Toggles the trigonometric angle unit between degrees and radians. */
 void MainWindow::degreesMode_pressed()
 {
-    QString strMode = ui->pushButton_changeDegreesMode->text();
-    if( strMode == "grad"){
+    const bool degrees = ui->pushButton_changeDegreesMode->text() == "grad";
+    if (degrees) {
         calc.setDegMode(false);
         ui->pushButton_changeDegreesMode->setText("rad");
     } else {
@@ -118,8 +117,7 @@ void MainWindow::digit_pressed(int digit)
 /** @brief Inserts a decimal separator at the current cursor position. */
 void MainWindow::decimal_pressed()
 {
-    if (m_isError) clear_pressed();
-    insertRightAlignedText(ui->textEdit,".");
+    insertRightAlignedText(ui->textEdit, ".");
 }
 
 /** @brief Applies the sign-toggle button action to the current expression. */
@@ -215,8 +213,8 @@ void MainWindow::move_right_pressed()
 /** @brief Displays the preceding entry in the expression/result history. */
 void MainWindow::history_back_pressed()
 {
-    if(m_history.empty()) return;
-    if(m_hpos <= 0 ) m_hpos = 0; else m_hpos--;
+    if (m_history.isEmpty()) return;
+    m_hpos = qMax(0, m_hpos - 1);
 
     QString hentry = m_history[m_hpos];
     ui->textEdit->clear();
@@ -227,7 +225,7 @@ void MainWindow::history_back_pressed()
 void MainWindow::history_forward_pressed()
 {
     if(m_history.empty()) return;
-    if(m_hpos >= (m_history.size()-1)) m_hpos = m_history.size()-1; else m_hpos++;
+    m_hpos = qMin(m_hpos + 1, m_history.size() - 1);
 
     QString hentry = m_history[m_hpos];
     ui->textEdit->clear();
@@ -375,6 +373,11 @@ void MainWindow::percent_pressed()
 /** @brief Deletes the character immediately before the text cursor, if any. */
 void MainWindow::erase_left_pressed()
 {
+    if (m_isError) {
+        clear_pressed();
+        return;
+    }
+
     // Get the cursor position
     QTextCursor cursor = ui->textEdit->textCursor();
     int pos = cursor.position();
@@ -403,6 +406,10 @@ void /** @brief Inserts text at the editor cursor and updates m_strExpression.
  * @param text Text to insert.
  */
 MainWindow::insertRightAlignedText(QTextEdit *textEdit, const QString &text) {
+    if (m_isError) {
+        clear_pressed();
+    }
+
     textEdit->insertPlainText(text);
     m_strExpression = textEdit->toPlainText();
 }
@@ -413,7 +420,7 @@ void /** @brief Replaces editor contents and applies right alignment.
  * @param text Replacement text.
  */
 MainWindow::setRightAlignedText(QTextEdit *textEdit, const QString &text) {
-    // Clear the existing content
+    m_strExpression = text;
     textEdit->clear();
 
     // Set the alignment of the entire text to right
