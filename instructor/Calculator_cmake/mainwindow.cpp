@@ -408,7 +408,7 @@ void MainWindow::erase_left_pressed()
     }
 }
 
-void /** @brief Inserts text at the editor cursor and updates m_strExpression.
+/** @brief Inserts text at the editor cursor and updates m_strExpression.
  * @param textEdit Editor receiving the inserted text.
  * @param text Text to insert.
  */
