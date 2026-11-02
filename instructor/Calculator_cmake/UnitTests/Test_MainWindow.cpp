@@ -25,6 +25,10 @@ private slots:
     void logarithmFunctions();
     void reciprocalOperation();
     void mathematicalFunctionErrors();
+    void cosineInDegrees();
+    void moduloOperation();
+    void inverseTangentInDegrees();
+    void tangentDomainError();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -506,6 +510,126 @@ void CalculatorGuiTests::mathematicalFunctionErrors()
     QTest::mouseClick(seven, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("7"));
 
+}
+
+
+void CalculatorGuiTests::cosineInDegrees()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *cos = window.findChild<QPushButton *>("pushButton_cos");
+    auto *six = window.findChild<QPushButton *>("pushButton_6");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(cos);
+    QVERIFY(six);
+    QVERIFY(zero);
+    QVERIFY(right);
+    QVERIFY(equals);
+
+    QTest::mouseClick(cos, Qt::LeftButton);
+    QTest::mouseClick(six, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("cos(60)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - 0.5) < 1e-12);
+}
+
+void CalculatorGuiTests::moduloOperation()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *one = window.findChild<QPushButton *>("pushButton_1");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *three = window.findChild<QPushButton *>("pushButton_3");
+    auto *mod = window.findChild<QPushButton *>("pushButton_mod");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(one);
+    QVERIFY(zero);
+    QVERIFY(three);
+    QVERIFY(mod);
+    QVERIFY(equals);
+
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(mod, Qt::LeftButton);
+    QTest::mouseClick(three, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("10 mod 3"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("1"));
+}
+
+void CalculatorGuiTests::inverseTangentInDegrees()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
+    auto *tan = window.findChild<QPushButton *>("pushButton_tan");
+    auto *one = window.findChild<QPushButton *>("pushButton_1");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(inverse);
+    QVERIFY(tan);
+    QVERIFY(one);
+    QVERIFY(right);
+    QVERIFY(equals);
+
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QCOMPARE(tan->text(), QString("atan"));
+    QTest::mouseClick(tan, Qt::LeftButton);
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("atan(1)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("45"));
+}
+
+void CalculatorGuiTests::tangentDomainError()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *tan = window.findChild<QPushButton *>("pushButton_tan");
+    auto *nine = window.findChild<QPushButton *>("pushButton_9");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+
+    QVERIFY(display);
+    QVERIFY(tan);
+    QVERIFY(nine);
+    QVERIFY(zero);
+    QVERIFY(right);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    QTest::mouseClick(tan, Qt::LeftButton);
+    QTest::mouseClick(nine, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("tan(90)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(display->toPlainText() != QString("tan(90)"));
+    QVERIFY(!display->toPlainText().isEmpty());
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString());
 }
 
 QTEST_MAIN(CalculatorGuiTests)
