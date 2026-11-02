@@ -158,8 +158,11 @@ private:
 
         static double checked(double value)
         {
-            if (!std::isfinite(value)) {
-                throw std::domain_error("Mathematical result is not finite");
+            if (std::isinf(value)) {
+                throw std::overflow_error("Mathematical result is out of range");
+            }
+            if (std::isnan(value)) {
+                throw std::domain_error("Mathematical result is undefined");
             }
             return value;
         }
@@ -198,7 +201,7 @@ private:
                         if (right == 0.0) {
                             throw std::domain_error("Percentage divisor is zero");
                         }
-                        left = checked(left / (right / 100.0));
+                        left = checked((left / right) * 100.0);
                     } else {
                         left = checked(left * (right / 100.0));
                     }
@@ -278,7 +281,14 @@ private:
                 current() == '.') {
                 const std::size_t start = m_position;
                 std::size_t parsed = 0;
-                const double value = std::stod(m_expression.substr(start), &parsed);
+                double value = 0.0;
+                try {
+                    value = std::stod(m_expression.substr(start), &parsed);
+                } catch (const std::out_of_range&) {
+                    throw std::overflow_error("Numeric literal is out of range");
+                } catch (const std::invalid_argument&) {
+                    throw std::invalid_argument("Invalid numeric literal");
+                }
                 m_position += parsed;
 
                 // Preserve the existing calculator shorthand, e.g. 2pi.
