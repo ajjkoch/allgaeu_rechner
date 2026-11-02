@@ -4,6 +4,8 @@
 #include <QButtonGroup>
 #include <QTextBlockFormat>
 #include <QSignalBlocker>
+#include <QShortcut>
+#include <QKeySequence>
 
 /**
  * @brief Constructs the calculator window and wires UI controls to slots.
@@ -90,6 +92,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton_clear, &QPushButton::clicked, this, &MainWindow::clear_pressed);
     connect(ui->pushButton_equals, &QPushButton::clicked, this, &MainWindow::equals_pressed);
+
+    // Allow the user to evaluate the current expression with Return or keypad Enter.
+    auto *returnShortcut = new QShortcut(QKeySequence(Qt::Key_Return), this);
+    returnShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    connect(returnShortcut, &QShortcut::activated, this, &MainWindow::equals_pressed);
+
+    auto *enterShortcut = new QShortcut(QKeySequence(Qt::Key_Enter), this);
+    enterShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    connect(enterShortcut, &QShortcut::activated, this, &MainWindow::equals_pressed);
 
     setRightAlignedText(ui->textEdit, m_strExpression);
 }
