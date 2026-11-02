@@ -205,7 +205,13 @@ private:
                         }
                         left = checked((left / right) * 100.0);
                     } else {
-                        left = checked(left * (right / 100.0));
+                        // Divide the operand with the larger magnitude first.
+                        // This avoids premature underflow in right / 100 and
+                        // reduces the risk of an overflowing intermediate product.
+                        const double percentage = std::fabs(left) >= std::fabs(right)
+                            ? (left / 100.0) * right
+                            : left * (right / 100.0);
+                        left = checked(percentage);
                     }
                 } else if (consumeWord("mod")) {
                     const double right = parseUnary();
