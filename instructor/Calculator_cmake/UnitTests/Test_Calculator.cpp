@@ -25,6 +25,7 @@ private slots:
     void test_sin();
     void test_cos();
     void test_tan();
+    void test_trigonometric_edge_cases();
     void test_sqrt();
     void test_power();
     void test_power_edge_cases();
@@ -261,6 +262,36 @@ void CalculatorTests::test_tan()
         double result = m_calculator.evaluate(expression);
         QCOMPARE(result, std::sqrt(3)); // so use a fractional value for the compare
     }
+}
+
+
+void CalculatorTests::test_trigonometric_edge_cases()
+{
+    m_calculator.setDegMode(true);
+
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("tan(90)"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("tan(270)"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("tan(-90)"), std::domain_error);
+
+    QVERIFY(std::fabs(m_calculator.evaluate("sin(180)")) < 1e-12);
+    QVERIFY(std::fabs(m_calculator.evaluate("cos(90)")) < 1e-12);
+    QVERIFY(std::fabs(m_calculator.evaluate("sin(360000000180)")) < 1e-12);
+
+    QCOMPARE(m_calculator.evaluate("asin(1)"), 90.0);
+    QCOMPARE(m_calculator.evaluate("asin(-1)"), -90.0);
+    QCOMPARE(m_calculator.evaluate("acos(1)"), 0.0);
+    QCOMPARE(m_calculator.evaluate("acos(-1)"), 180.0);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("asin(1.0000000001)"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("acos(-1.0000000001)"), std::domain_error);
+    QVERIFY(std::fabs(m_calculator.evaluate("atan(1)") - 45.0) < 1e-12);
+
+    m_calculator.setDegMode(false);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("tan(pi/2)"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("tan(3*pi/2)"), std::domain_error);
+    QVERIFY(std::fabs(m_calculator.evaluate("sin(pi)")) < 1e-12);
+    QVERIFY(std::fabs(m_calculator.evaluate("cos(pi/2)")) < 1e-12);
+    QCOMPARE(m_calculator.evaluate("asin(1)"), std::acos(-1.0) / 2.0);
+    QCOMPARE(m_calculator.evaluate("acos(-1)"), std::acos(-1.0));
 }
 
 void CalculatorTests::test_sqrt()
