@@ -170,7 +170,7 @@ void CalculatorTests::test_sin()
         std::string expression = "sin(180)";
         double result = Calculator::evaluate(expression);
         //QCOMPARE(result, 0); // this fails because it compares an integer to a fractional value.
-        QCOMPARE(result, 0.0); // so use a fractional value for the compare
+        QVERIFY(std::fabs(result) < 1e-12); // trigonometric round-off near zero
     }
     {
         std::string expression = "sin(90)";
@@ -180,7 +180,7 @@ void CalculatorTests::test_sin()
     {
         std::string expression = "sin(45)";
         double result = Calculator::evaluate(expression);
-        QCOMPARE(result, std::sqrt(2)/2.0);
+        QVERIFY(std::fabs(result - std::sqrt(2)/2.0) < 1e-12);
     }
 
     Calculator::setDegMode(false);
@@ -220,7 +220,7 @@ void CalculatorTests::test_cos()
     {
         std::string expression = "cos(pi)";
         double result = Calculator::evaluate(expression);
-        QCOMPARE(result, -1.0); // so use a fractional value for the compare
+        QVERIFY(std::fabs(result + 1.0) < 1e-12);
     }
 }
 
@@ -231,7 +231,7 @@ void CalculatorTests::test_tan()
     {
         std::string expression = "tan(60)";
         double result = Calculator::evaluate(expression);
-        QCOMPARE(result, std::sqrt(3)); // so use a fractional value for the compare
+        QVERIFY(std::fabs(result - std::sqrt(3)) < 1e-12);
     }
 
     Calculator::setDegMode(false);
