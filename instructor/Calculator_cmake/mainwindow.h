@@ -2,11 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPlainTextEdit>
 #include <QString>
-#include <QList>
+#include <QVector>
 
 #include "../../common/Util.h"
+
+class QTextEdit;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
