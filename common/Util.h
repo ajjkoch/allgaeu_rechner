@@ -58,44 +58,25 @@ static bool compareDoubles(double a, double b, double epsilon = 1e-9)
 class Calculator
 {
 public:
-    static long double evaluate(const std::string& expression)
+    long double evaluate(const std::string& expression) const
     {
-        Parser parser(expression, isDegrees(), isInverted());
+        Parser parser(expression, m_degrees, m_inverted);
         return parser.parse();
     }
 
-    static void setDegMode(bool isDegrees)
+    void setDegMode(bool isDegrees)
     {
-        degreesSetting().store(isDegrees);
+        m_degrees = isDegrees;
     }
 
-    static void setInverted(bool isInverted)
+    void setInverted(bool isInverted)
     {
-        invertedSetting().store(isInverted);
+        m_inverted = isInverted;
     }
 
 private:
-    static std::atomic<bool>& degreesSetting()
-    {
-        static std::atomic<bool> value(true);
-        return value;
-    }
-
-    static std::atomic<bool>& invertedSetting()
-    {
-        static std::atomic<bool> value(false);
-        return value;
-    }
-
-    static bool isDegrees()
-    {
-        return degreesSetting().load();
-    }
-
-    static bool isInverted()
-    {
-        return invertedSetting().load();
-    }
+    bool m_degrees = true;
+    bool m_inverted = false;
 
     class Parser
     {
