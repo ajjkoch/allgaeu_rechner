@@ -282,6 +282,11 @@ void CalculatorGuiTests::trigonometricFunctions()
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("1"));
 
+    // Start a fresh expression before testing inverse sine.
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+    QVERIFY(clear);
+    QTest::mouseClick(clear, Qt::LeftButton);
+
     // Inverse sine is also expressed in degrees by default: asin(1) = 90.
     QTest::mouseClick(inverse, Qt::LeftButton);
     QTest::mouseClick(sin, Qt::LeftButton);
