@@ -1,7 +1,6 @@
 #ifndef UTILS_COMMON_H
 #define UTILS_COMMON_H
 
-#include <atomic>
 #include <cctype>
 #include <cmath>
 #include <limits>
