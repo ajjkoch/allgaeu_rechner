@@ -216,6 +216,7 @@ void MainWindow::history_back_pressed()
     if (m_history.isEmpty()) return;
     m_hpos = qMax(0, m_hpos - 1);
 
+    m_isError = false;
     QString hentry = m_history[m_hpos];
     ui->textEdit->clear();
     setRightAlignedText(ui->textEdit,hentry);
