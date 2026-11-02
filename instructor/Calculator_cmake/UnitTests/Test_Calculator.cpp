@@ -39,6 +39,7 @@ private slots:
     void test_modulo();
     void test_invalid_expressions();
     void test_domain_errors();
+    void test_math_function_boundaries();
     void test_calculator_instances_are_independent();
     void test_numeric_literals();
     void test_invalid_numeric_literals_and_implicit_multiplication();
@@ -458,6 +459,37 @@ void CalculatorTests::test_domain_errors()
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("asin(2)"), std::domain_error);
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("5.5!"), std::domain_error);
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("(-1)!"), std::domain_error);
+}
+
+void CalculatorTests::test_math_function_boundaries()
+{
+    // sqrt: zero, ordinary values and positive subnormal input.
+    QCOMPARE(m_calculator.evaluate("sqrt(0)"), 0.0);
+    QCOMPARE(m_calculator.evaluate("sqrt(4)"), 2.0);
+    const double tinyRoot = m_calculator.evaluate("sqrt(1e-320)");
+    QVERIFY(tinyRoot > 0.0);
+    QVERIFY(std::isfinite(tinyRoot));
+
+    // ln/log: smallest positive normal and subnormal values remain valid.
+    QVERIFY(std::isfinite(m_calculator.evaluate("ln(1e-308)")));
+    QVERIFY(std::isfinite(m_calculator.evaluate("ln(1e-320)")));
+    QVERIFY(std::isfinite(m_calculator.evaluate("log(1e-308)")));
+    QVERIFY(std::isfinite(m_calculator.evaluate("log(1e-320)")));
+    QCOMPARE(m_calculator.evaluate("ln(1)"), 0.0);
+    QCOMPARE(m_calculator.evaluate("log(1)"), 0.0);
+
+    // exp: finite near the upper limit, overflow above it, underflow below it.
+    QVERIFY(std::isfinite(m_calculator.evaluate("exp(709)")));
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("exp(710)"), std::overflow_error);
+    QCOMPARE(m_calculator.evaluate("exp(-1000)"), 0.0);
+
+    // edx is the reciprocal: finite for suitable non-zero values,
+    // overflow for a very small non-zero value.
+    QCOMPARE(m_calculator.evaluate("edx(2)"), 0.5);
+    QCOMPARE(m_calculator.evaluate("edx(-4)"), -0.25);
+    QVERIFY(std::isfinite(m_calculator.evaluate("edx(1e-308)")));
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("edx(1e-309)"), std::overflow_error);
+    QVERIFY(std::isfinite(m_calculator.evaluate("edx(1e308)")));
 }
 
 QTEST_APPLESS_MAIN(CalculatorTests)
