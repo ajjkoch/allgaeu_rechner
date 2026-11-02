@@ -47,8 +47,11 @@ jobs:
           -G Ninja
           -DCMAKE_BUILD_TYPE=Debug
 
-      - name: Build calculator application
+      - name: Build calculator application and GUI tests
         run: cmake --build build/calculator --parallel
+
+      - name: Run calculator GUI interaction tests
+        run: ctest --test-dir build/calculator --output-on-failure -R CalculatorGuiTests
 
       - name: Configure unit tests
         run: >
