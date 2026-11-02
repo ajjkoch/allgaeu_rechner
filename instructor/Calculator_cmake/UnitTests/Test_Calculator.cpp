@@ -3,6 +3,7 @@
 #include <sstream> // for std::stringstream
 #include <iomanip> // for std::setprecision
 #include <vector>
+#include <limits>
 
 #include "../../../common/Util.h"
 
@@ -39,6 +40,7 @@ private slots:
     void test_numeric_literals();
     void test_invalid_numeric_literals_and_implicit_multiplication();
     void test_numeric_overflow();
+    void test_numeric_underflow();
     void test_small_nonzero_operands();
 
 private:
@@ -439,6 +441,16 @@ void CalculatorTests::test_numeric_overflow()
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("1e309"), std::overflow_error);
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("10^309"), std::overflow_error);
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("171!"), std::overflow_error);
+}
+
+void CalculatorTests::test_numeric_underflow()
+{
+    QCOMPARE(m_calculator.evaluate("1e-400"), 0.0);
+    QCOMPARE(m_calculator.evaluate("-1e-400"), 0.0);
+
+    const double subnormal = m_calculator.evaluate("1e-320");
+    QVERIFY(subnormal > 0.0);
+    QVERIFY(subnormal < std::numeric_limits<double>::min());
 }
 
 void CalculatorTests::test_small_nonzero_operands()
