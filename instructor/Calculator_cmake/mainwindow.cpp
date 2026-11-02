@@ -3,6 +3,10 @@
 #include <QDebug>
 #include <QPushButton>
 
+/**
+ * @brief Constructs the calculator window and wires UI controls to slots.
+ * @param parent Optional Qt parent widget.
+ */
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -71,11 +75,13 @@ MainWindow::MainWindow(QWidget *parent)
     setRightAlignedText(ui->textEdit, m_strExpression);
 }
 
+/** @brief Destroys the window's generated UI. */
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+/** @brief Toggles the trigonometric angle unit between degrees and radians. */
 void MainWindow::degreesMode_pressed()
 {
     QString strMode = ui->pushButton_changeDegreesMode->text();
@@ -88,18 +94,21 @@ void MainWindow::degreesMode_pressed()
     }
 }
 
+/** @brief Inserts the digit of the button that emitted the signal. */
 void MainWindow::digit_pressed()
 {
     if(m_isError) clear_pressed();
     insertRightAlignedText(ui->textEdit,((QPushButton*)sender())->text());
 }
 
+/** @brief Inserts a decimal separator at the current cursor position. */
 void MainWindow::decimal_pressed()
 {
     if (m_isError) clear_pressed();
     insertRightAlignedText(ui->textEdit,".");
 }
 
+/** @brief Applies the sign-toggle button action to the current expression. */
 void MainWindow::unary_operation_pressed()
 {
     if (m_isError) clear_pressed();
@@ -123,6 +132,7 @@ void MainWindow::unary_operation_pressed()
     }
 }
 
+/** @brief Clears the expression, display error state and selected binary operator buttons. */
 void MainWindow::clear_pressed()
 {
     ui->pushButton_plus->setChecked(false);
@@ -136,11 +146,13 @@ void MainWindow::clear_pressed()
     setRightAlignedText(ui->textEdit,m_strExpression);
 }
 
+/** @brief Inserts the calculator constant pi. */
 void MainWindow::pi_pressed()
 {
     insertRightAlignedText(ui->textEdit,"pi");
 }
 
+/** @brief Moves the text cursor one position to the left. */
 void MainWindow::move_left_pressed()
 {
     ui->textEdit->setFocus();
@@ -166,6 +178,7 @@ void MainWindow::move_left_pressed()
     ui->textEdit->setFocus();
 }
 
+/** @brief Moves the text cursor one position to the right. */
 void MainWindow::move_right_pressed()
 {
     ui->textEdit->setFocus();
@@ -191,6 +204,7 @@ void MainWindow::move_right_pressed()
     ui->textEdit->setFocus();
 }
 
+/** @brief Displays the preceding entry in the expression/result history. */
 void MainWindow::history_back_pressed()
 {
     if(m_history.empty()) return;
@@ -201,6 +215,7 @@ void MainWindow::history_back_pressed()
     setRightAlignedText(ui->textEdit,hentry);
 }
 
+/** @brief Displays the following entry in the expression/result history. */
 void MainWindow::history_forward_pressed()
 {
     if(m_history.empty()) return;
@@ -211,6 +226,7 @@ void MainWindow::history_forward_pressed()
     setRightAlignedText(ui->textEdit,hentry);
 }
 
+/** @brief Evaluates the displayed expression, stores history and displays the result or error. */
 void MainWindow::equals_pressed()
 {
     try
@@ -237,6 +253,7 @@ void MainWindow::equals_pressed()
     setRightAlignedText(ui->textEdit,m_strExpression);
 }
 
+/** @brief Inserts the selected binary arithmetic operator into the expression. */
 void MainWindow::binary_operation_pressed()
 {
     if (m_isError) clear_pressed();
@@ -263,59 +280,70 @@ void MainWindow::binary_operation_pressed()
     }
 }
 
+/** @brief Inserts an opening parenthesis. */
 void MainWindow::left_bracked_pressed()
 {
     insertRightAlignedText(ui->textEdit,"(");
 }
 
+/** @brief Inserts a closing parenthesis. */
 void MainWindow::right_bracked_pressed()
 {
     insertRightAlignedText(ui->textEdit,")");
 }
 
+/** @brief Inserts the square-root function prefix. */
 void MainWindow::sqrt_pressed()
 {
     insertRightAlignedText(ui->textEdit,"sqrt(");
 }
 
+/** @brief Inserts the exponentiation operator. */
 void MainWindow::power_pressed()
 {
     insertRightAlignedText(ui->textEdit,"^");
 }
 
+/** @brief Inserts sine or inverse sine, depending on inverse-key state. */
 void MainWindow::sin_pressed()
 {
     QString name = m_isInverted ? "asin(" : "sin(";
     insertRightAlignedText(ui->textEdit,name);
 }
 
+/** @brief Inserts cosine or inverse cosine, depending on inverse-key state. */
 void MainWindow::cos_pressed()
 {
     QString name = m_isInverted ? "acos(" : "cos(";
     insertRightAlignedText(ui->textEdit,name);
 }
 
+/** @brief Inserts tangent or inverse tangent, depending on inverse-key state. */
 void MainWindow::tan_pressed()
 {
     QString name = m_isInverted ? "atan(" : "tan(";
     insertRightAlignedText(ui->textEdit,name);
 }
 
+/** @brief Inserts the base-10 logarithm function prefix. */
 void MainWindow::log_pressed()
 {
     insertRightAlignedText(ui->textEdit,"log(");
 }
 
+/** @brief Inserts the natural logarithm function prefix. */
 void MainWindow::ln_pressed()
 {
     insertRightAlignedText(ui->textEdit,"ln(");
 }
 
+/** @brief Inserts the floating-point remainder operator. */
 void MainWindow::mod_pressed()
 {
     insertRightAlignedText(ui->textEdit," mod ");
 }
 
+/** @brief Toggles inverse trigonometric keys and inverse percentage mode. */
 void MainWindow::inv_pressed()
 {
     if(m_isInverted == false){
@@ -334,6 +362,7 @@ void MainWindow::inv_pressed()
     calc.setInverted(m_isInverted);
 }
 
+/** @brief Evaluates the reciprocal of the current expression and displays the result or error. */
 void MainWindow::edx_pressed()
 {
     try
@@ -356,11 +385,13 @@ void MainWindow::edx_pressed()
     setRightAlignedText(ui->textEdit,m_strExpression);
 }
 
+/** @brief Inserts the percentage operator. */
 void MainWindow::percent_pressed()
 {
     insertRightAlignedText(ui->textEdit,"%");
 }
 
+/** @brief Deletes the character immediately before the text cursor, if any. */
 void MainWindow::erase_left_pressed()
 {
     // Get the cursor position
@@ -386,13 +417,21 @@ void MainWindow::erase_left_pressed()
     }
 }
 
-void MainWindow::insertRightAlignedText(QTextEdit *textEdit, const QString &text) {
+void /** @brief Inserts text at the editor cursor and updates m_strExpression.
+ * @param textEdit Editor receiving the inserted text.
+ * @param text Text to insert.
+ */
+MainWindow::insertRightAlignedText(QTextEdit *textEdit, const QString &text) {
     textEdit->insertPlainText(text);
     m_strExpression = textEdit->toPlainText();
 }
 
 // Append text with right alignment
-void MainWindow::setRightAlignedText(QTextEdit *textEdit, const QString &text) {
+void /** @brief Replaces editor contents and applies right alignment.
+ * @param textEdit Editor to update.
+ * @param text Replacement text.
+ */
+MainWindow::setRightAlignedText(QTextEdit *textEdit, const QString &text) {
     // Clear the existing content
     textEdit->clear();
 
