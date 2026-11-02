@@ -1,0 +1,64 @@
+name: Calculator CI
+
+on:
+  push:
+    branches:
+      - main
+      - feature/calculator-core-review
+    paths:
+      - "common/Util.h"
+      - "common/test_common.cmake"
+      - "instructor/Calculator_cmake/**"
+      - ".github/workflows/calculator.yml"
+  pull_request:
+    paths:
+      - "common/Util.h"
+      - "common/test_common.cmake"
+      - "instructor/Calculator_cmake/**"
+      - ".github/workflows/calculator.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    name: Linux / Qt 6 / CMake
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes \
+            cmake \
+            ninja-build \
+            g++ \
+            qt6-base-dev \
+            qt6-base-dev-tools
+
+      - name: Configure calculator application
+        run: >
+          cmake -S instructor/Calculator_cmake
+          -B build/calculator
+          -G Ninja
+          -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build calculator application
+        run: cmake --build build/calculator --parallel
+
+      - name: Configure unit tests
+        run: >
+          cmake -S instructor/Calculator_cmake/UnitTests
+          -B build/calculator-tests
+          -G Ninja
+          -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build unit tests
+        run: cmake --build build/calculator-tests --parallel
+
+      - name: Run unit tests
+        run: ctest --test-dir build/calculator-tests --output-on-failure
