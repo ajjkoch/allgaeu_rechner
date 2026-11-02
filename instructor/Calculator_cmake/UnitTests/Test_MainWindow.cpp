@@ -35,6 +35,11 @@ private slots:
     void inverseTrigonometricDomainError();
     void reciprocalOfZeroError();
     void keyboardEntry();
+    void divisionByZeroError();
+    void moduloByZeroError();
+    void inverseCosineDomainError();
+    void logarithmDomainErrors();
+    void tangentDomainErrorInRadians();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -816,6 +821,193 @@ void CalculatorGuiTests::keyboardEntry()
     QCOMPARE(display->toPlainText(), QString("12+3"));
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("15"));
+}
+
+
+void CalculatorGuiTests::divisionByZeroError()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *one = window.findChild<QPushButton *>("pushButton_1");
+    auto *divide = window.findChild<QPushButton *>("pushButton_divided");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *seven = window.findChild<QPushButton *>("pushButton_7");
+
+    QVERIFY(display);
+    QVERIFY(one);
+    QVERIFY(divide);
+    QVERIFY(zero);
+    QVERIFY(equals);
+    QVERIFY(seven);
+
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(divide, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(equals, Qt::LeftButton);
+
+    QCOMPARE(display->toPlainText(), QString("Division by zero"));
+
+    QTest::mouseClick(seven, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("7"));
+}
+
+void CalculatorGuiTests::moduloByZeroError()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *one = window.findChild<QPushButton *>("pushButton_1");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *mod = window.findChild<QPushButton *>("pushButton_mod");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *seven = window.findChild<QPushButton *>("pushButton_7");
+
+    QVERIFY(display);
+    QVERIFY(one);
+    QVERIFY(zero);
+    QVERIFY(mod);
+    QVERIFY(equals);
+    QVERIFY(seven);
+
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(mod, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(equals, Qt::LeftButton);
+
+    QCOMPARE(display->toPlainText(), QString("Modulo by zero"));
+
+    QTest::mouseClick(seven, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("7"));
+}
+
+void CalculatorGuiTests::inverseCosineDomainError()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
+    auto *cos = window.findChild<QPushButton *>("pushButton_cos");
+    auto *two = window.findChild<QPushButton *>("pushButton_2");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *seven = window.findChild<QPushButton *>("pushButton_7");
+
+    QVERIFY(display);
+    QVERIFY(inverse);
+    QVERIFY(cos);
+    QVERIFY(two);
+    QVERIFY(right);
+    QVERIFY(equals);
+    QVERIFY(seven);
+
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QTest::mouseClick(cos, Qt::LeftButton);
+    QTest::mouseClick(two, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("acos(2)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+
+    QCOMPARE(display->toPlainText(),
+             QString("acos argument must be between -1 and 1"));
+
+    QTest::mouseClick(seven, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("7"));
+}
+
+void CalculatorGuiTests::logarithmDomainErrors()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *log = window.findChild<QPushButton *>("pushButton_log");
+    auto *ln = window.findChild<QPushButton *>("pushButton_ln");
+    auto *zero = window.findChild<QPushButton *>("pushButton_0");
+    auto *one = window.findChild<QPushButton *>("pushButton_1");
+    auto *minus = window.findChild<QPushButton *>("pushButton_minus");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+
+    QVERIFY(display);
+    QVERIFY(log);
+    QVERIFY(ln);
+    QVERIFY(zero);
+    QVERIFY(one);
+    QVERIFY(minus);
+    QVERIFY(right);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    QTest::mouseClick(log, Qt::LeftButton);
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("log(0)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(),
+             QString("log requires a positive argument"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    QTest::mouseClick(ln, Qt::LeftButton);
+    QTest::mouseClick(minus, Qt::LeftButton);
+    QTest::mouseClick(one, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("ln(-1)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(),
+             QString("ln requires a positive argument"));
+
+    QTest::mouseClick(zero, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("0"));
+}
+
+void CalculatorGuiTests::tangentDomainErrorInRadians()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *mode = window.findChild<QPushButton *>("pushButton_changeDegreesMode");
+    auto *tan = window.findChild<QPushButton *>("pushButton_tan");
+    auto *pi = window.findChild<QPushButton *>("pushButton_pi");
+    auto *divide = window.findChild<QPushButton *>("pushButton_divided");
+    auto *two = window.findChild<QPushButton *>("pushButton_2");
+    auto *right = window.findChild<QPushButton *>("pushButton_bracket_right");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *seven = window.findChild<QPushButton *>("pushButton_7");
+
+    QVERIFY(display);
+    QVERIFY(mode);
+    QVERIFY(tan);
+    QVERIFY(pi);
+    QVERIFY(divide);
+    QVERIFY(two);
+    QVERIFY(right);
+    QVERIFY(equals);
+    QVERIFY(seven);
+
+    QTest::mouseClick(mode, Qt::LeftButton);
+    QCOMPARE(mode->text(), QString("rad"));
+
+    QTest::mouseClick(tan, Qt::LeftButton);
+    QTest::mouseClick(pi, Qt::LeftButton);
+    QTest::mouseClick(divide, Qt::LeftButton);
+    QTest::mouseClick(two, Qt::LeftButton);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("tan(pi/2)"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+
+    QCOMPARE(display->toPlainText(),
+             QString("tan is undefined at odd multiples of 90 degrees"));
+
+    QTest::mouseClick(seven, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("7"));
 }
 
 QTEST_MAIN(CalculatorGuiTests)
