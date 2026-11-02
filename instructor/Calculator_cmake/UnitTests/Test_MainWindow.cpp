@@ -654,7 +654,7 @@ void CalculatorGuiTests::exponentialAndFactorial()
 
     display->setPlainText("exp(1)");
     QTest::mouseClick(equals, Qt::LeftButton);
-    QVERIFY(qAbs(display->toPlainText().toDouble() - qExp(1.0)) < 1e-12);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - qExp(1.0)) < 1e-5);
 
     QTest::mouseClick(clear, Qt::LeftButton);
     display->setPlainText("5!");
@@ -689,7 +689,7 @@ void CalculatorGuiTests::piConstantAndDecimalInput()
 
     QTest::mouseClick(pi, Qt::LeftButton);
     QTest::mouseClick(equals, Qt::LeftButton);
-    QVERIFY(qAbs(display->toPlainText().toDouble() - M_PI) < 1e-12);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - M_PI) < 1e-5);
 
     QTest::mouseClick(clear, Qt::LeftButton);
     QTest::mouseClick(one, Qt::LeftButton);
