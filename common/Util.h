@@ -1,8 +1,10 @@
 #ifndef UTILS_COMMON_H
 #define UTILS_COMMON_H
 
+#include <cerrno>
 #include <cctype>
 #include <cmath>
+#include <cstdlib>
 #include <limits>
 #include <stdexcept>
 #include <string>
@@ -280,15 +282,21 @@ private:
             if (std::isdigit(static_cast<unsigned char>(current())) ||
                 current() == '.') {
                 const std::size_t start = m_position;
-                std::size_t parsed = 0;
-                double value = 0.0;
-                try {
-                    value = std::stod(m_expression.substr(start), &parsed);
-                } catch (const std::out_of_range&) {
-                    throw std::overflow_error("Numeric literal is out of range");
-                } catch (const std::invalid_argument&) {
+                const std::string remaining = m_expression.substr(start);
+                char* end = nullptr;
+                errno = 0;
+                const double value = std::strtod(remaining.c_str(), &end);
+                const std::size_t parsed =
+                    static_cast<std::size_t>(end - remaining.c_str());
+
+                if (parsed == 0) {
                     throw std::invalid_argument("Invalid numeric literal");
                 }
+                if (std::isinf(value)) {
+                    throw std::overflow_error("Numeric literal is out of range");
+                }
+                // A finite result of zero or a subnormal value is an underflow,
+                // which is valid IEEE-754 behavior for this calculator.
                 m_position += parsed;
 
                 // Preserve the existing calculator shorthand, e.g. 2pi.
