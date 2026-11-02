@@ -367,6 +367,15 @@ private:
                 return checked(std::cos(toRadians(argument)));
             }
             if (name == "tan") {
+                const double reduced = m_degrees
+                    ? std::remainder(argument, 180.0)
+                    : std::remainder(argument,  pi());
+                const double halfTurn = m_degrees ? 90.0 : pi() / 2.0;
+                const double tolerance =
+                    4.0 * std::numeric_limits<double>::epsilon() * halfTurn;
+                if (std::fabs(std::fabs(reduced) - halfTurn) <= tolerance) {
+                    throw std::domain_error("tan is undefined at odd multiples of 90 degrees");
+                }
                 return checked(std::tan(toRadians(argument)));
             }
             if (name == "asin") {
@@ -401,7 +410,9 @@ private:
 
         double toRadians(double value) const
         {
-            return m_degrees ? value * pi() / 180.0 : value;
+            // Reduce degrees before conversion to avoid overflow and retain
+            // precision for large angles.
+            return m_degrees ? std::remainder(value, 360.0) * pi() / 180.0 : value;
         }
 
         double fromRadians(double value) const
