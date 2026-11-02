@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QPushButton>
 #include <QButtonGroup>
+#include <QTextBlockFormat>
 
 /**
  * @brief Constructs the calculator window and wires UI controls to slots.
@@ -108,9 +109,6 @@ void MainWindow::degreesMode_pressed()
 /** @brief Inserts the digit of the button that emitted the signal. */
 void MainWindow::digit_pressed(int digit)
 {
-    if (m_isError) {
-        clear_pressed();
-    }
     insertRightAlignedText(ui->textEdit, QString::number(digit));
 }
 
@@ -407,7 +405,7 @@ void /** @brief Inserts text at the editor cursor and updates m_strExpression.
  * @param textEdit Editor receiving the inserted text.
  * @param text Text to insert.
  */
-MainWindow::insertRightAlignedText(QTextEdit *textEdit, const QString &text) {
+void MainWindow::insertRightAlignedText(QTextEdit *textEdit, const QString &text) {
     if (m_isError) {
         clear_pressed();
     }
@@ -416,12 +414,11 @@ MainWindow::insertRightAlignedText(QTextEdit *textEdit, const QString &text) {
     m_strExpression = textEdit->toPlainText();
 }
 
-// Append text with right alignment
-void /** @brief Replaces editor contents and applies right alignment.
+/** @brief Replaces editor contents and applies right alignment.
  * @param textEdit Editor to update.
  * @param text Replacement text.
  */
-MainWindow::setRightAlignedText(QTextEdit *textEdit, const QString &text) {
+void MainWindow::setRightAlignedText(QTextEdit *textEdit, const QString &text) {
     m_strExpression = text;
     textEdit->clear();
 
