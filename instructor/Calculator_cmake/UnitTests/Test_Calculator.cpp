@@ -46,6 +46,7 @@ private slots:
     void test_numeric_overflow();
     void test_numeric_underflow();
     void test_small_nonzero_operands();
+    void test_arithmetic_overflow_and_underflow();
 
 private:
     Calculator m_calculator;
@@ -552,6 +553,26 @@ void CalculatorTests::test_small_nonzero_operands()
     QCOMPARE(m_calculator.evaluate("1e-300%1e-300"), 100.0);
     m_calculator.setInverted(false);
     QVERIFY(std::fabs(m_calculator.evaluate("1e-150%1e-150") / 1e-302 - 1.0) < 1e-12);
+}
+
+void CalculatorTests::test_arithmetic_overflow_and_underflow()
+{
+    const std::string max = "1.7976931348623157e308";
+
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(max + "+" + max), std::overflow_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(max + "-(-" + max + ")"), std::overflow_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(max + "*2"), std::overflow_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate(max + "/1e-308"), std::overflow_error);
+
+    // Underflow to zero is accepted when the exact result is too small
+    // to be represented by a double.
+    QCOMPARE(m_calculator.evaluate("1e-300*1e-300"), 0.0);
+    QCOMPARE(m_calculator.evaluate("1e-300/1e300"), 0.0);
+
+    // The percentage result is representable even though dividing the
+    // smaller operand by 100 first would underflow it to zero.
+    QVERIFY(std::fabs(m_calculator.evaluate("1e308%1e-320") / 1e-14 - 1.0) < 1e-12);
+    QVERIFY(std::fabs(m_calculator.evaluate("1e-320%1e308") / 1e-14 - 1.0) < 1e-12);
 }
 
 void CalculatorTests::test_calculator_instances_are_independent()
