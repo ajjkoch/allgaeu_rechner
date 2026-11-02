@@ -238,7 +238,12 @@ private:
         {
             const double base = parsePostfix();
             if (consume('^')) {
-                return checked(std::pow(base, parseUnary()));
+                const double exponent = parseUnary();
+                if (base == 0.0 && exponent < 0.0) {
+                    throw std::domain_error(
+                        "Zero cannot be raised to a negative power");
+                }
+                return checked(std::pow(base, exponent));
             }
             return base;
         }
