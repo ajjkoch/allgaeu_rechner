@@ -40,6 +40,10 @@ private slots:
     void inverseCosineDomainError();
     void logarithmDomainErrors();
     void tangentDomainErrorInRadians();
+    void keyboardBackspace();
+    void keyboardDecimalAndParentheses();
+    void keyboardNegativeSign();
+    void keyboardEnterEvaluates();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -1008,6 +1012,71 @@ void CalculatorGuiTests::tangentDomainErrorInRadians()
 
     QTest::mouseClick(seven, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("7"));
+}
+
+
+void CalculatorGuiTests::keyboardBackspace()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    QVERIFY(display);
+
+    display->setPlainText("123");
+    display->moveCursor(QTextCursor::End);
+    display->setFocus();
+    QTest::keyClick(display, Qt::Key_Backspace);
+
+    QCOMPARE(display->toPlainText(), QString("12"));
+}
+
+void CalculatorGuiTests::keyboardDecimalAndParentheses()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    QVERIFY(display);
+
+    display->setFocus();
+    QTest::keyClicks(display, "(1.5+0.5)");
+    QCOMPARE(display->toPlainText(), QString("(1.5+0.5)"));
+
+    QTest::keyClick(display, Qt::Key_Return);
+    QCOMPARE(display->toPlainText(), QString("2"));
+}
+
+void CalculatorGuiTests::keyboardNegativeSign()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    QVERIFY(display);
+
+    display->setFocus();
+    QTest::keyClicks(display, "-5+2");
+    QCOMPARE(display->toPlainText(), QString("-5+2"));
+
+    QTest::keyClick(display, Qt::Key_Return);
+    QCOMPARE(display->toPlainText(), QString("-3"));
+}
+
+void CalculatorGuiTests::keyboardEnterEvaluates()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    QVERIFY(display);
+
+    display->setFocus();
+    QTest::keyClicks(display, "12+3");
+    QCOMPARE(display->toPlainText(), QString("12+3"));
+
+    QTest::keyClick(display, Qt::Key_Enter);
+    QCOMPARE(display->toPlainText(), QString("15"));
 }
 
 QTEST_MAIN(CalculatorGuiTests)
