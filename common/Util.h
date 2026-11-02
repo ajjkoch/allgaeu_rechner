@@ -138,7 +138,7 @@ private:
 
         char current() const
         {
-            return atEnd() ? '\\0' : m_expression[m_position];
+            return atEnd() ? '\0' : m_expression[m_position];
         }
 
         void skipWhitespace()
