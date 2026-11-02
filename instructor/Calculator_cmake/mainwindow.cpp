@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QPushButton>
+#include <QButtonGroup>
 
 /**
  * @brief Constructs the calculator window and wires UI controls to slots.
@@ -18,54 +19,59 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->pushButton_0,SIGNAL(released()),this,SLOT(digit_pressed()));
-    connect(ui->pushButton_1,SIGNAL(released()),this,SLOT(digit_pressed()));
-    connect(ui->pushButton_2,SIGNAL(released()),this,SLOT(digit_pressed()));
-    connect(ui->pushButton_3,SIGNAL(released()),this,SLOT(digit_pressed()));
-    connect(ui->pushButton_4,SIGNAL(released()),this,SLOT(digit_pressed()));
-    connect(ui->pushButton_5,SIGNAL(released()),this,SLOT(digit_pressed()));
-    connect(ui->pushButton_6,SIGNAL(released()),this,SLOT(digit_pressed()));
-    connect(ui->pushButton_7,SIGNAL(released()),this,SLOT(digit_pressed()));
-    connect(ui->pushButton_8,SIGNAL(released()),this,SLOT(digit_pressed()));
-    connect(ui->pushButton_9,SIGNAL(released()),this,SLOT(digit_pressed()));
+    // Use button IDs to identify digit buttons without relying on sender().
+    auto *digitButtons = new QButtonGroup(this);
+    digitButtons->addButton(ui->pushButton_0, 0);
+    digitButtons->addButton(ui->pushButton_1, 1);
+    digitButtons->addButton(ui->pushButton_2, 2);
+    digitButtons->addButton(ui->pushButton_3, 3);
+    digitButtons->addButton(ui->pushButton_4, 4);
+    digitButtons->addButton(ui->pushButton_5, 5);
+    digitButtons->addButton(ui->pushButton_6, 6);
+    digitButtons->addButton(ui->pushButton_7, 7);
+    digitButtons->addButton(ui->pushButton_8, 8);
+    digitButtons->addButton(ui->pushButton_9, 9);
+    connect(digitButtons, &QButtonGroup::idClicked,
+            this, &MainWindow::digit_pressed);
 
-    connect(ui->pushButton_plusminus,SIGNAL(released()),this,SLOT(unary_operation_pressed()));
 
-    connect(ui->pushButton_plus   ,SIGNAL(released()),this,SLOT(binary_operation_pressed()));
-    connect(ui->pushButton_minus  ,SIGNAL(released()),this,SLOT(binary_operation_pressed()));
-    connect(ui->pushButton_divided,SIGNAL(released()),this,SLOT(binary_operation_pressed()));
-    connect(ui->pushButton_mul    ,SIGNAL(released()),this,SLOT(binary_operation_pressed()));
+    connect(ui->pushButton_plusminus, &QPushButton::released, this, &MainWindow::unary_operation_pressed);
 
-    connect(ui->pushButton_bracket_left ,SIGNAL(released()) ,this,SLOT(left_bracked_pressed()));
-    connect(ui->pushButton_bracket_right,SIGNAL(released()) ,this,SLOT(right_bracked_pressed()));
-    connect(ui->pushButton_sqrt         ,SIGNAL(released()) ,this,SLOT(sqrt_pressed()));
-    connect(ui->pushButton_x2           , SIGNAL(released()),this,SLOT(power_pressed()));
-    connect(ui->pushButton_erase_left   ,SIGNAL(released()) ,this,SLOT(erase_left_pressed()));
+    connect(ui->pushButton_plus, &QPushButton::released, this, &MainWindow::binary_operation_pressed);
+    connect(ui->pushButton_minus, &QPushButton::released, this, &MainWindow::binary_operation_pressed);
+    connect(ui->pushButton_divided, &QPushButton::released, this, &MainWindow::binary_operation_pressed);
+    connect(ui->pushButton_mul, &QPushButton::released, this, &MainWindow::binary_operation_pressed);
 
-    connect(ui->pushButton_cos,SIGNAL(released()),this,SLOT(cos_pressed()));
-    connect(ui->pushButton_sin,SIGNAL(released()),this,SLOT(sin_pressed()));
-    connect(ui->pushButton_tan,SIGNAL(released()),this,SLOT(tan_pressed()));
-    connect(ui->pushButton_log,SIGNAL(released()),this,SLOT(log_pressed()));
-    connect(ui->pushButton_ln ,SIGNAL(released()),this,SLOT(ln_pressed()));
-    connect(ui->pushButton_inv,SIGNAL(released()),this,SLOT(inv_pressed()));
-    connect(ui->pushButton_mod,SIGNAL(released()),this,SLOT(mod_pressed()));
-    connect(ui->pushButton_edx,SIGNAL(released()),this,SLOT(edx_pressed()));
-    connect(ui->pushButton_percent,SIGNAL(released()),this,SLOT(percent_pressed()));
+    connect(ui->pushButton_bracket_left, &QPushButton::released, this, &MainWindow::left_bracked_pressed);
+    connect(ui->pushButton_bracket_right, &QPushButton::released, this, &MainWindow::right_bracked_pressed);
+    connect(ui->pushButton_sqrt, &QPushButton::released, this, &MainWindow::sqrt_pressed);
+    connect(ui->pushButton_x2, &QPushButton::released, this, &MainWindow::power_pressed);
+    connect(ui->pushButton_erase_left, &QPushButton::released, this, &MainWindow::erase_left_pressed);
 
-    connect(ui->pushButton_pi          , SIGNAL(released()), this, SLOT(pi_pressed()));
+    connect(ui->pushButton_cos, &QPushButton::released, this, &MainWindow::cos_pressed);
+    connect(ui->pushButton_sin, &QPushButton::released, this, &MainWindow::sin_pressed);
+    connect(ui->pushButton_tan, &QPushButton::released, this, &MainWindow::tan_pressed);
+    connect(ui->pushButton_log, &QPushButton::released, this, &MainWindow::log_pressed);
+    connect(ui->pushButton_ln, &QPushButton::released, this, &MainWindow::ln_pressed);
+    connect(ui->pushButton_inv, &QPushButton::released, this, &MainWindow::inv_pressed);
+    connect(ui->pushButton_mod, &QPushButton::released, this, &MainWindow::mod_pressed);
+    connect(ui->pushButton_edx, &QPushButton::released, this, &MainWindow::edx_pressed);
+    connect(ui->pushButton_percent, &QPushButton::released, this, &MainWindow::percent_pressed);
+
+    connect(ui->pushButton_pi, &QPushButton::released, this, &MainWindow::pi_pressed);
     connect(ui->pushButton_cursor_left , SIGNAL(clicked() ), this, SLOT(move_left_pressed()));
     connect(ui->pushButton_cursor_right, SIGNAL(clicked() ), this, SLOT(move_right_pressed()));
 
     connect(ui->pushButton_history_back   , SIGNAL(clicked() ), this, SLOT(history_back_pressed()));
     connect(ui->pushButton_history_forward, SIGNAL(clicked() ), this, SLOT(history_forward_pressed()));
 
-    connect(ui->pushButton_changeDegreesMode, SIGNAL(clicked()), this, SLOT(degreesMode_pressed()));
+    connect(ui->pushButton_changeDegreesMode, &QPushButton::clicked, this, &MainWindow::degreesMode_pressed);
 
 
-    connect(ui->pushButton_decimal, SIGNAL(clicked()), this, SLOT(decimal_pressed()));
+    connect(ui->pushButton_decimal, &QPushButton::clicked, this, &MainWindow::decimal_pressed);
 
-    connect(ui->pushButton_clear, SIGNAL(clicked()), this, SLOT(clear_pressed()));
-    connect(ui->pushButton_equals, SIGNAL(clicked()), this, SLOT(equals_pressed()));
+    connect(ui->pushButton_clear, &QPushButton::clicked, this, &MainWindow::clear_pressed);
+    connect(ui->pushButton_equals, &QPushButton::clicked, this, &MainWindow::equals_pressed);
 
     ui->pushButton_plus->setCheckable(true);
     ui->pushButton_minus->setCheckable(true);
@@ -95,10 +101,12 @@ void MainWindow::degreesMode_pressed()
 }
 
 /** @brief Inserts the digit of the button that emitted the signal. */
-void MainWindow::digit_pressed()
+void MainWindow::digit_pressed(int digit)
 {
-    if(m_isError) clear_pressed();
-    insertRightAlignedText(ui->textEdit,((QPushButton*)sender())->text());
+    if (m_isError) {
+        clear_pressed();
+    }
+    insertRightAlignedText(ui->textEdit, QString::number(digit));
 }
 
 /** @brief Inserts a decimal separator at the current cursor position. */
