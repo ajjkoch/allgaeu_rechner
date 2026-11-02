@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 6 REQUIRED COMPONENTS Core Widgets Test)
 
 include(GNUInstallDirs)
 
@@ -55,3 +55,26 @@ install( TARGETS ${PROJECT_NAME}
 )
 
 qt_finalize_executable( ${PROJECT_NAME} )
+
+# Build the GUI interaction tests as a separate executable.
+qt_add_executable(CalculatorGuiTests
+    mainwindow.h
+    mainwindow.cpp
+    mainwindow.ui
+    UnitTests/Test_MainWindow.cpp
+)
+
+target_include_directories(CalculatorGuiTests
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(CalculatorGuiTests PRIVATE
+    Qt6::Core
+    Qt6::Widgets
+    Qt6::Test
+)
+
+add_test(NAME CalculatorGuiTests COMMAND CalculatorGuiTests)
+set_tests_properties(CalculatorGuiTests PROPERTIES
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
+)
