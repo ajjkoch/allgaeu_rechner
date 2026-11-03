@@ -75,6 +75,7 @@ jobs:
         run: |
           mkdir -p coverage
           gcovr --root . --object-directory build \
+            --gcov-ignore-errors=no_working_dir_found \
             --filter 'common/Util.h' \
             --filter 'instructor/Calculator_cmake/.*\.cpp' \
             --exclude '.*Test_.*\.cpp' \
