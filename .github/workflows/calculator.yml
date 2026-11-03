@@ -46,9 +46,9 @@ jobs:
           cmake -S instructor/Calculator_cmake
           -B build/calculator
           -G Ninja
-          -DCMAKE_BUILD_TYPE=Debug \
-          -DCMAKE_CXX_FLAGS="--coverage -O0 -g" \
-          -DCMAKE_EXE_LINKER_FLAGS="--coverage"
+          -DCMAKE_BUILD_TYPE=Debug
+          "-DCMAKE_CXX_FLAGS=--coverage -O0 -g"
+          -DCMAKE_EXE_LINKER_FLAGS=--coverage
 
       - name: Build calculator application and GUI tests
         run: cmake --build build/calculator --parallel
@@ -74,7 +74,7 @@ jobs:
       - name: Generate code coverage reports
         run: |
           mkdir -p coverage
-          gcovr --root . --object-directory build/coverage \
+          gcovr --root . --object-directory build \
             --filter 'common/Util.h' \
             --filter 'instructor/Calculator_cmake/.*\\.cpp' \
             --exclude '.*Test_.*\\.cpp' \
