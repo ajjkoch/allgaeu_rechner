@@ -38,14 +38,17 @@ jobs:
             ninja-build \
             g++ \
             qt6-base-dev \
-            qt6-base-dev-tools
+            qt6-base-dev-tools \
+            gcovr
 
       - name: Configure calculator application
         run: >
           cmake -S instructor/Calculator_cmake
           -B build/calculator
           -G Ninja
-          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_FLAGS="--coverage -O0 -g" \
+          -DCMAKE_EXE_LINKER_FLAGS="--coverage"
 
       - name: Build calculator application and GUI tests
         run: cmake --build build/calculator --parallel
@@ -58,10 +61,30 @@ jobs:
           cmake -S instructor/Calculator_cmake/UnitTests
           -B build/calculator-tests
           -G Ninja
-          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_FLAGS="--coverage -O0 -g" \
+          -DCMAKE_EXE_LINKER_FLAGS="--coverage"
 
       - name: Build unit tests
         run: cmake --build build/calculator-tests --parallel
 
       - name: Run unit tests
         run: ctest --test-dir build/calculator-tests --output-on-failure
+
+      - name: Generate code coverage reports
+        run: |
+          mkdir -p coverage
+          gcovr --root . --object-directory build/coverage \
+            --filter 'common/Util.h' \
+            --filter 'instructor/Calculator_cmake/.*\\.cpp' \
+            --exclude '.*Test_.*\\.cpp' \
+            --html-details coverage/index.html \
+            --xml coverage/coverage.xml \
+            --print-summary
+
+      - name: Upload code coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: calculator-code-coverage
+          path: coverage/
+          if-no-files-found: error
