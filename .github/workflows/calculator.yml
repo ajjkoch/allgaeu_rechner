@@ -76,8 +76,8 @@ jobs:
           mkdir -p coverage
           gcovr --root . --object-directory build \
             --filter 'common/Util.h' \
-            --filter 'instructor/Calculator_cmake/.*\\.cpp' \
-            --exclude '.*Test_.*\\.cpp' \
+            --filter 'instructor/Calculator_cmake/.*\.cpp' \
+            --exclude '.*Test_.*\.cpp' \
             --html-details coverage/index.html \
             --xml coverage/coverage.xml \
             --print-summary
