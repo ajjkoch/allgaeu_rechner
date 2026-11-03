@@ -1447,6 +1447,7 @@ void CalculatorGuiTests::guiSignAndEventFilterBoundaries()
 
     // Non-Return key events must pass through the event filter.
     display->setPlainText("12");
+    display->moveCursor(QTextCursor::End);
     display->setFocus();
     QTest::keyClick(display, Qt::Key_Left);
     QCOMPARE(display->textCursor().position(), 1);
