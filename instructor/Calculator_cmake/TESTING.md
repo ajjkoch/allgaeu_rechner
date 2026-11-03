@@ -27,13 +27,13 @@ ctest --test-dir build/calculator-tests --output-on-failure
 
 ## Current inventory
 
-The current suite contains **76 test methods**:
+The current suite contains **78 test methods**:
 
 | Test layer | Test methods | Main focus |
 |---|---:|---|
-| Parser/calculation unit tests | 33 | Arithmetic, parsing, operators, functions, numeric boundaries and exceptions |
-| GUI interaction tests | 43 | Button interaction, display editing, keyboard input, modes, visible results and error recovery |
-| **Total** | **76** | |
+| Parser/calculation unit tests | 34 | Arithmetic, parsing, operators, functions, numeric boundaries and exceptions |
+| GUI interaction tests | 44 | Button interaction, display editing, keyboard input, modes, visible results and error recovery |
+| **Total** | **78** | |
 
 Qt's `init()` setup method is not included in the method count.
 
@@ -67,7 +67,7 @@ Qt's `init()` setup method is not included in the method count.
 - The CI workflow collects GCC/gcovr line and branch coverage for `common/Util.h` and `mainwindow.cpp`. The application entry point (`main.cpp`) is excluded because the automated test executables do not exercise it. Compiler-generated exception-handling and unreachable branches are excluded from the branch metric. HTML and Cobertura XML reports are uploaded as the `calculator-code-coverage` artifact. Coverage is measured only for code reached by the automated test runs; it is not mutation coverage and does not prove formal correctness.
 - GUI tests run headlessly on Linux/Qt 6. They do not replace manual checks of visual layout, accessibility, focus behavior on every desktop platform, or native keyboard behavior on Windows/macOS.
 - Some legacy GUI tests only check that an error replaced the expression. The principal error cases now assert the exact diagnostic, but the older cases can be tightened incrementally.
-- Additional regression tests cover repeated factorial (`3!!`), factorial precedence/sign combinations, malformed scientific notation through the display, parser nesting limits through both parser and GUI layers, compatibility helpers, and GUI boundary cases for cursor movement, empty history, Backspace, and reciprocal formatting.
+- Additional regression tests cover repeated factorial (`3!!`), factorial precedence/sign combinations, malformed scientific notation through the display, parser nesting limits through both parser and GUI layers, compatibility helpers, parser keyword boundaries, inverted percentage division by zero, and GUI boundary cases for cursor movement, empty history, Backspace, reciprocal formatting, sign toggling, and keyboard event filtering.
 - Floating-point assertions should use tolerances for transcendental results; exact equality is appropriate only for exactly representable or deliberately formatted results.
 
 ## Maintenance rule
