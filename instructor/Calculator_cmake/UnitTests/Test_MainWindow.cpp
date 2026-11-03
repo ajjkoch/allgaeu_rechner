@@ -46,6 +46,9 @@ private slots:
     void keyboardEnterEvaluates();
     void angleModeCanToggleBackToDegrees();
     void inverseTrigonometricFunctionsInRadians();
+    void negativeExponentAndNestedExpressions();
+    void factorialBoundaryErrors();
+    void largeNumberOverflowErrors();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -1185,6 +1188,105 @@ void CalculatorGuiTests::inverseTrigonometricFunctionsInRadians()
     QTest::mouseClick(right, Qt::LeftButton);
     QTest::mouseClick(equals, Qt::LeftButton);
     QVERIFY(qAbs(display->toPlainText().toDouble() - M_PI_4) < 1e-5);
+}
+
+
+void CalculatorGuiTests::negativeExponentAndNestedExpressions()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+    QVERIFY(display);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    display->setPlainText("2^-3");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - 0.125) < 1e-12);
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("(2+(3*(4+1)))");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("17"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("2^3^2");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("512"));
+}
+
+void CalculatorGuiTests::factorialBoundaryErrors()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+    QVERIFY(display);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    display->setPlainText("0!");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("1"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("(-3)!");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(),
+             QString("Factorial requires a non-negative integer"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("3.5!");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(),
+             QString("Factorial requires a non-negative integer"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("171!");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(),
+             QString("Factorial result is out of range"));
+
+    // The display must recover after a factorial domain/overflow error.
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("6!");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("720"));
+}
+
+void CalculatorGuiTests::largeNumberOverflowErrors()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+    QVERIFY(display);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    display->setPlainText("1e308*1e308");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(),
+             QString("Mathematical result is out of range"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("1e309");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(),
+             QString("Numeric literal is out of range"));
+
+    // A subsequent ordinary expression must still evaluate correctly.
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("10^2");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("100"));
 }
 
 QTEST_MAIN(CalculatorGuiTests)
