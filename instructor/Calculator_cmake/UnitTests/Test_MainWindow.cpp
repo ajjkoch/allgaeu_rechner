@@ -52,6 +52,7 @@ private slots:
     void repeatedFactorialAndSignPrecedence();
     void malformedScientificNotationInDisplay();
     void parserNestingLimitInDisplay();
+    void guiBoundaryBranches();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -1361,6 +1362,61 @@ void CalculatorGuiTests::parserNestingLimitInDisplay()
     display->setPlainText(beyondLimit);
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("Expression nesting limit exceeded"));
+}
+
+
+void CalculatorGuiTests::guiBoundaryBranches()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *cursorLeft = window.findChild<QPushButton *>("pushButton_cursor_left");
+    auto *cursorRight = window.findChild<QPushButton *>("pushButton_cursor_right");
+    auto *backspace = window.findChild<QPushButton *>("pushButton_erase_left");
+    auto *historyBack = window.findChild<QPushButton *>("pushButton_history_back");
+    auto *historyForward = window.findChild<QPushButton *>("pushButton_history_forward");
+    auto *reciprocal = window.findChild<QPushButton *>("pushButton_edx");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(cursorLeft);
+    QVERIFY(cursorRight);
+    QVERIFY(backspace);
+    QVERIFY(historyBack);
+    QVERIFY(historyForward);
+    QVERIFY(reciprocal);
+    QVERIFY(equals);
+
+    // Empty history is a no-op in both directions.
+    QTest::mouseClick(historyBack, Qt::LeftButton);
+    QTest::mouseClick(historyForward, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString());
+
+    // Backspace at the start of the editor must not remove any character.
+    display->setPlainText("12");
+    display->moveCursor(QTextCursor::Start);
+    QTest::mouseClick(backspace, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("12"));
+
+    // Exercise the right-cursor action and insert at the resulting position.
+    QTest::mouseClick(cursorRight, Qt::LeftButton);
+    QTest::mouseClick(cursorLeft, Qt::LeftButton);
+    QTest::mouseClick(cursorRight, Qt::LeftButton);
+    QTest::mouseClick(window.findChild<QPushButton *>("pushButton_3"), Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("132"));
+
+    // The error branch clears the error instead of deleting a character from it.
+    display->setPlainText("1/0");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("Division by zero"));
+    QTest::mouseClick(backspace, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString());
+
+    // Exercise the integer formatting branch in the reciprocal button handler.
+    display->setPlainText("1");
+    QTest::mouseClick(reciprocal, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("1"));
 }
 
 QTEST_MAIN(CalculatorGuiTests)
