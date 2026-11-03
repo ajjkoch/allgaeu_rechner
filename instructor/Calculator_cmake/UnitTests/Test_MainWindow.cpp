@@ -53,6 +53,7 @@ private slots:
     void malformedScientificNotationInDisplay();
     void parserNestingLimitInDisplay();
     void guiBoundaryBranches();
+    void guiSignAndEventFilterBoundaries();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -1417,6 +1418,40 @@ void CalculatorGuiTests::guiBoundaryBranches()
     display->setPlainText("1");
     QTest::mouseClick(reciprocal, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("1"));
+}
+
+
+void CalculatorGuiTests::guiSignAndEventFilterBoundaries()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *sign = window.findChild<QPushButton *>("pushButton_plusminus");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(sign);
+    QVERIFY(equals);
+
+    // Toggling the sign on an empty expression is a no-op.
+    QTest::mouseClick(sign, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString());
+
+    // After an evaluation error, the sign button first clears the error.
+    display->setPlainText("1/0");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("Division by zero"));
+    QTest::mouseClick(sign, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString());
+
+    // Non-Return key events must pass through the event filter.
+    display->setPlainText("12");
+    display->setFocus();
+    QTest::keyClick(display, Qt::Key_Left);
+    QCOMPARE(display->textCursor().position(), 1);
+    QTest::keyClick(display, Qt::Key_Right);
+    QCOMPARE(display->textCursor().position(), 2);
 }
 
 QTEST_MAIN(CalculatorGuiTests)
