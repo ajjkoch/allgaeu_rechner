@@ -1,5 +1,7 @@
 #include <QtTest>
 
+#include <QApplication>
+#include <QEvent>
 #include <QPushButton>
 #include <QTextEdit>
 
@@ -1418,6 +1420,11 @@ void CalculatorGuiTests::guiBoundaryBranches()
     display->setPlainText("1");
     QTest::mouseClick(reciprocal, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("1"));
+
+    // The reciprocal handler must display its domain error for zero.
+    display->setPlainText("0");
+    QTest::mouseClick(reciprocal, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("Reciprocal of zero"));
 }
 
 
@@ -1449,6 +1456,11 @@ void CalculatorGuiTests::guiSignAndEventFilterBoundaries()
     display->setPlainText("12");
     display->moveCursor(QTextCursor::End);
     display->setFocus();
+
+    // Non-key events are passed through to the base event filter.
+    QEvent focusEvent(QEvent::FocusIn);
+    QApplication::sendEvent(display, &focusEvent);
+
     QTest::keyClick(display, Qt::Key_Left);
     QCOMPARE(display->textCursor().position(), 1);
     QTest::keyClick(display, Qt::Key_Right);
