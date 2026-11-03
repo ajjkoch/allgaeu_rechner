@@ -76,7 +76,7 @@ jobs:
             exit 1
           fi
           mkdir -p dist
-          echo "path=dist/Calculator-Android-arm64-debug.apk" >> "$GITHUB_OUTPUT"
+          echo "path=dist/Calculator-Android-arm64-test.apk" >> "$GITHUB_OUTPUT"
           echo "source=$APK_PATH" >> "$GITHUB_OUTPUT"
 
       - name: Align and sign APK
