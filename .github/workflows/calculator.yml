@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feature/calculator-core-review
     paths:
       - "common/Util.h"
       - "common/test_common.cmake"
@@ -77,8 +76,8 @@ jobs:
           gcovr --root . --object-directory build \
             --gcov-ignore-errors=no_working_dir_found \
             --filter 'common/Util.h' \
-            --filter 'instructor/Calculator_cmake/mainwindow\.cpp' \
-            --exclude '.*Test_.*\.cpp' \
+            --filter 'instructor/Calculator_cmake/mainwindow\\.cpp' \
+            --exclude '.*Test_.*\\.cpp' \
             --exclude-throw-branches \
             --exclude-unreachable-branches \
             --html-details coverage/index.html \
