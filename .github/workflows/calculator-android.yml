@@ -3,7 +3,7 @@ name: Calculator Android
 on:
   push:
     branches:
-      - feature/calculator-core-review
+      - main
     paths:
       - "common/Util.h"
       - "instructor/Calculator_cmake/**"
