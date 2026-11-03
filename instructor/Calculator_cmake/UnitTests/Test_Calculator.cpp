@@ -90,6 +90,8 @@ void CalculatorTests::test_percent()
 
     m_calculator.setInverted(true);
 
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("5%0"), std::domain_error);
+
     {
         double res = m_calculator.evaluate("15%15");
         QCOMPARE(res, 100);
@@ -435,6 +437,7 @@ void CalculatorTests::test_operator_precedence()
     QCOMPARE(m_calculator.evaluate("(-2)^2"), 4.0);
     QCOMPARE(m_calculator.evaluate("2^-2"), 0.25);
     QCOMPARE(m_calculator.evaluate("2^3^2"), 512.0);
+    QCOMPARE(m_calculator.evaluate("0^1"), 0.0);
     QCOMPARE(m_calculator.evaluate("+5"), 5.0);
     QCOMPARE(m_calculator.evaluate("2^+3"), 8.0);
 }
@@ -454,6 +457,9 @@ void CalculatorTests::test_invalid_expressions()
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("(2+3"), std::invalid_argument);
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("2+"), std::invalid_argument);
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("unknown(2)"), std::invalid_argument);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("sqrt"), std::invalid_argument);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("pix"), std::invalid_argument);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("5 modx 2"), std::invalid_argument);
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("sqrt 4"), std::invalid_argument);
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("sqrt(4"), std::invalid_argument);
 }
