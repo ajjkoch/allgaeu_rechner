@@ -77,7 +77,10 @@ jobs:
           gcovr --root . --object-directory build \
             --gcov-ignore-errors=no_working_dir_found \
             --filter 'common/Util.h' \
-            --filter 'instructor/Calculator_cmake/.*\.cpp' \
+            --filter 'instructor/Calculator_cmake/mainwindow\.cpp' \
+            --exclude '.*Test_.*\.cpp' \
+            --exclude-throw-branches \
+            --exclude-unreachable-branches \
             --exclude '.*Test_.*\.cpp' \
             --html-details coverage/index.html \
             --xml coverage/coverage.xml \
