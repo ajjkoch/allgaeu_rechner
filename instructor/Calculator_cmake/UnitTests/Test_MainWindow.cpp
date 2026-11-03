@@ -49,6 +49,9 @@ private slots:
     void negativeExponentAndNestedExpressions();
     void factorialBoundaryErrors();
     void largeNumberOverflowErrors();
+    void repeatedFactorialAndSignPrecedence();
+    void malformedScientificNotationInDisplay();
+    void parserNestingLimitInDisplay();
 };
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -1286,6 +1289,78 @@ void CalculatorGuiTests::largeNumberOverflowErrors()
     display->setPlainText("10^2");
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("100"));
+}
+
+
+void CalculatorGuiTests::repeatedFactorialAndSignPrecedence()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    QVERIFY(display);
+    QVERIFY(equals);
+
+    display->setPlainText("3!!");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("720"));
+
+    display->setPlainText("-3!");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("-6"));
+
+    display->setPlainText("2^3!");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("64"));
+
+    display->setPlainText("(-3)!");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(),
+             QString("Factorial requires a non-negative integer"));
+}
+
+void CalculatorGuiTests::malformedScientificNotationInDisplay()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    QVERIFY(display);
+    QVERIFY(equals);
+
+    const QStringList malformedLiterals = {"1e", "1e+", "2.5e-"};
+    for (const QString &literal : malformedLiterals) {
+        display->setPlainText(literal);
+        QTest::mouseClick(equals, Qt::LeftButton);
+        QCOMPARE(display->toPlainText(), QString("Expected '(' after e"));
+    }
+
+    display->setPlainText("1.25e2");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("125"));
+}
+
+void CalculatorGuiTests::parserNestingLimitInDisplay()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    QVERIFY(display);
+    QVERIFY(equals);
+
+    const QString withinLimit = QString(100, '(') + "1" + QString(100, ')');
+    display->setPlainText(withinLimit);
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("1"));
+
+    const QString beyondLimit = QString(300, '(') + "1" + QString(300, ')');
+    display->setPlainText(beyondLimit);
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("Expression nesting limit exceeded"));
 }
 
 QTEST_MAIN(CalculatorGuiTests)
