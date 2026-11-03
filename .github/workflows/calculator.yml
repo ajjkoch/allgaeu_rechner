@@ -61,9 +61,9 @@ jobs:
           cmake -S instructor/Calculator_cmake/UnitTests
           -B build/calculator-tests
           -G Ninja
-          -DCMAKE_BUILD_TYPE=Debug \
-          -DCMAKE_CXX_FLAGS="--coverage -O0 -g" \
-          -DCMAKE_EXE_LINKER_FLAGS="--coverage"
+          -DCMAKE_BUILD_TYPE=Debug
+          "-DCMAKE_CXX_FLAGS=--coverage -O0 -g"
+          -DCMAKE_EXE_LINKER_FLAGS=--coverage
 
       - name: Build unit tests
         run: cmake --build build/calculator-tests --parallel
