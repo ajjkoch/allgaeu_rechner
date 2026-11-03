@@ -4,7 +4,6 @@ project(Calculator VERSION 1.0.0.0 DESCRIPTION "Qt Calculator" LANGUAGES CXX)
 
 remove_definitions(CONSOLE_TEST)
 
-# tell CMake to use CTest extension
 enable_testing()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -17,7 +16,11 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6 REQUIRED COMPONENTS Core Widgets Test)
+if(ANDROID)
+    find_package(Qt6 6 REQUIRED COMPONENTS Core Widgets)
+else()
+    find_package(Qt6 6 REQUIRED COMPONENTS Core Widgets Test)
+endif()
 
 include(GNUInstallDirs)
 
@@ -37,44 +40,56 @@ set(PROJECT_SOURCES
     ../../common/Util.h
 )
 
-qt_add_executable( ${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES} )
+qt_add_executable(${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES})
 
-target_include_directories( ${PROJECT_NAME}
+target_include_directories(${PROJECT_NAME}
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_link_libraries( ${PROJECT_NAME} PUBLIC
+target_link_libraries(${PROJECT_NAME} PUBLIC
     Qt6::Core
     Qt6::Widgets
 )
 
-install( TARGETS ${PROJECT_NAME}
+if(ANDROID)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        QT_ANDROID_PACKAGE_NAME "de.ajjkoch.calculator"
+        QT_ANDROID_MIN_SDK_VERSION 23
+        QT_ANDROID_TARGET_SDK_VERSION 35
+        QT_ANDROID_VERSION_NAME "${PROJECT_VERSION}"
+        QT_ANDROID_VERSION_CODE 1
+    )
+endif()
+
+install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-qt_finalize_executable( ${PROJECT_NAME} )
+qt_finalize_executable(${PROJECT_NAME})
 
-# Build the GUI interaction tests as a separate executable.
-qt_add_executable(CalculatorGuiTests
-    mainwindow.h
-    mainwindow.cpp
-    mainwindow.ui
-    UnitTests/Test_MainWindow.cpp
-)
+# GUI interaction tests use Qt Test and are intentionally desktop-only.
+if(NOT ANDROID)
+    qt_add_executable(CalculatorGuiTests
+        mainwindow.h
+        mainwindow.cpp
+        mainwindow.ui
+        UnitTests/Test_MainWindow.cpp
+    )
 
-target_include_directories(CalculatorGuiTests
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-)
+    target_include_directories(CalculatorGuiTests
+        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 
-target_link_libraries(CalculatorGuiTests PRIVATE
-    Qt6::Core
-    Qt6::Widgets
-    Qt6::Test
-)
+    target_link_libraries(CalculatorGuiTests PRIVATE
+        Qt6::Core
+        Qt6::Widgets
+        Qt6::Test
+    )
 
-add_test(NAME CalculatorGuiTests COMMAND CalculatorGuiTests)
-set_tests_properties(CalculatorGuiTests PROPERTIES
-    ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
-)
+    add_test(NAME CalculatorGuiTests COMMAND CalculatorGuiTests)
+    set_tests_properties(CalculatorGuiTests PROPERTIES
+        ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
+    )
+endif()
