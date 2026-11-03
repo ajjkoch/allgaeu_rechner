@@ -49,6 +49,7 @@ private slots:
     void test_arithmetic_overflow_and_underflow();
     void test_parser_recursion_limits();
     void test_repeated_factorial_and_precedence();
+    void test_compatibility_helpers();
 
 private:
     Calculator m_calculator;
@@ -434,6 +435,8 @@ void CalculatorTests::test_operator_precedence()
     QCOMPARE(m_calculator.evaluate("(-2)^2"), 4.0);
     QCOMPARE(m_calculator.evaluate("2^-2"), 0.25);
     QCOMPARE(m_calculator.evaluate("2^3^2"), 512.0);
+    QCOMPARE(m_calculator.evaluate("+5"), 5.0);
+    QCOMPARE(m_calculator.evaluate("2^+3"), 8.0);
 }
 
 void CalculatorTests::test_modulo()
@@ -451,6 +454,8 @@ void CalculatorTests::test_invalid_expressions()
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("(2+3"), std::invalid_argument);
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("2+"), std::invalid_argument);
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("unknown(2)"), std::invalid_argument);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("sqrt 4"), std::invalid_argument);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("sqrt(4"), std::invalid_argument);
 }
 
 void CalculatorTests::test_domain_errors()
@@ -641,6 +646,22 @@ void CalculatorTests::test_repeated_factorial_and_precedence()
 
     // Parentheses make the negative value the factorial operand, which is invalid.
     QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("(-3)!"), std::domain_error);
+}
+
+
+void CalculatorTests::test_compatibility_helpers()
+{
+    // These legacy helpers remain part of the shared compatibility API.
+    QCOMPARE(sie_mod(5.5, 2.0), 1.5);
+    QVERIFY_EXCEPTION_THROWN(sie_mod(5.0, 0.0), std::domain_error);
+
+    QCOMPARE(facultyRecursive(0), 1.0);
+    QCOMPARE(facultyRecursive(1), 1.0);
+    QCOMPARE(facultyRecursive(5), 120.0);
+    QVERIFY_EXCEPTION_THROWN(facultyRecursive(-1), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(
+        facultyRecursive(std::numeric_limits<int>::max()),
+        std::overflow_error);
 }
 
 #include "Test_Calculator.moc"
