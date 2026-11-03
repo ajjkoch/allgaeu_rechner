@@ -1334,7 +1334,7 @@ void CalculatorGuiTests::malformedScientificNotationInDisplay()
     for (const QString &literal : malformedLiterals) {
         display->setPlainText(literal);
         QTest::mouseClick(equals, Qt::LeftButton);
-        QCOMPARE(display->toPlainText(), QString("Expected '(' after e"));
+        QCOMPARE(display->toPlainText(), QString("Unexpected character: e"));
     }
 
     display->setPlainText("1.25e2");
