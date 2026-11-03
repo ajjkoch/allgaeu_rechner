@@ -81,7 +81,6 @@ jobs:
             --exclude '.*Test_.*\.cpp' \
             --exclude-throw-branches \
             --exclude-unreachable-branches \
-            --exclude '.*Test_.*\.cpp' \
             --html-details coverage/index.html \
             --xml coverage/coverage.xml \
             --print-summary
