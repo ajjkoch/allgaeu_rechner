@@ -48,6 +48,7 @@ private slots:
     void test_small_nonzero_operands();
     void test_arithmetic_overflow_and_underflow();
     void test_parser_recursion_limits();
+    void test_repeated_factorial_and_precedence();
 
 private:
     Calculator m_calculator;
@@ -625,6 +626,21 @@ void CalculatorTests::test_calculator_instances_are_independent()
 
     QCOMPARE(degreesCalculator.evaluate("15%15"), 100.0);
     QCOMPARE(radiansCalculator.evaluate("15%15"), 2.25);
+}
+
+
+void CalculatorTests::test_repeated_factorial_and_precedence()
+{
+    // Repeated postfix factorial applies from left to right: (3!)! = 6! = 720.
+    QCOMPARE(m_calculator.evaluate("3!!"), 720.0);
+
+    // Factorial binds more tightly than a leading unary minus and exponentiation.
+    QCOMPARE(m_calculator.evaluate("-3!"), -6.0);
+    QCOMPARE(m_calculator.evaluate("2^3!"), 64.0);
+    QCOMPARE(m_calculator.evaluate("-(3!)"), -6.0);
+
+    // Parentheses make the negative value the factorial operand, which is invalid.
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("(-3)!"), std::domain_error);
 }
 
 #include "Test_Calculator.moc"
