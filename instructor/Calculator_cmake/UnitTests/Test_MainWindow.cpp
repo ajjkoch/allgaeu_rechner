@@ -147,7 +147,7 @@ void CalculatorGuiTests::errorRecovery()
     QTest::mouseClick(divide, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);
     QTest::mouseClick(equals, Qt::LeftButton);
-    QVERIFY(display->toPlainText() != QString("1/0"));
+    QCOMPARE(display->toPlainText(), QString("Division by zero"));
 
     QTest::mouseClick(seven, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("7"));
@@ -524,8 +524,8 @@ void CalculatorGuiTests::mathematicalFunctionErrors()
     QTest::mouseClick(right, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("sqrt(-9)"));
     QTest::mouseClick(equals, Qt::LeftButton);
-    QVERIFY(display->toPlainText() != QString("sqrt(-9)"));
-    QVERIFY(!display->toPlainText().isEmpty());
+    QCOMPARE(display->toPlainText(),
+             QString("sqrt requires a non-negative argument"));
 
     QTest::mouseClick(seven, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("7"));
@@ -645,8 +645,8 @@ void CalculatorGuiTests::tangentDomainError()
     QTest::mouseClick(right, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("tan(90)"));
     QTest::mouseClick(equals, Qt::LeftButton);
-    QVERIFY(display->toPlainText() != QString("tan(90)"));
-    QVERIFY(!display->toPlainText().isEmpty());
+    QCOMPARE(display->toPlainText(),
+             QString("tan is undefined at odd multiples of 90 degrees"));
 
     QTest::mouseClick(clear, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString());
@@ -791,8 +791,8 @@ void CalculatorGuiTests::inverseTrigonometricDomainError()
     QTest::mouseClick(right, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("asin(2)"));
     QTest::mouseClick(equals, Qt::LeftButton);
-    QVERIFY(display->toPlainText() != QString("asin(2)"));
-    QVERIFY(!display->toPlainText().isEmpty());
+    QCOMPARE(display->toPlainText(),
+             QString("asin argument must be between -1 and 1"));
 }
 
 void CalculatorGuiTests::reciprocalOfZeroError()
@@ -810,8 +810,7 @@ void CalculatorGuiTests::reciprocalOfZeroError()
 
     QTest::mouseClick(zero, Qt::LeftButton);
     QTest::mouseClick(reciprocal, Qt::LeftButton);
-    QVERIFY(display->toPlainText() != QString("0"));
-    QVERIFY(!display->toPlainText().isEmpty());
+    QCOMPARE(display->toPlainText(), QString("Reciprocal of zero"));
 }
 
 void CalculatorGuiTests::keyboardEntry()
