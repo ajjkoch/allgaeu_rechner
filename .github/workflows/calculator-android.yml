@@ -36,7 +36,7 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: "platform-tools platforms;android-35 ndk;26.1.10909125"
+          packages: "platform-tools platforms;android-35 build-tools;35.0.0 ndk;26.1.10909125"
 
       - name: Install Qt for Android ARM64
         id: install-qt
@@ -76,8 +76,46 @@ jobs:
             exit 1
           fi
           mkdir -p dist
-          cp "$APK_PATH" dist/Calculator-Android-arm64-debug.apk
           echo "path=dist/Calculator-Android-arm64-debug.apk" >> "$GITHUB_OUTPUT"
+          echo "source=$APK_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Align and sign APK
+        shell: bash
+        env:
+          APK_SOURCE: ${{ steps.apk.outputs.source }}
+          APK_OUTPUT: ${{ steps.apk.outputs.path }}
+        run: |
+          set -euo pipefail
+
+          BUILD_TOOLS="$(find "$ANDROID_SDK_ROOT/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          ZIPALIGN="$BUILD_TOOLS/zipalign"
+          APKSIGNER="$BUILD_TOOLS/apksigner"
+
+          if [ ! -x "$ZIPALIGN" ] || [ ! -x "$APKSIGNER" ]; then
+            echo "Android zipalign/apksigner tools not found in $BUILD_TOOLS" >&2
+            exit 1
+          fi
+
+          keytool -genkeypair -noprompt \
+            -keystore "$RUNNER_TEMP/calculator-debug.keystore" \
+            -storetype PKCS12 \
+            -storepass android \
+            -alias androiddebugkey \
+            -keypass android \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US"
+
+          "$ZIPALIGN" -f -p 4 "$APK_SOURCE" "$RUNNER_TEMP/calculator-aligned.apk"
+          "$APKSIGNER" sign \
+            --ks "$RUNNER_TEMP/calculator-debug.keystore" \
+            --ks-type PKCS12 \
+            --ks-key-alias androiddebugkey \
+            --ks-pass pass:android \
+            --key-pass pass:android \
+            --out "$APK_OUTPUT" \
+            "$RUNNER_TEMP/calculator-aligned.apk"
+
+          "$APKSIGNER" verify --verbose --print-certs "$APK_OUTPUT"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
