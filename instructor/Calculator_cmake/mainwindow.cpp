@@ -572,7 +572,7 @@ void MainWindow::dispatchAction(CalculatorAction action)
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == ui->centralwidget && event->type() == QEvent::Resize) {
-        if (auto *background = ui->centralwidget->findChild<AlpineBackground *>("alpineBackground"))
+        if (auto *background = ui->centralwidget->findChild<QWidget *>("alpineBackground"))
             background->setGeometry(ui->centralwidget->rect());
     }
 
