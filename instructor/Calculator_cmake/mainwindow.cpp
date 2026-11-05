@@ -276,22 +276,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton_plusminus, &QPushButton::released, this, &MainWindow::unary_operation_pressed);
 
-    // Keep arithmetic operator selection mutually exclusive.
-    auto *operatorButtons = new QButtonGroup(this);
-    operatorButtons->setExclusive(true);
-    operatorButtons->addButton(ui->pushButton_plus, 0);
-    operatorButtons->addButton(ui->pushButton_minus, 1);
-    operatorButtons->addButton(ui->pushButton_mul, 2);
-    operatorButtons->addButton(ui->pushButton_divided, 3);
-    for (auto *button : operatorButtons->buttons()) {
-        button->setCheckable(true);
-    }
-    connect(operatorButtons, &QButtonGroup::idClicked, this,
-            [this, operatorButtons](int id) {
-                static const QString operators[] = {"+", "-", "*", "/"};
-                insertRightAlignedText(ui->textEdit, operators[id]);
-                operatorButtons->button(id)->setChecked(false);
-            });
+    // Arithmetic operators are ordinary input keys. Connect each button
+    // directly so their behavior does not depend on QButtonGroup's checked
+    // state (which can differ between desktop and Android styles/platforms).
+    const auto connectOperator = [this](QPushButton *button, const QString &op) {
+        button->setCheckable(false);
+        connect(button, &QPushButton::clicked, this, [this, op]() {
+            insertRightAlignedText(ui->textEdit, op);
+        });
+    };
+    connectOperator(ui->pushButton_plus, "+");
+    connectOperator(ui->pushButton_minus, "-");
+    connectOperator(ui->pushButton_mul, "*");
+    connectOperator(ui->pushButton_divided, "/");
 
     connect(ui->pushButton_bracket_left, &QPushButton::released, this, &MainWindow::left_bracked_pressed);
     connect(ui->pushButton_bracket_right, &QPushButton::released, this, &MainWindow::right_bracked_pressed);
