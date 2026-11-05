@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - refactor_design
     paths:
       - "common/Util.h"
       - "common/test_common.cmake"
