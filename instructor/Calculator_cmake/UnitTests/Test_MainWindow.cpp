@@ -1495,7 +1495,8 @@ void CalculatorGuiTests::allArithmeticOperatorButtons()
         QTest::mouseClick(clear, Qt::LeftButton);
         QTest::mouseClick(window.findChild<QPushButton *>("pushButton_8"), Qt::LeftButton);
         QTest::mouseClick(window.findChild<QPushButton *>(test.button), Qt::LeftButton);
-        const char *lastDigit = test.button == QString("pushButton_divided") ? "2" : "3";
+        const char *lastDigit =
+            QString::fromLatin1(test.button) == QStringLiteral("pushButton_divided") ? "2" : "3";
         QTest::mouseClick(window.findChild<QPushButton *>(lastDigit), Qt::LeftButton);
 
         QCOMPARE(display->toPlainText(), QString::fromLatin1(test.expression));
