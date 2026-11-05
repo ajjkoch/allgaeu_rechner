@@ -173,98 +173,6 @@ protected:
 
 void applyAlpineTheme(QWidget *window)
 {
-    window->setStyleSheet(R"(
-        QMainWindow, QWidget#centralwidget {
-            background-color: #ded9cd;
-        }
-        QTextEdit#textEdit {
-            background-color: #fbfaf5;
-            color: #26372d;
-            border: 1px solid #aaa995;
-            border-bottom: 3px solid #71836f;
-            border-radius: 9px;
-            padding: 6px 10px;
-            selection-background-color: #a9bba7;
-            selection-color: #203126;
-            font: 22pt "DejaVu Sans";
-        }
-        QPushButton {
-            color: #344137;
-            background-color: #f2f0e8;
-            border: 1px solid #b9b7a9;
-            border-bottom: 3px solid #a09e90;
-            border-radius: 8px;
-            padding: 2px 3px;
-            font: 11pt "DejaVu Sans";
-        }
-        QPushButton:hover {
-            background-color: #fffdf6;
-            border-color: #81927f;
-        }
-        QPushButton:pressed {
-            background-color: #d4dfd2;
-            border: 1px solid #718a74;
-            padding-top: 3px;
-            padding-bottom: 1px;
-        }
-        QPushButton[role="digit"] {
-            background-color: #faf9f3;
-            color: #26372d;
-            font: 17pt "DejaVu Sans";
-            border-color: #c5c2b5;
-            border-bottom-color: #aaa797;
-        }
-        QPushButton[role="function"] {
-            background-color: #e2e9df;
-            color: #3e5945;
-            font: 10pt "DejaVu Sans";
-            border-color: #afbdab;
-            border-bottom-color: #91a18e;
-        }
-        QPushButton[role="constant"] {
-            background-color: #eee7d7;
-            color: #655538;
-            font: 12pt "DejaVu Sans";
-            border-color: #cbbd9d;
-            border-bottom-color: #b4a47f;
-        }
-        QPushButton[role="operator"] {
-            background-color: #dce5d9;
-            color: #36513d;
-            font: 16pt "DejaVu Sans";
-            border-color: #a6b7a2;
-            border-bottom-color: #81967f;
-        }
-        QPushButton[role="utility"] {
-            background-color: #e9e5db;
-            color: #596257;
-            font: 10pt "DejaVu Sans";
-            border-color: #c2bdaf;
-            border-bottom-color: #a7a292;
-        }
-        QPushButton#pushButton_equals {
-            background-color: #536f59;
-            color: #fffdf4;
-            border: 1px solid #405c46;
-            border-bottom: 3px solid #344b39;
-            font: bold 18pt "DejaVu Sans";
-        }
-        QPushButton#pushButton_equals:hover {
-            background-color: #66836b;
-        }
-        QPushButton#pushButton_clear {
-            background-color: #eadbd2;
-            color: #70483d;
-            border-color: #cfb1a5;
-            border-bottom-color: #b99486;
-            font: bold 12pt "DejaVu Sans";
-        }
-        QWidget#alpineHeader {
-            border: 1px solid #b6c0b2;
-            border-radius: 8px;
-        }
-    )");
-
     const QMap<QString, QString> roles = {
         {"pushButton_0", "digit"}, {"pushButton_1", "digit"},
         {"pushButton_2", "digit"}, {"pushButton_3", "digit"},
@@ -289,16 +197,20 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_history_forward", "utility"}
     };
 
+    // Each key gets a concise, engraved-looking symbol where that improves recognition.
+    // Object names and calculatorActionId remain the only source of action semantics.
     const QMap<QString, QString> labels = {
-        {"pushButton_cursor_left", "←"},
-        {"pushButton_cursor_right", "→"},
-        {"pushButton_history_back", "↑"},
+        {"pushButton_plusminus", "±"}, {"pushButton_sqrt", "√"},
+        {"pushButton_x2", "x²"}, {"pushButton_edx", "1/x"},
+        {"pushButton_inv", "INV"}, {"pushButton_mul", "×"},
+        {"pushButton_erase_left", "⌫"}, {"pushButton_cursor_left", "←"},
+        {"pushButton_cursor_right", "→"}, {"pushButton_history_back", "↑"},
         {"pushButton_history_forward", "↓"}
     };
 
     const QMap<QString, QString> hints = {
         {"pushButton_pi", "Konstante π einfügen"},
-        {"pushButton_sqrt", "Quadratwurzel berechnen"},
+        {"pushButton_sqrt", "Quadratwurzel √x berechnen"},
         {"pushButton_x2", "Potenz x hoch y"},
         {"pushButton_edx", "Kehrwert 1/x berechnen"},
         {"pushButton_inv", "Umkehrfunktionen aktivieren"},
@@ -309,20 +221,141 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_cursor_left", "Cursor nach links bewegen"},
         {"pushButton_cursor_right", "Cursor nach rechts bewegen"},
         {"pushButton_history_back", "Vorherigen Verlaufseintrag anzeigen"},
-        {"pushButton_history_forward", "Nächsten Verlaufseintrag anzeigen"}
+        {"pushButton_history_forward", "Nächsten Verlaufseintrag anzeigen"},
+        {"pushButton_percent", "Prozentfunktion"},
+        {"pushButton_mod", "Modulo – Rest einer Division"},
+        {"pushButton_plusminus", "Vorzeichen wechseln"}
     };
 
-    // Small, mathematically distinct function plots are purely presentational.
-    // The buttons keep their existing object names and action-ID wiring.
+    window->setStyleSheet(R"(
+        QMainWindow, QWidget#centralwidget {
+            background-color: #b8a487;
+            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 #cbbb9f, stop:0.52 #b9a486, stop:1 #a58e70);
+        }
+        QTextEdit#textEdit {
+            background-color: #fbf8ee;
+            color: #26372d;
+            border: 1px solid #897c66;
+            border-top: 2px solid #e8e1d2;
+            border-bottom: 4px solid #687b68;
+            border-radius: 8px;
+            padding: 7px 10px;
+            selection-background-color: #a9bba7;
+            selection-color: #203126;
+            font: 22pt "DejaVu Sans";
+        }
+        QPushButton {
+            color: #3d4037;
+            background-color: #e9e4d7;
+            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 #fbf8ef, stop:0.48 #e9e4d7, stop:1 #d4cebf);
+            border: 1px solid #a59b88;
+            border-top: 1px solid #fffdf5;
+            border-bottom: 3px solid #938875;
+            border-radius: 7px;
+            padding: 2px 3px;
+            font: 11pt "DejaVu Sans";
+        }
+        QPushButton:hover {
+            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 #fffdf6, stop:1 #e4e9dc);
+            border-color: #71836f;
+        }
+        QPushButton:pressed {
+            background-color: #cbd5c5;
+            background-image: none;
+            border: 1px solid #687d69;
+            padding-top: 4px;
+            padding-bottom: 0;
+        }
+        QPushButton[role="digit"] {
+            color: #28362d;
+            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 #fffdf5, stop:0.55 #f3f0e6, stop:1 #ded9ca);
+            border-color: #b5ad9b;
+            border-bottom-color: #938b79;
+            font: 17pt "DejaVu Sans";
+        }
+        QPushButton[role="function"] {
+            color: #38503d;
+            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 #edf2e8, stop:0.55 #dce5d7, stop:1 #c5d1c0);
+            border-color: #9eae98;
+            border-bottom-color: #788b75;
+            font: 10pt "DejaVu Sans";
+        }
+        QPushButton[role="constant"] {
+            color: #665333;
+            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 #f6f0df, stop:0.55 #e9dfc8, stop:1 #d8c9a9);
+            border-color: #c0ae88;
+            border-bottom-color: #9e8960;
+            font: 12pt "DejaVu Sans";
+        }
+        QPushButton[role="operator"] {
+            color: #304b37;
+            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 #e5eee1, stop:0.55 #d0dfcc, stop:1 #b8cbb5);
+            border-color: #91a58e;
+            border-bottom-color: #6f876e;
+            font: 16pt "DejaVu Sans";
+        }
+        QPushButton[role="utility"] {
+            color: #55594f;
+            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 #eeeae0, stop:0.55 #dfdbd0, stop:1 #c9c4b7);
+            border-color: #aaa392;
+            border-bottom-color: #898271;
+            font: 11pt "DejaVu Sans";
+        }
+        QPushButton#pushButton_equals {
+            color: #fffdf4;
+            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 #718b70, stop:0.5 #536f59, stop:1 #405a46);
+            border: 1px solid #3d5843;
+            border-top-color: #8fa58a;
+            border-bottom: 4px solid #304536;
+            font: bold 18pt "DejaVu Sans";
+        }
+        QPushButton#pushButton_equals:hover {
+            background-color: #66836b;
+            background-image: none;
+        }
+        QPushButton#pushButton_clear {
+            color: #70483d;
+            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                stop:0 #f4e7dd, stop:0.55 #ead6ca, stop:1 #d8bfb2);
+            border-color: #c5a394;
+            border-bottom-color: #a17b6d;
+            font: bold 12pt "DejaVu Sans";
+        }
+        QPushButton#pushButton_erase_left {
+            color: #6b5144;
+            font: 15pt "DejaVu Sans";
+        }
+        QPushButton#pushButton_pi, QPushButton#pushButton_sqrt {
+            font: bold 15pt "DejaVu Sans";
+        }
+        QPushButton#pushButton_sin, QPushButton#pushButton_cos,
+        QPushButton#pushButton_tan, QPushButton#pushButton_log,
+        QPushButton#pushButton_ln {
+            font: bold 10pt "DejaVu Sans";
+        }
+        QWidget#alpineHeader {
+            border: 1px solid #a8ad9b;
+            border-bottom: 2px solid #7b8b73;
+            border-radius: 7px;
+        }
+    )");
+
     const QMap<QString, QString> functionPlots = {
-        {"pushButton_sin", "sin"},
-        {"pushButton_cos", "cos"},
+        {"pushButton_sin", "sin"}, {"pushButton_cos", "cos"},
         {"pushButton_tan", "tan"}
     };
 
     const auto buttons = window->findChildren<QPushButton *>();
     for (QPushButton *button : buttons) {
-        button->setStyleSheet(QString());
         const QString name = button->objectName();
         if (labels.contains(name))
             button->setText(labels.value(name));
@@ -336,8 +369,11 @@ void applyAlpineTheme(QWidget *window)
         }
         if (name == "pushButton_edx")
             button->setText(QString::fromUtf8("1⁄x"));
-        button->setMinimumHeight(28);
+        button->setMinimumHeight(30);
         button->setFocusPolicy(Qt::NoFocus);
+        button->setCursor(Qt::PointingHandCursor);
+        button->setAutoDefault(false);
+        button->setDefault(false);
     }
 }
 } // namespace
