@@ -259,75 +259,100 @@ MainWindow::MainWindow(QWidget *parent)
         m_isError = false;
     });
 
-    // Connect digits directly; avoid QButtonGroup ID dispatch for Android touch input.
-    const auto connectDigit = [this](QPushButton *button, int digit) {
+    // Every visual control exposes the same action-ID contract. The widget
+    // type and its label are deliberately irrelevant to action dispatch.
+    using Action = CalculatorAction;
+    const QMap<QString, Action> actions = {
+        {"pushButton_0", Action::Digit0}, {"pushButton_1", Action::Digit1},
+        {"pushButton_2", Action::Digit2}, {"pushButton_3", Action::Digit3},
+        {"pushButton_4", Action::Digit4}, {"pushButton_5", Action::Digit5},
+        {"pushButton_6", Action::Digit6}, {"pushButton_7", Action::Digit7},
+        {"pushButton_8", Action::Digit8}, {"pushButton_9", Action::Digit9},
+        {"pushButton_plus", Action::Add}, {"pushButton_minus", Action::Subtract},
+        {"pushButton_mul", Action::Multiply}, {"pushButton_divided", Action::Divide},
+        {"pushButton_equals", Action::Equals}, {"pushButton_clear", Action::Clear},
+        {"pushButton_erase_left", Action::Backspace},
+        {"pushButton_plusminus", Action::ToggleSign},
+        {"pushButton_decimal", Action::Decimal},
+        {"pushButton_bracket_left", Action::OpenParenthesis},
+        {"pushButton_bracket_right", Action::CloseParenthesis},
+        {"pushButton_sqrt", Action::SquareRoot}, {"pushButton_x2", Action::Power},
+        {"pushButton_sin", Action::Sine}, {"pushButton_cos", Action::Cosine},
+        {"pushButton_tan", Action::Tangent}, {"pushButton_log", Action::Log10},
+        {"pushButton_ln", Action::NaturalLog}, {"pushButton_inv", Action::Inverse},
+        {"pushButton_mod", Action::Modulo}, {"pushButton_edx", Action::Reciprocal},
+        {"pushButton_percent", Action::Percent}, {"pushButton_pi", Action::Pi},
+        {"pushButton_changeDegreesMode", Action::ToggleAngleMode},
+        {"pushButton_cursor_left", Action::CursorLeft},
+        {"pushButton_cursor_right", Action::CursorRight},
+        {"pushButton_history_back", Action::HistoryBack},
+        {"pushButton_history_forward", Action::HistoryForward}
+    };
+
+    for (auto it = actions.cbegin(); it != actions.cend(); ++it) {
+        auto *button = findChild<QPushButton *>(it.key());
+        if (!button)
+            continue;
+
+        button->setProperty("calculatorActionId", static_cast<int>(it.value()));
         button->setCheckable(false);
         button->setFocusPolicy(Qt::NoFocus);
-        connect(button, &QPushButton::clicked, this, [this, digit]() {
-            digit_pressed(digit);
+        connect(button, &QPushButton::clicked, this, [this, button]() {
+            const auto action = static_cast<CalculatorAction>(
+                button->property("calculatorActionId").toInt());
+            dispatchAction(action);
         });
-    };
-    connectDigit(ui->pushButton_0, 0);
-    connectDigit(ui->pushButton_1, 1);
-    connectDigit(ui->pushButton_2, 2);
-    connectDigit(ui->pushButton_3, 3);
-    connectDigit(ui->pushButton_4, 4);
-    connectDigit(ui->pushButton_5, 5);
-    connectDigit(ui->pushButton_6, 6);
-    connectDigit(ui->pushButton_7, 7);
-    connectDigit(ui->pushButton_8, 8);
-    connectDigit(ui->pushButton_9, 9);
-
-    connect(ui->pushButton_plusminus, &QPushButton::clicked, this, &MainWindow::unary_operation_pressed);
-
-    // Arithmetic operators are ordinary input keys. Connect each button
-    // directly so their behavior does not depend on QButtonGroup's checked
-    // state (which can differ between desktop and Android styles/platforms).
-    const auto connectOperator = [this](QPushButton *button, const QString &op) {
-        button->setCheckable(false);
-        connect(button, &QPushButton::clicked, this, [this, op]() {
-            insertRightAlignedText(ui->textEdit, op);
-        });
-    };
-    connectOperator(ui->pushButton_plus, "+");
-    connectOperator(ui->pushButton_minus, "-");
-    connectOperator(ui->pushButton_mul, "*");
-    connectOperator(ui->pushButton_divided, "/");
-
-    connect(ui->pushButton_bracket_left, &QPushButton::clicked, this, &MainWindow::left_bracked_pressed);
-    connect(ui->pushButton_bracket_right, &QPushButton::clicked, this, &MainWindow::right_bracked_pressed);
-    connect(ui->pushButton_sqrt, &QPushButton::clicked, this, &MainWindow::sqrt_pressed);
-    connect(ui->pushButton_x2, &QPushButton::clicked, this, &MainWindow::power_pressed);
-    connect(ui->pushButton_erase_left, &QPushButton::clicked, this, &MainWindow::erase_left_pressed);
-
-    connect(ui->pushButton_cos, &QPushButton::clicked, this, &MainWindow::cos_pressed);
-    connect(ui->pushButton_sin, &QPushButton::clicked, this, &MainWindow::sin_pressed);
-    connect(ui->pushButton_tan, &QPushButton::clicked, this, &MainWindow::tan_pressed);
-    connect(ui->pushButton_log, &QPushButton::clicked, this, &MainWindow::log_pressed);
-    connect(ui->pushButton_ln, &QPushButton::clicked, this, &MainWindow::ln_pressed);
-    connect(ui->pushButton_inv, &QPushButton::clicked, this, &MainWindow::inv_pressed);
-    connect(ui->pushButton_mod, &QPushButton::clicked, this, &MainWindow::mod_pressed);
-    connect(ui->pushButton_edx, &QPushButton::clicked, this, &MainWindow::edx_pressed);
-    connect(ui->pushButton_percent, &QPushButton::clicked, this, &MainWindow::percent_pressed);
-
-    connect(ui->pushButton_pi, &QPushButton::clicked, this, &MainWindow::pi_pressed);
-    connect(ui->pushButton_cursor_left, &QPushButton::clicked, this, &MainWindow::move_left_pressed);
-    connect(ui->pushButton_cursor_right, &QPushButton::clicked, this, &MainWindow::move_right_pressed);
-
-    connect(ui->pushButton_history_back, &QPushButton::clicked, this, &MainWindow::history_back_pressed);
-    connect(ui->pushButton_history_forward, &QPushButton::clicked, this, &MainWindow::history_forward_pressed);
-
-    connect(ui->pushButton_changeDegreesMode, &QPushButton::clicked, this, &MainWindow::degreesMode_pressed);
-
-
-    connect(ui->pushButton_decimal, &QPushButton::clicked, this, &MainWindow::decimal_pressed);
-
-    connect(ui->pushButton_clear, &QPushButton::clicked, this, &MainWindow::clear_pressed);
-    connect(ui->pushButton_equals, &QPushButton::clicked, this, &MainWindow::equals_pressed);
+    }
 
     setRightAlignedText(ui->textEdit, m_strExpression);
 }
 
+
+
+/** @brief Executes an action identified independently of its visual control. */
+void MainWindow::dispatchAction(CalculatorAction action)
+{
+    switch (action) {
+    case CalculatorAction::Digit0: digit_pressed(0); break;
+    case CalculatorAction::Digit1: digit_pressed(1); break;
+    case CalculatorAction::Digit2: digit_pressed(2); break;
+    case CalculatorAction::Digit3: digit_pressed(3); break;
+    case CalculatorAction::Digit4: digit_pressed(4); break;
+    case CalculatorAction::Digit5: digit_pressed(5); break;
+    case CalculatorAction::Digit6: digit_pressed(6); break;
+    case CalculatorAction::Digit7: digit_pressed(7); break;
+    case CalculatorAction::Digit8: digit_pressed(8); break;
+    case CalculatorAction::Digit9: digit_pressed(9); break;
+    case CalculatorAction::Add: insertRightAlignedText(ui->textEdit, "+"); break;
+    case CalculatorAction::Subtract: insertRightAlignedText(ui->textEdit, "-"); break;
+    case CalculatorAction::Multiply: insertRightAlignedText(ui->textEdit, "*"); break;
+    case CalculatorAction::Divide: insertRightAlignedText(ui->textEdit, "/"); break;
+    case CalculatorAction::Equals: equals_pressed(); break;
+    case CalculatorAction::Clear: clear_pressed(); break;
+    case CalculatorAction::Backspace: erase_left_pressed(); break;
+    case CalculatorAction::ToggleSign: unary_operation_pressed(); break;
+    case CalculatorAction::Decimal: decimal_pressed(); break;
+    case CalculatorAction::OpenParenthesis: left_bracked_pressed(); break;
+    case CalculatorAction::CloseParenthesis: right_bracked_pressed(); break;
+    case CalculatorAction::SquareRoot: sqrt_pressed(); break;
+    case CalculatorAction::Power: power_pressed(); break;
+    case CalculatorAction::Sine: sin_pressed(); break;
+    case CalculatorAction::Cosine: cos_pressed(); break;
+    case CalculatorAction::Tangent: tan_pressed(); break;
+    case CalculatorAction::Log10: log_pressed(); break;
+    case CalculatorAction::NaturalLog: ln_pressed(); break;
+    case CalculatorAction::Inverse: inv_pressed(); break;
+    case CalculatorAction::Modulo: mod_pressed(); break;
+    case CalculatorAction::Reciprocal: edx_pressed(); break;
+    case CalculatorAction::Percent: percent_pressed(); break;
+    case CalculatorAction::Pi: pi_pressed(); break;
+    case CalculatorAction::ToggleAngleMode: degreesMode_pressed(); break;
+    case CalculatorAction::CursorLeft: move_left_pressed(); break;
+    case CalculatorAction::CursorRight: move_right_pressed(); break;
+    case CalculatorAction::HistoryBack: history_back_pressed(); break;
+    case CalculatorAction::HistoryForward: history_forward_pressed(); break;
+    }
+}
 
 /** @brief Evaluates the expression when Return or keypad Enter is pressed in the display. */
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
