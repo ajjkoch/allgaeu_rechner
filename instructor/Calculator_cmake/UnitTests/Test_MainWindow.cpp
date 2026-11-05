@@ -13,6 +13,7 @@ class CalculatorGuiTests : public QObject
 
 private slots:
     void digitButtonsAndAddition();
+    void allArithmeticOperatorButtons();
     void cursorEditingAndBackspace();
     void directDisplayEditing();
     void errorRecovery();
@@ -1465,6 +1466,42 @@ void CalculatorGuiTests::guiSignAndEventFilterBoundaries()
     QCOMPARE(display->textCursor().position(), 1);
     QTest::keyClick(display, Qt::Key_Right);
     QCOMPARE(display->textCursor().position(), 2);
+}
+
+void CalculatorGuiTests::allArithmeticOperatorButtons()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    QVERIFY(display);
+    QVERIFY(clear);
+    QVERIFY(equals);
+
+    const struct {
+        const char *button;
+        const char *expression;
+        const char *expected;
+    } cases[] = {
+        {"pushButton_plus", "8+3", "11"},
+        {"pushButton_minus", "8-3", "5"},
+        {"pushButton_mul", "8*3", "24"},
+        {"pushButton_divided", "8/2", "4"}
+    };
+
+    for (const auto &test : cases) {
+        QTest::mouseClick(clear, Qt::LeftButton);
+        QTest::mouseClick(window.findChild<QPushButton *>("pushButton_8"), Qt::LeftButton);
+        QTest::mouseClick(window.findChild<QPushButton *>(test.button), Qt::LeftButton);
+        const char *lastDigit = test.button == QString("pushButton_divided") ? "2" : "3";
+        QTest::mouseClick(window.findChild<QPushButton *>(lastDigit), Qt::LeftButton);
+
+        QCOMPARE(display->toPlainText(), QString::fromLatin1(test.expression));
+        QTest::mouseClick(equals, Qt::LeftButton);
+        QCOMPARE(display->toPlainText(), QString::fromLatin1(test.expected));
+    }
 }
 
 QTEST_MAIN(CalculatorGuiTests)
