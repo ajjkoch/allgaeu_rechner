@@ -214,6 +214,13 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_history_forward", "utility"}
     };
 
+    const QMap<QString, QString> labels = {
+        {"pushButton_cursor_left", "←"},
+        {"pushButton_cursor_right", "→"},
+        {"pushButton_history_back", "↑"},
+        {"pushButton_history_forward", "↓"}
+    };
+
     const QMap<QString, QString> hints = {
         {"pushButton_pi", "Konstante π einfügen"},
         {"pushButton_sqrt", "Quadratwurzel berechnen"},
@@ -234,6 +241,8 @@ void applyAlpineTheme(QWidget *window)
     for (QPushButton *button : buttons) {
         button->setStyleSheet(QString());
         const QString name = button->objectName();
+        if (labels.contains(name))
+            button->setText(labels.value(name));
         if (roles.contains(name))
             button->setProperty("role", roles.value(name));
         if (hints.contains(name))
