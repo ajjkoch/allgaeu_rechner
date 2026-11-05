@@ -1,5 +1,7 @@
 name: Calculator CI
 
+# Regression tests also run on the design branch.
+
 on:
   push:
     branches:
