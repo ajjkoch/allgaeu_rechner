@@ -124,10 +124,9 @@ protected:
         // Engraved Allgäu mountain silhouette on the left.
         const QPointF base(10,height()-10);
         QPainterPath ridge; ridge.moveTo(base);
-        ridge.lineTo(width()*.07,height()*.47); ridge.lineTo(width()*.12,height()*.58);
-        ridge.lineTo(width()*.19,height()*.15); ridge.lineTo(width()*.25,height()*.42);
-        ridge.lineTo(width()*.30,height()*.29); ridge.lineTo(width()*.37,height()*.67);
-        ridge.lineTo(width()*.43,height()*.52); ridge.lineTo(width()*.49,height()*.78);
+        ridge.lineTo(width()*.06,height()*.55); ridge.lineTo(width()*.10,height()*.62);
+        ridge.lineTo(width()*.16,height()*.20); ridge.lineTo(width()*.21,height()*.49);
+        ridge.lineTo(width()*.25,height()*.34); ridge.lineTo(width()*.29,height()*.69);
         p.setPen(QPen(QColor("#4a2a12"),3.0,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
         p.setBrush(QColor(110,67,29,35)); p.drawPath(ridge);
         QPainterPath snow; snow.moveTo(width()*.105,height()*.48);
@@ -145,12 +144,20 @@ protected:
             tree.lineTo(x+3,y-8); tree.lineTo(x+7,y-7); tree.closeSubpath(); p.drawPath(tree);
         }
 
-        p.setPen(QColor("#3a1e0c"));
-        QFont title("Georgia",qMax(13,int(height()*.31)),QFont::Bold);
-        title.setLetterSpacing(QFont::AbsoluteSpacing,1.0); p.setFont(title);
-        p.drawText(QRect(width()*.28,7,width()*.59,height()*.48),Qt::AlignCenter,"ALLGÄU RECHNER");
-        QFont sub("Georgia",qMax(7,int(height()*.15)),QFont::Bold); p.setFont(sub);
-        p.drawText(QRect(width()*.28,height()*.51,width()*.59,height()*.25),Qt::AlignCenter,"RECHNEN MIT WEITBLICK");
+        p.setPen(QColor("#2b1609"));
+        const QRect titleRect(int(width()*.245), 5, int(width()*.52), int(height()*.46));
+        QFont title("Georgia", 20, QFont::Bold);
+        title.setLetterSpacing(QFont::AbsoluteSpacing, 0.0);
+        QFontMetrics titleMetrics(title);
+        while (title.pointSize() > 10 && titleMetrics.horizontalAdvance("ALLGÄU RECHNER") > titleRect.width()) {
+            title.setPointSize(title.pointSize()-1);
+            titleMetrics = QFontMetrics(title);
+        }
+        p.setFont(title);
+        p.drawText(titleRect, Qt::AlignCenter | Qt::TextSingleLine, "ALLGÄU RECHNER");
+        const QRect subtitleRect(int(width()*.25), int(height()*.53), int(width()*.51), int(height()*.23));
+        QFont sub("Georgia", 10, QFont::Bold); p.setFont(sub);
+        p.drawText(subtitleRect, Qt::AlignCenter | Qt::TextSingleLine, "RECHNEN MIT WEITBLICK");
 
         // Layered edelweiss emblem on the right.
         const QPointF flower(width()-27,height()*.48);
@@ -238,17 +245,17 @@ void paintAlpineButton(QPushButton *button)
     painter.save();
     QPainterPath clip; clip.addRoundedRect(r.adjusted(2,2,-2,-2),9,9);
     painter.setClipPath(clip);
-    for (int i=0; i<9; ++i) {
-        const qreal y = r.top()+5+i*(r.height()-10)/8.0;
+    for (int i=0; i<17; ++i) {
+        const qreal y = r.top()+3+i*(r.height()-6)/16.0;
         QPainterPath grain;
         grain.moveTo(r.left()-4,y);
-        grain.cubicTo(r.left()+r.width()*0.22,y-3+(i%3),r.left()+r.width()*0.65,y+3-(i%2),r.right()+4,y-1);
-        painter.setPen(QPen(QColor(92,48,17, i%2 ? 32 : 20), i%3==0 ? 1.4 : 0.8));
+        grain.cubicTo(r.left()+r.width()*0.18,y-4+(i%4),r.left()+r.width()*0.68,y+4-(i%3),r.right()+4,y-1);
+        painter.setPen(QPen(QColor(64,29,9, i%2 ? 88 : 55), i%4==0 ? 1.7 : 1.0));
         painter.drawPath(grain);
     }
     painter.restore();
     painter.setBrush(Qt::NoBrush);
-    painter.setPen(QPen(QColor(255,245,210,175),1.2));
+    painter.setPen(QPen(QColor(255,239,197,225),1.8));
     painter.drawRoundedRect(r.adjusted(2,2,-2,-3),9,9);
     painter.setPen(QPen(QColor(65,37,18,150),1.0));
     painter.drawLine(QPointF(r.left()+8,r.bottom()-3),QPointF(r.right()-8,r.bottom()-3));
@@ -258,14 +265,18 @@ void paintAlpineButton(QPushButton *button)
     const bool function = role=="function" || trig;
     const QColor ink = name=="pushButton_equals" ? QColor("#fff3cf") :
                        name=="pushButton_clear" ? QColor("#431b12") : QColor("#291307");
-    painter.setPen(ink);
-    QFont f("Georgia", function ? 15 : 20, QFont::Bold);
-    if (name=="pushButton_pi" || name=="pushButton_sqrt") f.setPointSize(25);
-    if (name=="pushButton_changeDegreesMode") f.setPointSize(18);
-    if (name=="pushButton_edx") f.setPointSize(17);
-    if (name=="pushButton_equals") f.setPointSize(25);
+    QFont f("Georgia", function ? 19 : 26, QFont::Black);
+    if (name=="pushButton_pi" || name=="pushButton_sqrt") f.setPointSize(31);
+    if (name=="pushButton_changeDegreesMode") f.setPointSize(23);
+    if (name=="pushButton_edx") f.setPointSize(23);
+    if (name=="pushButton_equals") f.setPointSize(31);
+    if (name=="pushButton_erase_left") f.setPointSize(20);
     f.setItalic(function || name=="pushButton_pi" || name=="pushButton_changeDegreesMode");
+    // A restrained engraved shadow gives the lettering the depth of the reference.
+    painter.setPen(QColor(255,226,174,150));
     painter.setFont(f);
+    painter.drawText(r.adjusted(3,4,-3,-1), Qt::AlignCenter, button->text());
+    painter.setPen(ink); painter.setFont(f);
 
     if (trig) {
         QIcon icon = button->icon();
@@ -279,6 +290,18 @@ void paintAlpineButton(QPushButton *button)
         QString caption = name=="pushButton_pi" ? "Pi" : name=="pushButton_sqrt" ? "Wurzel" :
                           name=="pushButton_x2" ? "Potenz" : "Grad";
         painter.drawText(QRectF(r.left()+3,r.center().y()+3,r.width()-6,r.height()/2-4),Qt::AlignCenter,caption);
+    } else if (name=="pushButton_erase_left") {
+        const qreal cx=r.center().x(), cy=r.center().y();
+        QPainterPath key;
+        key.moveTo(cx-35,cy); key.lineTo(cx-17,cy-18);
+        key.lineTo(cx+32,cy-18); key.lineTo(cx+32,cy+18);
+        key.lineTo(cx-17,cy+18); key.closeSubpath();
+        painter.setPen(QPen(QColor("#fff0cf"),4.2,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+        painter.drawPath(key.translated(0,1.5));
+        painter.setPen(QPen(ink,3.2,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+        painter.drawPath(key);
+        painter.drawLine(QPointF(cx+7,cy-7),QPointF(cx-7,cy+7));
+        painter.drawLine(QPointF(cx-7,cy-7),QPointF(cx+7,cy+7));
     } else {
         painter.drawText(r.adjusted(3,2,-3,-3),Qt::AlignCenter,button->text());
     }
@@ -316,7 +339,7 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_plusminus", "±"}, {"pushButton_sqrt", "√"},
         {"pushButton_x2", "x²"}, {"pushButton_edx", "1/x"},
         {"pushButton_inv", "INV"}, {"pushButton_mul", "×"},
-        {"pushButton_erase_left", "⌫"}, {"pushButton_cursor_left", "←"},
+        {"pushButton_erase_left", ""}, {"pushButton_cursor_left", "←"},
         {"pushButton_cursor_right", "→"}, {"pushButton_history_back", "↑"},
         {"pushButton_history_forward", "↓"}
     };
@@ -862,14 +885,19 @@ void MainWindow::insertRightAlignedText(QTextEdit *textEdit, const QString &text
 void MainWindow::setRightAlignedText(QTextEdit *textEdit, const QString &text) {
     const QSignalBlocker signalBlocker(textEdit);
     m_strExpression = text;
-    textEdit->clear();
 
-    // Set the alignment of the entire text to right
+    // Update the document as one edit and always leave the caret at the end.
+    // This avoids the visible clear/reinsert cycle while typing or evaluating.
     QTextCursor cursor(textEdit->document());
+    cursor.beginEditBlock();
+    cursor.select(QTextCursor::Document);
     cursor.insertText(text);
     QTextBlockFormat blockFormat = cursor.blockFormat();
     blockFormat.setAlignment(Qt::AlignRight);
     cursor.mergeBlockFormat(blockFormat);
+    cursor.endEditBlock();
+    cursor.movePosition(QTextCursor::End);
+    textEdit->setTextCursor(cursor);
 }
 
 
