@@ -13,6 +13,76 @@
 
 
 namespace {
+QIcon makeFunctionIcon(const QString &function)
+{
+    const QSize size(36, 24);
+    QPixmap pixmap(size);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+    const QRectF plot(2.0, 2.0, 32.0, 20.0);
+
+    QPen axisPen(QColor("#8b9988"), 0.8);
+    painter.setPen(axisPen);
+    painter.drawLine(QPointF(plot.left(), plot.center().y()),
+                     QPointF(plot.right(), plot.center().y()));
+    painter.drawLine(QPointF(plot.center().x(), plot.top()),
+                     QPointF(plot.center().x(), plot.bottom()));
+
+    QPen curvePen(QColor("#365b43"), 1.8, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    painter.setPen(curvePen);
+    painter.setBrush(Qt::NoBrush);
+
+    auto mapPoint = [&plot](qreal x, qreal y) {
+        return QPointF(plot.left() + (x + 1.0) * plot.width() / 2.0,
+                       plot.center().y() - y * plot.height() / 2.0);
+    };
+
+    if (function == "tan") {
+        // Plot tan(x) in two clipped branches; the gaps represent its asymptotes.
+        const qreal xMin = -1.35;
+        const qreal xMax = 1.35;
+        const qreal yLimit = 2.6;
+        const qreal scale = qMax(qAbs(std::tan(xMin)), qAbs(std::tan(xMax)));
+        Q_UNUSED(scale);
+        for (int branch = 0; branch < 2; ++branch) {
+            const qreal start = branch == 0 ? xMin : 0.0;
+            const qreal end = branch == 0 ? 0.0 : xMax;
+            QPainterPath path;
+            bool started = false;
+            for (int i = 0; i <= 100; ++i) {
+                const qreal x = start + (end - start) * i / 100.0;
+                if (qAbs(x) > 1.50)
+                    continue;
+                const qreal y = qBound(-yLimit, std::tan(x), yLimit) / yLimit;
+                const QPointF point = mapPoint(x / xMax, y);
+                if (!started) { path.moveTo(point); started = true; }
+                else path.lineTo(point);
+            }
+            painter.drawPath(path);
+        }
+        QPen asymptotePen(QColor("#a28d68"), 0.9, Qt::DashLine);
+        painter.setPen(asymptotePen);
+        const qreal asymptoteX = (M_PI_2 / xMax);
+        painter.drawLine(mapPoint(-asymptoteX, -1.0), mapPoint(-asymptoteX, 1.0));
+        painter.drawLine(mapPoint(asymptoteX, -1.0), mapPoint(asymptoteX, 1.0));
+    } else {
+        QPainterPath path;
+        for (int i = 0; i <= 100; ++i) {
+            const qreal x = -M_PI;
+            const qreal angle = x + (2.0 * M_PI * i / 100.0);
+            const qreal y = function == "sin" ? std::sin(angle) : std::cos(angle);
+            const QPointF point = mapPoint(angle / M_PI, y * 0.82);
+            if (i == 0) path.moveTo(point);
+            else path.lineTo(point);
+        }
+        painter.drawPath(path);
+    }
+
+    return QIcon(pixmap);
+}
+
 class AlpineHeader final : public QWidget
 {
 public:
@@ -237,6 +307,14 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_history_forward", "Nächsten Verlaufseintrag anzeigen"}
     };
 
+    // Small, mathematically distinct function plots are purely presentational.
+    // The buttons keep their existing object names and action-ID wiring.
+    const QMap<QString, QString> functionPlots = {
+        {"pushButton_sin", "sin"},
+        {"pushButton_cos", "cos"},
+        {"pushButton_tan", "tan"}
+    };
+
     const auto buttons = window->findChildren<QPushButton *>();
     for (QPushButton *button : buttons) {
         button->setStyleSheet(QString());
@@ -247,6 +325,12 @@ void applyAlpineTheme(QWidget *window)
             button->setProperty("role", roles.value(name));
         if (hints.contains(name))
             button->setToolTip(hints.value(name));
+        if (functionPlots.contains(name)) {
+            button->setIcon(makeFunctionIcon(functionPlots.value(name)));
+            button->setIconSize(QSize(36, 24));
+        }
+        if (name == "pushButton_edx")
+            button->setText(QString::fromUtf8("1⁄x"));
         button->setMinimumHeight(28);
         button->setFocusPolicy(Qt::NoFocus);
     }
