@@ -171,6 +171,80 @@ protected:
     }
 };
 
+
+void paintAlpineButton(QPushButton *button)
+{
+    QPainter painter(button);
+    painter.setRenderHint(QPainter::Antialiasing);
+    const QRectF r = button->rect().adjusted(1.5, 1.5, -1.5, -2.5);
+    const QString role = button->property("role").toString();
+    const bool pressed = button->isDown();
+    QColor top("#f4c27c"), middle("#dfa45d"), bottom("#b87536");
+    if (role == "function") { top=QColor("#d9d78a"); middle=QColor("#b8b96a"); bottom=QColor("#858b3d"); }
+    if (role == "operator") { top=QColor("#d9d78a"); middle=QColor("#b8b96a"); bottom=QColor("#858b3d"); }
+    if (role == "utility") { top=QColor("#f8e2b7"); middle=QColor("#e8c58d"); bottom=QColor("#b98b52"); }
+    if (button->objectName() == "pushButton_clear") { top=QColor("#eaa08a"); middle=QColor("#c96f58"); bottom=QColor("#8e4538"); }
+    if (button->objectName() == "pushButton_equals") { top=QColor("#4f9b20"); middle=QColor("#26730d"); bottom=QColor("#124407"); }
+    if (pressed) { top=top.darker(115); middle=middle.darker(115); bottom=bottom.darker(115); }
+
+    painter.setPen(QPen(QColor(55,35,18,190), 2.0));
+    painter.setBrush(QColor("#4a2b16"));
+    painter.drawRoundedRect(r.adjusted(0,1,0,1), 12, 12);
+    QLinearGradient wood(r.topLeft(), r.bottomLeft());
+    wood.setColorAt(0, top.lighter(118)); wood.setColorAt(0.45, middle); wood.setColorAt(1, bottom);
+    painter.setPen(QPen(QColor("#68401f"), 1.2));
+    painter.setBrush(wood);
+    painter.drawRoundedRect(r, 11, 11);
+
+    painter.save();
+    QPainterPath clip; clip.addRoundedRect(r.adjusted(2,2,-2,-2),9,9);
+    painter.setClipPath(clip);
+    for (int i=0; i<9; ++i) {
+        const qreal y = r.top()+5+i*(r.height()-10)/8.0;
+        QPainterPath grain;
+        grain.moveTo(r.left()-4,y);
+        grain.cubicTo(r.left()+r.width()*0.22,y-3+(i%3),r.left()+r.width()*0.65,y+3-(i%2),r.right()+4,y-1);
+        painter.setPen(QPen(QColor(92,48,17, i%2 ? 32 : 20), i%3==0 ? 1.4 : 0.8));
+        painter.drawPath(grain);
+    }
+    painter.restore();
+    painter.setBrush(Qt::NoBrush);
+    painter.setPen(QPen(QColor(255,245,210,175),1.2));
+    painter.drawRoundedRect(r.adjusted(2,2,-2,-3),9,9);
+    painter.setPen(QPen(QColor(65,37,18,150),1.0));
+    painter.drawLine(QPointF(r.left()+8,r.bottom()-3),QPointF(r.right()-8,r.bottom()-3));
+
+    const QString name = button->objectName();
+    const bool trig = name=="pushButton_sin" || name=="pushButton_cos" || name=="pushButton_tan";
+    const bool function = role=="function" || trig;
+    const QColor ink = name=="pushButton_equals" ? QColor("#fff3cf") :
+                       name=="pushButton_clear" ? QColor("#431b12") : QColor("#291307");
+    painter.setPen(ink);
+    QFont f("Georgia", function ? 15 : 20, QFont::Bold);
+    if (name=="pushButton_pi" || name=="pushButton_sqrt") f.setPointSize(25);
+    if (name=="pushButton_changeDegreesMode") f.setPointSize(18);
+    if (name=="pushButton_edx") f.setPointSize(17);
+    if (name=="pushButton_equals") f.setPointSize(25);
+    f.setItalic(function || name=="pushButton_pi" || name=="pushButton_changeDegreesMode");
+    painter.setFont(f);
+
+    if (trig) {
+        QIcon icon = button->icon();
+        const QRect graphRect(button->rect().center().x()-26, button->rect().top()+5, 52, 25);
+        icon.paint(&painter, graphRect);
+        painter.drawText(QRectF(r.left()+3,r.center().y()+4,r.width()-6,r.height()/2-3),Qt::AlignHCenter|Qt::AlignVCenter,button->text());
+    } else if (name=="pushButton_pi" || name=="pushButton_sqrt" || name=="pushButton_x2" ||
+               name=="pushButton_changeDegreesMode") {
+        painter.drawText(QRectF(r.left()+3,r.top()+5,r.width()-6,r.height()*0.58),Qt::AlignCenter,button->text());
+        QFont sub("Georgia", 12, QFont::Bold); sub.setItalic(true); painter.setFont(sub);
+        QString caption = name=="pushButton_pi" ? "Pi" : name=="pushButton_sqrt" ? "Wurzel" :
+                          name=="pushButton_x2" ? "Potenz" : "Grad";
+        painter.drawText(QRectF(r.left()+3,r.center().y()+3,r.width()-6,r.height()/2-4),Qt::AlignCenter,caption);
+    } else {
+        painter.drawText(r.adjusted(3,2,-3,-3),Qt::AlignCenter,button->text());
+    }
+}
+
 void applyAlpineTheme(QWidget *window)
 {
     const QMap<QString, QString> roles = {
@@ -229,125 +303,19 @@ void applyAlpineTheme(QWidget *window)
 
     window->setStyleSheet(R"(
         QMainWindow, QWidget#centralwidget {
-            background-color: #b8a487;
-            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                stop:0 #cbbb9f, stop:0.52 #b9a486, stop:1 #a58e70);
+            background-color: #70421f;
+            background-image: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #9b6738,stop:0.5 #633b1e,stop:1 #3c2415);
         }
         QTextEdit#textEdit {
-            background-color: #fbf8ee;
-            color: #26372d;
-            border: 1px solid #897c66;
-            border-top: 2px solid #e8e1d2;
-            border-bottom: 4px solid #687b68;
-            border-radius: 8px;
-            padding: 7px 10px;
-            selection-background-color: #a9bba7;
-            selection-color: #203126;
-            font: 22pt "DejaVu Sans";
+            background-color: #f6f0d9; color: #28190c;
+            border: 3px solid #6b431f; border-top: 3px solid #f5d99e;
+            border-bottom: 5px solid #39200e; border-radius: 13px;
+            padding: 7px 10px; font: bold 23pt "Georgia";
         }
-        QPushButton {
-            color: #3d4037;
-            background-color: #e9e4d7;
-            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                stop:0 #fbf8ef, stop:0.48 #e9e4d7, stop:1 #d4cebf);
-            border: 1px solid #a59b88;
-            border-top: 1px solid #fffdf5;
-            border-bottom: 3px solid #938875;
-            border-radius: 7px;
-            padding: 2px 3px;
-            font: 11pt "DejaVu Sans";
-        }
-        QPushButton:hover {
-            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                stop:0 #fffdf6, stop:1 #e4e9dc);
-            border-color: #71836f;
-        }
-        QPushButton:pressed {
-            background-color: #cbd5c5;
-            background-image: none;
-            border: 1px solid #687d69;
-            padding-top: 4px;
-            padding-bottom: 0;
-        }
-        QPushButton[role="digit"] {
-            color: #28362d;
-            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                stop:0 #fffdf5, stop:0.55 #f3f0e6, stop:1 #ded9ca);
-            border-color: #b5ad9b;
-            border-bottom-color: #938b79;
-            font: 17pt "DejaVu Sans";
-        }
-        QPushButton[role="function"] {
-            color: #38503d;
-            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                stop:0 #edf2e8, stop:0.55 #dce5d7, stop:1 #c5d1c0);
-            border-color: #9eae98;
-            border-bottom-color: #788b75;
-            font: 10pt "DejaVu Sans";
-        }
-        QPushButton[role="constant"] {
-            color: #665333;
-            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                stop:0 #f6f0df, stop:0.55 #e9dfc8, stop:1 #d8c9a9);
-            border-color: #c0ae88;
-            border-bottom-color: #9e8960;
-            font: 12pt "DejaVu Sans";
-        }
-        QPushButton[role="operator"] {
-            color: #304b37;
-            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                stop:0 #e5eee1, stop:0.55 #d0dfcc, stop:1 #b8cbb5);
-            border-color: #91a58e;
-            border-bottom-color: #6f876e;
-            font: 16pt "DejaVu Sans";
-        }
-        QPushButton[role="utility"] {
-            color: #55594f;
-            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                stop:0 #eeeae0, stop:0.55 #dfdbd0, stop:1 #c9c4b7);
-            border-color: #aaa392;
-            border-bottom-color: #898271;
-            font: 11pt "DejaVu Sans";
-        }
-        QPushButton#pushButton_equals {
-            color: #fffdf4;
-            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                stop:0 #718b70, stop:0.5 #536f59, stop:1 #405a46);
-            border: 1px solid #3d5843;
-            border-top-color: #8fa58a;
-            border-bottom: 4px solid #304536;
-            font: bold 18pt "DejaVu Sans";
-        }
-        QPushButton#pushButton_equals:hover {
-            background-color: #66836b;
-            background-image: none;
-        }
-        QPushButton#pushButton_clear {
-            color: #70483d;
-            background-image: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                stop:0 #f4e7dd, stop:0.55 #ead6ca, stop:1 #d8bfb2);
-            border-color: #c5a394;
-            border-bottom-color: #a17b6d;
-            font: bold 12pt "DejaVu Sans";
-        }
-        QPushButton#pushButton_erase_left {
-            color: #6b5144;
-            font: 15pt "DejaVu Sans";
-        }
-        QPushButton#pushButton_pi, QPushButton#pushButton_sqrt {
-            font: bold 15pt "DejaVu Sans";
-        }
-        QPushButton#pushButton_sin, QPushButton#pushButton_cos,
-        QPushButton#pushButton_tan, QPushButton#pushButton_log,
-        QPushButton#pushButton_ln {
-            font: bold 10pt "DejaVu Sans";
-        }
-        QWidget#alpineHeader {
-            border: 1px solid #a8ad9b;
-            border-bottom: 2px solid #7b8b73;
-            border-radius: 7px;
-        }
+        QPushButton { background: transparent; border: none; padding: 1px; }
+        QWidget#alpineHeader { border: 2px solid #70451f; border-radius: 8px; }
     )");
+
 
     const QMap<QString, QString> functionPlots = {
         {"pushButton_sin", "sin"}, {"pushButton_cos", "cos"},
@@ -370,6 +338,7 @@ void applyAlpineTheme(QWidget *window)
         if (name == "pushButton_edx")
             button->setText(QString::fromUtf8("1⁄x"));
         button->setMinimumHeight(30);
+        button->installEventFilter(window);
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
         button->setAutoDefault(false);
@@ -503,6 +472,11 @@ void MainWindow::dispatchAction(CalculatorAction action)
 /** @brief Evaluates the expression when Return or keypad Enter is pressed in the display. */
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
+    if (qobject_cast<QPushButton *>(watched) && event->type() == QEvent::Paint) {
+        paintAlpineButton(qobject_cast<QPushButton *>(watched));
+        return true;
+    }
+
     if (watched == ui->textEdit && event->type() == QEvent::KeyPress) {
         auto *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
