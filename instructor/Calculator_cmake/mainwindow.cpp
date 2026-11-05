@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QPushButton>
-#include <QButtonGroup>
 #include <QTextBlockFormat>
 #include <QSignalBlocker>
 #include <QKeyEvent>
@@ -227,6 +226,8 @@ void applyAlpineTheme(QWidget *window)
         if (hints.contains(name))
             button->setToolTip(hints.value(name));
         button->setMinimumHeight(24);
+        // Touch keys should not consume the first Android tap for keyboard focus.
+        button->setFocusPolicy(Qt::NoFocus);
     }
 }
 } // namespace
@@ -258,23 +259,26 @@ MainWindow::MainWindow(QWidget *parent)
         m_isError = false;
     });
 
-    // Use button IDs to identify digit buttons without inspecting the emitting widget.
-    auto *digitButtons = new QButtonGroup(this);
-    digitButtons->addButton(ui->pushButton_0, 0);
-    digitButtons->addButton(ui->pushButton_1, 1);
-    digitButtons->addButton(ui->pushButton_2, 2);
-    digitButtons->addButton(ui->pushButton_3, 3);
-    digitButtons->addButton(ui->pushButton_4, 4);
-    digitButtons->addButton(ui->pushButton_5, 5);
-    digitButtons->addButton(ui->pushButton_6, 6);
-    digitButtons->addButton(ui->pushButton_7, 7);
-    digitButtons->addButton(ui->pushButton_8, 8);
-    digitButtons->addButton(ui->pushButton_9, 9);
-    connect(digitButtons, &QButtonGroup::idClicked,
-            this, &MainWindow::digit_pressed);
+    // Connect digits directly; avoid QButtonGroup ID dispatch for Android touch input.
+    const auto connectDigit = [this](QPushButton *button, int digit) {
+        button->setCheckable(false);
+        button->setFocusPolicy(Qt::NoFocus);
+        connect(button, &QPushButton::clicked, this, [this, digit]() {
+            digit_pressed(digit);
+        });
+    };
+    connectDigit(ui->pushButton_0, 0);
+    connectDigit(ui->pushButton_1, 1);
+    connectDigit(ui->pushButton_2, 2);
+    connectDigit(ui->pushButton_3, 3);
+    connectDigit(ui->pushButton_4, 4);
+    connectDigit(ui->pushButton_5, 5);
+    connectDigit(ui->pushButton_6, 6);
+    connectDigit(ui->pushButton_7, 7);
+    connectDigit(ui->pushButton_8, 8);
+    connectDigit(ui->pushButton_9, 9);
 
-
-    connect(ui->pushButton_plusminus, &QPushButton::released, this, &MainWindow::unary_operation_pressed);
+    connect(ui->pushButton_plusminus, &QPushButton::clicked, this, &MainWindow::unary_operation_pressed);
 
     // Arithmetic operators are ordinary input keys. Connect each button
     // directly so their behavior does not depend on QButtonGroup's checked
@@ -290,23 +294,23 @@ MainWindow::MainWindow(QWidget *parent)
     connectOperator(ui->pushButton_mul, "*");
     connectOperator(ui->pushButton_divided, "/");
 
-    connect(ui->pushButton_bracket_left, &QPushButton::released, this, &MainWindow::left_bracked_pressed);
-    connect(ui->pushButton_bracket_right, &QPushButton::released, this, &MainWindow::right_bracked_pressed);
-    connect(ui->pushButton_sqrt, &QPushButton::released, this, &MainWindow::sqrt_pressed);
-    connect(ui->pushButton_x2, &QPushButton::released, this, &MainWindow::power_pressed);
-    connect(ui->pushButton_erase_left, &QPushButton::released, this, &MainWindow::erase_left_pressed);
+    connect(ui->pushButton_bracket_left, &QPushButton::clicked, this, &MainWindow::left_bracked_pressed);
+    connect(ui->pushButton_bracket_right, &QPushButton::clicked, this, &MainWindow::right_bracked_pressed);
+    connect(ui->pushButton_sqrt, &QPushButton::clicked, this, &MainWindow::sqrt_pressed);
+    connect(ui->pushButton_x2, &QPushButton::clicked, this, &MainWindow::power_pressed);
+    connect(ui->pushButton_erase_left, &QPushButton::clicked, this, &MainWindow::erase_left_pressed);
 
-    connect(ui->pushButton_cos, &QPushButton::released, this, &MainWindow::cos_pressed);
-    connect(ui->pushButton_sin, &QPushButton::released, this, &MainWindow::sin_pressed);
-    connect(ui->pushButton_tan, &QPushButton::released, this, &MainWindow::tan_pressed);
-    connect(ui->pushButton_log, &QPushButton::released, this, &MainWindow::log_pressed);
-    connect(ui->pushButton_ln, &QPushButton::released, this, &MainWindow::ln_pressed);
-    connect(ui->pushButton_inv, &QPushButton::released, this, &MainWindow::inv_pressed);
-    connect(ui->pushButton_mod, &QPushButton::released, this, &MainWindow::mod_pressed);
-    connect(ui->pushButton_edx, &QPushButton::released, this, &MainWindow::edx_pressed);
-    connect(ui->pushButton_percent, &QPushButton::released, this, &MainWindow::percent_pressed);
+    connect(ui->pushButton_cos, &QPushButton::clicked, this, &MainWindow::cos_pressed);
+    connect(ui->pushButton_sin, &QPushButton::clicked, this, &MainWindow::sin_pressed);
+    connect(ui->pushButton_tan, &QPushButton::clicked, this, &MainWindow::tan_pressed);
+    connect(ui->pushButton_log, &QPushButton::clicked, this, &MainWindow::log_pressed);
+    connect(ui->pushButton_ln, &QPushButton::clicked, this, &MainWindow::ln_pressed);
+    connect(ui->pushButton_inv, &QPushButton::clicked, this, &MainWindow::inv_pressed);
+    connect(ui->pushButton_mod, &QPushButton::clicked, this, &MainWindow::mod_pressed);
+    connect(ui->pushButton_edx, &QPushButton::clicked, this, &MainWindow::edx_pressed);
+    connect(ui->pushButton_percent, &QPushButton::clicked, this, &MainWindow::percent_pressed);
 
-    connect(ui->pushButton_pi, &QPushButton::released, this, &MainWindow::pi_pressed);
+    connect(ui->pushButton_pi, &QPushButton::clicked, this, &MainWindow::pi_pressed);
     connect(ui->pushButton_cursor_left, &QPushButton::clicked, this, &MainWindow::move_left_pressed);
     connect(ui->pushButton_cursor_right, &QPushButton::clicked, this, &MainWindow::move_right_pressed);
 
