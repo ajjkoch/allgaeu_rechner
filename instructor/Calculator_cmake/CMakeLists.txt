@@ -37,6 +37,7 @@ set(PROJECT_SOURCES
     mainwindow.h
     mainwindow.cpp
     mainwindow.ui
+    alpine_resources.qrc
     ../../common/Util.h
 )
 
