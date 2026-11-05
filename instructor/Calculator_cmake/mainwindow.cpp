@@ -19,7 +19,7 @@ public:
     explicit AlpineHeader(QWidget *parent = nullptr) : QWidget(parent)
     {
         setObjectName("alpineHeader");
-        setFixedHeight(42);
+        setFixedHeight(50);
         setAttribute(Qt::WA_TransparentForMouseEvents);
     }
 
@@ -28,65 +28,71 @@ protected:
     {
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);
-        const QRectF area = rect();
+        const qreal w = width();
+        const qreal h = height();
 
-        QLinearGradient sky(0, 0, 0, height());
-        sky.setColorAt(0.0, QColor("#e9eee8"));
-        sky.setColorAt(1.0, QColor("#d5dfd5"));
-        painter.fillRect(area, sky);
+        QLinearGradient sky(0, 0, 0, h);
+        sky.setColorAt(0.0, QColor("#edf0e8"));
+        sky.setColorAt(1.0, QColor("#cbd7ca"));
+        painter.fillRect(rect(), sky);
 
+        // Distant limestone peaks.
         QPainterPath distant;
-        distant.moveTo(0, height() * 0.78);
-        distant.lineTo(width() * 0.16, height() * 0.20);
-        distant.lineTo(width() * 0.27, height() * 0.55);
-        distant.lineTo(width() * 0.43, height() * 0.08);
-        distant.lineTo(width() * 0.61, height() * 0.70);
-        distant.lineTo(width() * 0.78, height() * 0.28);
-        distant.lineTo(width(), height() * 0.72);
-        distant.lineTo(width(), height());
-        distant.lineTo(0, height());
+        distant.moveTo(0, h * 0.77);
+        distant.lineTo(w * 0.13, h * 0.26);
+        distant.lineTo(w * 0.20, h * 0.43);
+        distant.lineTo(w * 0.34, h * 0.08);
+        distant.lineTo(w * 0.43, h * 0.34);
+        distant.lineTo(w * 0.57, h * 0.17);
+        distant.lineTo(w * 0.70, h * 0.52);
+        distant.lineTo(w * 0.84, h * 0.24);
+        distant.lineTo(w, h * 0.68);
+        distant.lineTo(w, h);
+        distant.lineTo(0, h);
         distant.closeSubpath();
-        painter.fillPath(distant, QColor(119, 139, 126, 75));
+        painter.fillPath(distant, QColor(119, 137, 125, 82));
 
+        // A darker, nearer ridge gives the header depth without competing with the display.
         QPainterPath foreground;
-        foreground.moveTo(0, height() * 0.88);
-        foreground.lineTo(width() * 0.22, height() * 0.50);
-        foreground.lineTo(width() * 0.37, height() * 0.82);
-        foreground.lineTo(width() * 0.58, height() * 0.40);
-        foreground.lineTo(width() * 0.76, height() * 0.83);
-        foreground.lineTo(width(), height() * 0.54);
-        foreground.lineTo(width(), height());
-        foreground.lineTo(0, height());
+        foreground.moveTo(0, h * 0.83);
+        foreground.lineTo(w * 0.18, h * 0.53);
+        foreground.lineTo(w * 0.31, h * 0.77);
+        foreground.lineTo(w * 0.49, h * 0.43);
+        foreground.lineTo(w * 0.65, h * 0.80);
+        foreground.lineTo(w * 0.82, h * 0.49);
+        foreground.lineTo(w, h * 0.75);
+        foreground.lineTo(w, h);
+        foreground.lineTo(0, h);
         foreground.closeSubpath();
-        painter.fillPath(foreground, QColor(88, 111, 94, 95));
+        painter.fillPath(foreground, QColor(76, 101, 83, 105));
 
-        painter.setPen(QColor("#34483b"));
+        painter.setPen(QColor("#293d31"));
         QFont titleFont("Sans Serif", 11, QFont::DemiBold);
-        titleFont.setLetterSpacing(QFont::AbsoluteSpacing, 1.5);
+        titleFont.setLetterSpacing(QFont::AbsoluteSpacing, 1.6);
         painter.setFont(titleFont);
-        painter.drawText(QRect(12, 3, width() - 24, 20),
+        painter.drawText(QRect(12, 5, width() - 40, 20),
                          Qt::AlignLeft | Qt::AlignVCenter, "ALLGÄU RECHNER");
 
-        painter.setPen(QColor("#53675a"));
+        painter.setPen(QColor("#465d4b"));
         QFont subtitleFont("Sans Serif", 7);
-        subtitleFont.setLetterSpacing(QFont::AbsoluteSpacing, 1.0);
+        subtitleFont.setLetterSpacing(QFont::AbsoluteSpacing, 1.1);
         painter.setFont(subtitleFont);
-        painter.drawText(QRect(13, 21, width() - 26, 14),
+        painter.drawText(QRect(13, 26, width() - 40, 13),
                          Qt::AlignLeft | Qt::AlignVCenter, "RECHNEN MIT WEITBLICK");
-        
-        // A tiny, understated edelweiss mark.
-        const QPointF flower(width() - 18, 13);
+
+        // Small edelweiss emblem.
+        const QPointF flower(width() - 19, 15);
         painter.setPen(Qt::NoPen);
         painter.setBrush(QColor("#fffdf4"));
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 6; ++i) {
             painter.save();
             painter.translate(flower);
-            painter.rotate(i * 72.0);
-            painter.drawEllipse(QRectF(-2.2, -7.0, 4.4, 7.0));
+            painter.rotate(i * 60.0);
+            painter.drawEllipse(QRectF(-2.0, -6.5, 4.0, 6.5));
             painter.restore();
         }
-        painter.setBrush(QColor("#c7a75a"));
-        painter.drawEllipse(QRectF(flower.x() - 2.0, flower.y() - 2.0, 4.0, 4.0));
+        painter.setBrush(QColor("#c5a45c"));
+        painter.drawEllipse(QRectF(flower.x() - 1.8, flower.y() - 1.8, 3.6, 3.6));
     }
 };
 
@@ -94,90 +100,93 @@ void applyAlpineTheme(QWidget *window)
 {
     window->setStyleSheet(R"(
         QMainWindow, QWidget#centralwidget {
-            background-color: #e8e3d7;
+            background-color: #ded9cd;
         }
         QTextEdit#textEdit {
-            background: #f8f6ef;
-            color: #26352d;
-            border: 1px solid #9a9b87;
-            border-bottom: 3px solid #788675;
-            border-radius: 8px;
-            padding: 5px 9px;
-            selection-background-color: #a8b8a5;
+            background-color: #fbfaf5;
+            color: #26372d;
+            border: 1px solid #aaa995;
+            border-bottom: 3px solid #71836f;
+            border-radius: 9px;
+            padding: 6px 10px;
+            selection-background-color: #a9bba7;
+            selection-color: #203126;
             font: 22pt "DejaVu Sans";
         }
         QPushButton {
             color: #344137;
-            background-color: #f1eee5;
-            border: 1px solid #b8b5a7;
-            border-bottom: 2px solid #a19d8e;
-            border-radius: 6px;
+            background-color: #f2f0e8;
+            border: 1px solid #b9b7a9;
+            border-bottom: 3px solid #a09e90;
+            border-radius: 8px;
             padding: 2px 3px;
             font: 11pt "DejaVu Sans";
         }
         QPushButton:hover {
-            background-color: #faf8f0;
-            border-color: #899786;
+            background-color: #fffdf6;
+            border-color: #81927f;
         }
         QPushButton:pressed {
-            background-color: #d8dfd3;
-            border: 1px solid #778b79;
+            background-color: #d4dfd2;
+            border: 1px solid #718a74;
             padding-top: 3px;
             padding-bottom: 1px;
         }
         QPushButton[role="digit"] {
-            background-color: #f7f5ee;
-            color: #26352d;
-            font: 15pt "DejaVu Sans";
-            border-color: #c4c0b2;
+            background-color: #faf9f3;
+            color: #26372d;
+            font: 17pt "DejaVu Sans";
+            border-color: #c5c2b5;
+            border-bottom-color: #aaa797;
         }
         QPushButton[role="function"] {
-            background-color: #e1e7df;
-            color: #405746;
+            background-color: #e2e9df;
+            color: #3e5945;
             font: 10pt "DejaVu Sans";
-            border-color: #aab7a7;
+            border-color: #afbdab;
+            border-bottom-color: #91a18e;
         }
         QPushButton[role="constant"] {
-            background-color: #eee6d3;
-            color: #665638;
-            font: 11pt "DejaVu Sans";
-            border-color: #c9b994;
+            background-color: #eee7d7;
+            color: #655538;
+            font: 12pt "DejaVu Sans";
+            border-color: #cbbd9d;
+            border-bottom-color: #b4a47f;
         }
         QPushButton[role="operator"] {
-            background-color: #e7d9c7;
-            color: #654b35;
-            font: 15pt "DejaVu Sans";
-            border-color: #c4aa8e;
+            background-color: #dce5d9;
+            color: #36513d;
+            font: 16pt "DejaVu Sans";
+            border-color: #a6b7a2;
+            border-bottom-color: #81967f;
         }
         QPushButton[role="utility"] {
-            background-color: #e7e4db;
+            background-color: #e9e5db;
             color: #596257;
-            font: 9pt "DejaVu Sans";
+            font: 10pt "DejaVu Sans";
+            border-color: #c2bdaf;
+            border-bottom-color: #a7a292;
         }
         QPushButton#pushButton_equals {
-            background-color: #657d68;
+            background-color: #536f59;
             color: #fffdf4;
-            border: 1px solid #506653;
-            border-bottom: 3px solid #405643;
-            font: bold 17pt "DejaVu Sans";
+            border: 1px solid #405c46;
+            border-bottom: 3px solid #344b39;
+            font: bold 18pt "DejaVu Sans";
         }
         QPushButton#pushButton_equals:hover {
-            background-color: #748d77;
+            background-color: #66836b;
         }
         QPushButton#pushButton_clear {
-            background-color: #ead8d0;
+            background-color: #eadbd2;
             color: #70483d;
-            border-color: #c9a99d;
-            font: bold 11pt "DejaVu Sans";
-        }
-        QPushButton#pushButton_inv:checked,
-        QPushButton:checked {
-            background-color: #cbd8c9;
-            border-color: #748b76;
+            border-color: #cfb1a5;
+            border-bottom-color: #b99486;
+            font: bold 12pt "DejaVu Sans";
         }
         QWidget#alpineHeader {
-            border: 1px solid #c2c7b9;
-            border-radius: 7px;
+            border: 1px solid #b6c0b2;
+            border-radius: 8px;
         }
     )");
 
@@ -207,14 +216,18 @@ void applyAlpineTheme(QWidget *window)
 
     const QMap<QString, QString> hints = {
         {"pushButton_pi", "Konstante π einfügen"},
-        {"pushButton_sqrt", "Quadratwurzel"},
+        {"pushButton_sqrt", "Quadratwurzel berechnen"},
         {"pushButton_x2", "Potenz x hoch y"},
         {"pushButton_edx", "Kehrwert 1/x berechnen"},
         {"pushButton_inv", "Umkehrfunktionen aktivieren"},
         {"pushButton_changeDegreesMode", "Winkelmaß zwischen Grad und Radiant wechseln"},
-        {"pushButton_clear", "Eingabe löschen"},
+        {"pushButton_clear", "Eingabe vollständig löschen"},
         {"pushButton_erase_left", "Zeichen links vom Cursor löschen"},
-        {"pushButton_equals", "Ausdruck berechnen"}
+        {"pushButton_equals", "Ausdruck berechnen"},
+        {"pushButton_cursor_left", "Cursor nach links bewegen"},
+        {"pushButton_cursor_right", "Cursor nach rechts bewegen"},
+        {"pushButton_history_back", "Vorherigen Verlaufseintrag anzeigen"},
+        {"pushButton_history_forward", "Nächsten Verlaufseintrag anzeigen"}
     };
 
     const auto buttons = window->findChildren<QPushButton *>();
@@ -225,8 +238,7 @@ void applyAlpineTheme(QWidget *window)
             button->setProperty("role", roles.value(name));
         if (hints.contains(name))
             button->setToolTip(hints.value(name));
-        button->setMinimumHeight(24);
-        // Touch keys should not consume the first Android tap for keyboard focus.
+        button->setMinimumHeight(28);
         button->setFocusPolicy(Qt::NoFocus);
     }
 }
