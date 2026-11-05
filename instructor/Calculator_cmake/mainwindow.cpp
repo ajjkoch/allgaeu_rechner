@@ -9,6 +9,7 @@
 #include <QLinearGradient>
 #include <QMap>
 #include <QWidget>
+#include <cmath>
 
 
 
@@ -40,33 +41,37 @@ QIcon makeFunctionIcon(const QString &function)
     };
 
     if (function == "tan") {
-        // Plot tan(x) in two clipped branches; the gaps represent its asymptotes.
-        const qreal xMin = -1.35;
-        const qreal xMax = 1.35;
-        const qreal yLimit = 2.6;
-        const qreal scale = qMax(qAbs(std::tan(xMin)), qAbs(std::tan(xMax)));
-        Q_UNUSED(scale);
-        for (int branch = 0; branch < 2; ++branch) {
-            const qreal start = branch == 0 ? xMin : 0.0;
-            const qreal end = branch == 0 ? 0.0 : xMax;
+        // Three clipped branches; dashed lines mark the vertical asymptotes.
+        const qreal xMin = -2.2;
+        const qreal xMax = 2.2;
+        const qreal gap = 0.09;
+        const qreal asymptote = 1.5707963267948966;
+        const qreal yLimit = 3.2;
+        const qreal ranges[3][2] = {
+            {xMin, -asymptote - gap},
+            {-asymptote + gap, asymptote - gap},
+            {asymptote + gap, xMax}
+        };
+
+        for (const auto &range : ranges) {
             QPainterPath path;
-            bool started = false;
-            for (int i = 0; i <= 100; ++i) {
-                const qreal x = start + (end - start) * i / 100.0;
-                if (qAbs(x) > 1.50)
-                    continue;
+            for (int i = 0; i <= 80; ++i) {
+                const qreal x = range[0] + (range[1] - range[0]) * i / 80.0;
                 const qreal y = qBound(-yLimit, std::tan(x), yLimit) / yLimit;
                 const QPointF point = mapPoint(x / xMax, y);
-                if (!started) { path.moveTo(point); started = true; }
+                if (i == 0) path.moveTo(point);
                 else path.lineTo(point);
             }
             painter.drawPath(path);
         }
+
         QPen asymptotePen(QColor("#a28d68"), 0.9, Qt::DashLine);
         painter.setPen(asymptotePen);
-        const qreal asymptoteX = (M_PI_2 / xMax);
-        painter.drawLine(mapPoint(-asymptoteX, -1.0), mapPoint(-asymptoteX, 1.0));
-        painter.drawLine(mapPoint(asymptoteX, -1.0), mapPoint(asymptoteX, 1.0));
+        for (qreal x : {-asymptote, asymptote}) {
+            const qreal normalizedX = x / xMax;
+            painter.drawLine(mapPoint(normalizedX, -1.0),
+                             mapPoint(normalizedX, 1.0));
+        }
     } else {
         QPainterPath path;
         for (int i = 0; i <= 100; ++i) {
