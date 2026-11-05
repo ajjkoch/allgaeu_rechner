@@ -9,6 +9,9 @@
 #include <QLinearGradient>
 #include <QMap>
 #include <QWidget>
+#include <QFile>
+#include <QPixmap>
+#include <QByteArray>
 #include <cmath>
 
 
@@ -87,6 +90,38 @@ QIcon makeFunctionIcon(const QString &function)
 
     return QIcon(pixmap);
 }
+
+class AlpineBackground final : public QWidget
+{
+public:
+    explicit AlpineBackground(QWidget *parent = nullptr) : QWidget(parent)
+    {
+        setObjectName("alpineBackground");
+        setAttribute(Qt::WA_TransparentForMouseEvents);
+        setAttribute(Qt::WA_StyledBackground, false);
+        QFile file(":/alpine/background.jpg.b64");
+        if (file.open(QIODevice::ReadOnly)) {
+            const QByteArray encoded = file.readAll();
+            m_image.loadFromData(QByteArray::fromBase64(encoded), "JPG");
+        }
+    }
+
+protected:
+    void paintEvent(QPaintEvent *) override
+    {
+        QPainter painter(this);
+        if (!m_image.isNull()) {
+            const QSize scaled = m_image.size().scaled(size(), Qt::KeepAspectRatioByExpanding);
+            const QRect source((scaled.width() - width()) / 2,
+                               (scaled.height() - height()) / 2,
+                               width(), height());
+            painter.drawPixmap(rect(), m_image, source);
+        }
+    }
+
+private:
+    QPixmap m_image;
+};
 
 class AlpineHeader final : public QWidget
 {
@@ -365,8 +400,7 @@ void applyAlpineTheme(QWidget *window)
 
     window->setStyleSheet(R"(
         QMainWindow, QWidget#centralwidget {
-            background-color: #70421f;
-            background-image: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #b47a3f,stop:0.25 #7b4a24,stop:0.55 #4b2b17,stop:0.8 #875126,stop:1 #c18a4b);
+            background: transparent;
         }
         QTextEdit#textEdit {
             background-color: #f6f0d9; color: #28190c;
@@ -423,13 +457,15 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     applyAlpineTheme(this);
-    ui->verticalLayout->insertWidget(0, new AlpineHeader(ui->centralwidget));
-    ui->verticalLayout->addWidget(new AlpineFooter(ui->centralwidget));
+    auto *background = new AlpineBackground(ui->centralwidget);
+    background->setGeometry(ui->centralwidget->rect());
+    background->lower();
     ui->verticalLayout->setSpacing(5);
     ui->verticalLayout->setContentsMargins(7, 7, 7, 7);
     ui->gridLayout->setHorizontalSpacing(4);
     ui->gridLayout->setVerticalSpacing(4);
     ui->textEdit->installEventFilter(this);
+    ui->centralwidget->installEventFilter(this);
 
     // Keep the internal expression synchronized when the user edits the display directly.
     connect(ui->textEdit, &QTextEdit::textChanged, this, [this]() {
@@ -535,6 +571,11 @@ void MainWindow::dispatchAction(CalculatorAction action)
 /** @brief Evaluates the expression when Return or keypad Enter is pressed in the display. */
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
+    if (watched == ui->centralwidget && event->type() == QEvent::Resize) {
+        if (auto *background = ui->centralwidget->findChild<AlpineBackground *>("alpineBackground"))
+            background->setGeometry(ui->centralwidget->rect());
+    }
+
     if (qobject_cast<QPushButton *>(watched) && event->type() == QEvent::Paint) {
         paintAlpineButton(qobject_cast<QPushButton *>(watched));
         return true;
