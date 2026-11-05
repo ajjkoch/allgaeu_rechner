@@ -94,83 +94,122 @@ public:
     explicit AlpineHeader(QWidget *parent = nullptr) : QWidget(parent)
     {
         setObjectName("alpineHeader");
-        setFixedHeight(50);
+        setFixedHeight(88);
         setAttribute(Qt::WA_TransparentForMouseEvents);
     }
 
 protected:
     void paintEvent(QPaintEvent *) override
     {
-        QPainter painter(this);
-        painter.setRenderHint(QPainter::Antialiasing);
-        const qreal w = width();
-        const qreal h = height();
-
-        QLinearGradient sky(0, 0, 0, h);
-        sky.setColorAt(0.0, QColor("#edf0e8"));
-        sky.setColorAt(1.0, QColor("#cbd7ca"));
-        painter.fillRect(rect(), sky);
-
-        // Distant limestone peaks.
-        QPainterPath distant;
-        distant.moveTo(0, h * 0.77);
-        distant.lineTo(w * 0.13, h * 0.26);
-        distant.lineTo(w * 0.20, h * 0.43);
-        distant.lineTo(w * 0.34, h * 0.08);
-        distant.lineTo(w * 0.43, h * 0.34);
-        distant.lineTo(w * 0.57, h * 0.17);
-        distant.lineTo(w * 0.70, h * 0.52);
-        distant.lineTo(w * 0.84, h * 0.24);
-        distant.lineTo(w, h * 0.68);
-        distant.lineTo(w, h);
-        distant.lineTo(0, h);
-        distant.closeSubpath();
-        painter.fillPath(distant, QColor(119, 137, 125, 82));
-
-        // A darker, nearer ridge gives the header depth without competing with the display.
-        QPainterPath foreground;
-        foreground.moveTo(0, h * 0.83);
-        foreground.lineTo(w * 0.18, h * 0.53);
-        foreground.lineTo(w * 0.31, h * 0.77);
-        foreground.lineTo(w * 0.49, h * 0.43);
-        foreground.lineTo(w * 0.65, h * 0.80);
-        foreground.lineTo(w * 0.82, h * 0.49);
-        foreground.lineTo(w, h * 0.75);
-        foreground.lineTo(w, h);
-        foreground.lineTo(0, h);
-        foreground.closeSubpath();
-        painter.fillPath(foreground, QColor(76, 101, 83, 105));
-
-        painter.setPen(QColor("#293d31"));
-        QFont titleFont("Sans Serif", 11, QFont::DemiBold);
-        titleFont.setLetterSpacing(QFont::AbsoluteSpacing, 1.6);
-        painter.setFont(titleFont);
-        painter.drawText(QRect(12, 5, width() - 40, 20),
-                         Qt::AlignLeft | Qt::AlignVCenter, "ALLGÄU RECHNER");
-
-        painter.setPen(QColor("#465d4b"));
-        QFont subtitleFont("Sans Serif", 7);
-        subtitleFont.setLetterSpacing(QFont::AbsoluteSpacing, 1.1);
-        painter.setFont(subtitleFont);
-        painter.drawText(QRect(13, 26, width() - 40, 13),
-                         Qt::AlignLeft | Qt::AlignVCenter, "RECHNEN MIT WEITBLICK");
-
-        // Small edelweiss emblem.
-        const QPointF flower(width() - 19, 15);
-        painter.setPen(Qt::NoPen);
-        painter.setBrush(QColor("#fffdf4"));
-        for (int i = 0; i < 6; ++i) {
-            painter.save();
-            painter.translate(flower);
-            painter.rotate(i * 60.0);
-            painter.drawEllipse(QRectF(-2.0, -6.5, 4.0, 6.5));
-            painter.restore();
+        QPainter p(this);
+        p.setRenderHint(QPainter::Antialiasing);
+        const QRectF r=rect().adjusted(1,1,-1,-1);
+        QLinearGradient wood(r.topLeft(),r.bottomLeft());
+        wood.setColorAt(0,QColor("#f5d49a"));
+        wood.setColorAt(.22,QColor("#d99a50"));
+        wood.setColorAt(.55,QColor("#f0bd75"));
+        wood.setColorAt(1,QColor("#985321"));
+        p.setPen(QPen(QColor("#4b2b12"),2)); p.setBrush(wood);
+        p.drawRoundedRect(r,7,7);
+        p.save();
+        QPainterPath clip; clip.addRoundedRect(r.adjusted(2,2,-2,-2),6,6); p.setClipPath(clip);
+        for(int i=0;i<17;++i) {
+            qreal y=5+i*4.7;
+            QPainterPath grain; grain.moveTo(0,y);
+            grain.cubicTo(width()*.22,y-3,width()*.53,y+3,width(),y-1);
+            p.setPen(QPen(QColor(94,48,15,i%2?30:19),i%4==0?1.4:.7)); p.drawPath(grain);
         }
-        painter.setBrush(QColor("#c5a45c"));
-        painter.drawEllipse(QRectF(flower.x() - 1.8, flower.y() - 1.8, 3.6, 3.6));
+        p.restore();
+
+        // Engraved Allgäu mountain silhouette on the left.
+        const QPointF base(10,height()-10);
+        QPainterPath ridge; ridge.moveTo(base);
+        ridge.lineTo(width()*.07,height()*.47); ridge.lineTo(width()*.12,height()*.58);
+        ridge.lineTo(width()*.19,height()*.15); ridge.lineTo(width()*.25,height()*.42);
+        ridge.lineTo(width()*.30,height()*.29); ridge.lineTo(width()*.37,height()*.67);
+        ridge.lineTo(width()*.43,height()*.52); ridge.lineTo(width()*.49,height()*.78);
+        p.setPen(QPen(QColor("#4a2a12"),3.0,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+        p.setBrush(QColor(110,67,29,35)); p.drawPath(ridge);
+        QPainterPath snow; snow.moveTo(width()*.105,height()*.48);
+        snow.lineTo(width()*.19,height()*.15); snow.lineTo(width()*.22,height()*.43);
+        snow.lineTo(width()*.19,height()*.34); snow.lineTo(width()*.17,height()*.39);
+        snow.lineTo(width()*.15,height()*.34);
+        p.setPen(QPen(QColor("#fff0c9"),2)); p.setBrush(QColor("#fff0c9")); p.drawPath(snow);
+
+        // Pine silhouettes along the lower edge.
+        p.setPen(QPen(QColor("#392411"),1.2)); p.setBrush(QColor("#314326"));
+        for(int i=0;i<5;++i) {
+            qreal x=8+i*13, y=height()-7-(i%2)*3;
+            QPainterPath tree; tree.moveTo(x,y-23); tree.lineTo(x-7,y-7);
+            tree.lineTo(x-3,y-8); tree.lineTo(x-9,y-2); tree.lineTo(x+9,y-2);
+            tree.lineTo(x+3,y-8); tree.lineTo(x+7,y-7); tree.closeSubpath(); p.drawPath(tree);
+        }
+
+        p.setPen(QColor("#3a1e0c"));
+        QFont title("Georgia",qMax(13,int(height()*.31)),QFont::Bold);
+        title.setLetterSpacing(QFont::AbsoluteSpacing,1.0); p.setFont(title);
+        p.drawText(QRect(width()*.28,7,width()*.59,height()*.48),Qt::AlignCenter,"ALLGÄU RECHNER");
+        QFont sub("Georgia",qMax(7,int(height()*.15)),QFont::Bold); p.setFont(sub);
+        p.drawText(QRect(width()*.28,height()*.51,width()*.59,height()*.25),Qt::AlignCenter,"RECHNEN MIT WEITBLICK");
+
+        // Layered edelweiss emblem on the right.
+        const QPointF flower(width()-27,height()*.48);
+        p.setPen(QPen(QColor("#70421c"),.8)); p.setBrush(QColor("#fff9e8"));
+        for(int i=0;i<8;++i) {
+            p.save(); p.translate(flower); p.rotate(i*45.0);
+            p.drawEllipse(QRectF(-4.1,-17,8.2,18)); p.restore();
+        }
+        p.setBrush(QColor("#e4b52f")); p.drawEllipse(QRectF(flower.x()-6,flower.y()-6,12,12));
+        p.setBrush(QColor("#7b4b19")); p.drawEllipse(QRectF(flower.x()-2,flower.y()-2,4,4));
+        p.setPen(Qt::NoPen); p.setBrush(QColor("#3c642d"));
+        QPainterPath leaf; leaf.moveTo(width()-42,height()*.62);
+        leaf.quadTo(width()-53,height()*.49,width()-49,height()*.30);
+        leaf.quadTo(width()-32,height()*.39,width()-42,height()*.62); p.drawPath(leaf);
     }
 };
 
+class AlpineFooter final : public QWidget
+{
+public:
+    explicit AlpineFooter(QWidget *parent=nullptr):QWidget(parent) {
+        setObjectName("alpineFooter"); setFixedHeight(54);
+        setAttribute(Qt::WA_TransparentForMouseEvents);
+    }
+protected:
+    void paintEvent(QPaintEvent *) override {
+        QPainter p(this); p.setRenderHint(QPainter::Antialiasing);
+        QLinearGradient g(0,0,0,height());
+        g.setColorAt(0,QColor("#e9b96f")); g.setColorAt(.5,QColor("#c98742")); g.setColorAt(1,QColor("#70401d"));
+        p.fillRect(rect(),g);
+        for(int i=0;i<9;++i) {
+            QPainterPath grain; qreal y=4+i*6;
+            grain.moveTo(0,y); grain.cubicTo(width()*.3,y-2,width()*.7,y+2,width(),y);
+            p.setPen(QPen(QColor(73,38,15,35),1)); p.drawPath(grain);
+        }
+        const qreal w=width(), h=height();
+        QPainterPath peaks; peaks.moveTo(0,h*.78);
+        peaks.lineTo(w*.12,h*.46); peaks.lineTo(w*.18,h*.63);
+        peaks.lineTo(w*.31,h*.18); peaks.lineTo(w*.39,h*.55);
+        peaks.lineTo(w*.51,h*.08); peaks.lineTo(w*.62,h*.56);
+        peaks.lineTo(w*.72,h*.31); peaks.lineTo(w*.82,h*.63);
+        peaks.lineTo(w*.91,h*.42); peaks.lineTo(w,h*.75);
+        p.setPen(QPen(QColor("#42240f"),3,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+        p.setBrush(QColor("#9a6738")); p.drawPath(peaks);
+        QPainterPath snow; snow.moveTo(w*.25,h*.43); snow.lineTo(w*.31,h*.18);
+        snow.lineTo(w*.36,h*.45); snow.lineTo(w*.32,h*.37); snow.lineTo(w*.30,h*.41);
+        snow.lineTo(w*.28,h*.34); snow.lineTo(w*.25,h*.43);
+        snow.moveTo(w*.45,h*.35); snow.lineTo(w*.51,h*.08); snow.lineTo(w*.57,h*.39);
+        snow.lineTo(w*.52,h*.29); snow.lineTo(w*.49,h*.33); snow.closeSubpath();
+        p.setPen(QPen(QColor("#fff0ca"),1.5)); p.setBrush(QColor("#f5e2b7")); p.drawPath(snow);
+        p.setPen(QPen(QColor("#3b2614"),1)); p.setBrush(QColor("#263d20"));
+        for(int side=0;side<2;++side) for(int i=0;i<5;++i) {
+            qreal x=side? w-8-i*13:8+i*13, y=h-2-(i%2)*3;
+            QPainterPath t; t.moveTo(x,y-22); t.lineTo(x-7,y-8); t.lineTo(x-3,y-9);
+            t.lineTo(x-9,y-2); t.lineTo(x+9,y-2); t.lineTo(x+3,y-9);
+            t.lineTo(x+7,y-8); t.closeSubpath(); p.drawPath(t);
+        }
+    }
+};
 
 void paintAlpineButton(QPushButton *button)
 {
@@ -304,7 +343,7 @@ void applyAlpineTheme(QWidget *window)
     window->setStyleSheet(R"(
         QMainWindow, QWidget#centralwidget {
             background-color: #70421f;
-            background-image: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #9b6738,stop:0.5 #633b1e,stop:1 #3c2415);
+            background-image: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #b47a3f,stop:0.25 #7b4a24,stop:0.55 #4b2b17,stop:0.8 #875126,stop:1 #c18a4b);
         }
         QTextEdit#textEdit {
             background-color: #f6f0d9; color: #28190c;
@@ -313,7 +352,7 @@ void applyAlpineTheme(QWidget *window)
             padding: 7px 10px; font: bold 23pt "Georgia";
         }
         QPushButton { background: transparent; border: none; padding: 1px; }
-        QWidget#alpineHeader { border: 2px solid #70451f; border-radius: 8px; }
+        QWidget#alpineHeader, QWidget#alpineFooter { border: 2px solid #70451f; border-radius: 7px; }
     )");
 
 
@@ -336,7 +375,7 @@ void applyAlpineTheme(QWidget *window)
             button->setIconSize(QSize(36, 24));
         }
         if (name == "pushButton_edx")
-            button->setText(QString::fromUtf8("1⁄x"));
+            button->setText("1/x");
         button->setMinimumHeight(30);
         button->installEventFilter(window);
         button->setFocusPolicy(Qt::NoFocus);
@@ -362,6 +401,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     applyAlpineTheme(this);
     ui->verticalLayout->insertWidget(0, new AlpineHeader(ui->centralwidget));
+    ui->verticalLayout->addWidget(new AlpineFooter(ui->centralwidget));
     ui->verticalLayout->setSpacing(5);
     ui->verticalLayout->setContentsMargins(7, 7, 7, 7);
     ui->gridLayout->setHorizontalSpacing(4);
