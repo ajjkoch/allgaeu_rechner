@@ -1482,22 +1482,29 @@ void CalculatorGuiTests::allArithmeticOperatorButtons()
 
     const struct {
         const char *button;
+        const char *lastDigitButton;
         const char *expression;
         const char *expected;
     } cases[] = {
-        {"pushButton_plus", "8+3", "11"},
-        {"pushButton_minus", "8-3", "5"},
-        {"pushButton_mul", "8*3", "24"},
-        {"pushButton_divided", "8/2", "4"}
+        {"pushButton_plus", "pushButton_3", "8+3", "11"},
+        {"pushButton_minus", "pushButton_3", "8-3", "5"},
+        {"pushButton_mul", "pushButton_3", "8*3", "24"},
+        {"pushButton_divided", "pushButton_2", "8/2", "4"}
     };
 
+    auto *eight = window.findChild<QPushButton *>("pushButton_8");
+    QVERIFY(eight);
+
     for (const auto &test : cases) {
+        auto *operation = window.findChild<QPushButton *>(test.button);
+        auto *lastDigit = window.findChild<QPushButton *>(test.lastDigitButton);
+        QVERIFY2(operation, test.button);
+        QVERIFY2(lastDigit, test.lastDigitButton);
+
         QTest::mouseClick(clear, Qt::LeftButton);
-        QTest::mouseClick(window.findChild<QPushButton *>("pushButton_8"), Qt::LeftButton);
-        QTest::mouseClick(window.findChild<QPushButton *>(test.button), Qt::LeftButton);
-        const char *lastDigit =
-            QString::fromLatin1(test.button) == QStringLiteral("pushButton_divided") ? "2" : "3";
-        QTest::mouseClick(window.findChild<QPushButton *>(lastDigit), Qt::LeftButton);
+        QTest::mouseClick(eight, Qt::LeftButton);
+        QTest::mouseClick(operation, Qt::LeftButton);
+        QTest::mouseClick(lastDigit, Qt::LeftButton);
 
         QCOMPARE(display->toPlainText(), QString::fromLatin1(test.expression));
         QTest::mouseClick(equals, Qt::LeftButton);
