@@ -466,9 +466,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->verticalLayout->setContentsMargins(7, 7, 7, 7);
     ui->gridLayout->setHorizontalSpacing(5);
     ui->gridLayout->setVerticalSpacing(5);
-    const int buttonMaxHeight = qMax(30, ui->centralwidget->height() / 19);
-    for (QPushButton *button : ui->centralwidget->findChildren<QPushButton *>())
-        button->setMaximumHeight(buttonMaxHeight);
+    // Let the grid distribute the available height naturally. A fixed maximum
+    // here capped every key at 30 px on common phone sizes and clipped its artwork.
     ui->textEdit->installEventFilter(this);
     ui->centralwidget->installEventFilter(this);
 
@@ -579,9 +578,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     if (watched == ui->centralwidget && event->type() == QEvent::Resize) {
         if (auto *background = ui->centralwidget->findChild<QWidget *>("alpineBackground"))
             background->setGeometry(ui->centralwidget->rect());
-        const int buttonMaxHeight = qMax(30, ui->centralwidget->height() / 19);
-        for (QPushButton *button : ui->centralwidget->findChildren<QPushButton *>())
-            button->setMaximumHeight(buttonMaxHeight);
+        // Button heights are managed by the expanding grid layout.
     }
 
     if (qobject_cast<QPushButton *>(watched) && event->type() == QEvent::Paint) {
