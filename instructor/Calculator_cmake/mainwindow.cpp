@@ -498,9 +498,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->verticalLayout->setSpacing(0);
     ui->verticalLayout->setContentsMargins(7, 7, 7, 7);
 
-    // Reserve transparent bands above and below the calculator so the full
-    // alpine photograph remains visible. 3:30:3 gives each band about
-    // 1.5 of the grid's 15 row-heights without covering the background.
+    // Shift the complete calculator grid down by roughly one display-row
+    // height so the header is more visible. Keeping the combined clearance
+    // stretch unchanged preserves the grid's overall height.
     auto *topClearance = new QWidget(ui->centralwidget);
     auto *bottomClearance = new QWidget(ui->centralwidget);
     topClearance->setObjectName("topBackgroundClearance");
@@ -509,11 +509,11 @@ MainWindow::MainWindow(QWidget *parent)
     bottomClearance->setAttribute(Qt::WA_TransparentForMouseEvents);
     topClearance->setStyleSheet("background: transparent;");
     bottomClearance->setStyleSheet("background: transparent;");
-    ui->verticalLayout->insertWidget(0, topClearance, 60);
-    ui->verticalLayout->insertWidget(2, bottomClearance, 42);
-    ui->verticalLayout->setStretch(0, 60);
+    ui->verticalLayout->insertWidget(0, topClearance, 80);
+    ui->verticalLayout->insertWidget(2, bottomClearance, 22);
+    ui->verticalLayout->setStretch(0, 80);
     ui->verticalLayout->setStretch(1, 300);
-    ui->verticalLayout->setStretch(2, 42);
+    ui->verticalLayout->setStretch(2, 22);
 
     ui->gridLayout->setHorizontalSpacing(5);
     ui->gridLayout->setVerticalSpacing(5);
