@@ -11,7 +11,6 @@
 #include <QWidget>
 #include <QFile>
 #include <QPixmap>
-#include <QByteArray>
 #include <cmath>
 
 
@@ -99,10 +98,9 @@ public:
         setObjectName("alpineBackground");
         setAttribute(Qt::WA_TransparentForMouseEvents);
         setAttribute(Qt::WA_StyledBackground, false);
-        QFile file(":/alpine/background.jpg.b64");
+        QFile file(":/alpine/background.jpg");
         if (file.open(QIODevice::ReadOnly)) {
-            const QByteArray encoded = file.readAll();
-            m_image.loadFromData(QByteArray::fromBase64(encoded), "JPG");
+            m_image.load(file.fileName());
         }
     }
 
