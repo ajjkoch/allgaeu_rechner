@@ -316,14 +316,16 @@ void paintAlpineButton(QPushButton *button)
         painter.fillRect(r, tint);
     painter.restore();
 
-    painter.setPen(QPen(QColor("#70451f"), 1.2));
+    // Dark brown contours preserve a clear edge between the wood key face
+    // and the surrounding wooden background without the former cream highlight.
+    painter.setPen(QPen(QColor("#3b2416"), 1.8));
     painter.setBrush(Qt::NoBrush);
     painter.drawRoundedRect(r, 11, 11);
 
     painter.setBrush(Qt::NoBrush);
-    painter.setPen(QPen(QColor(255,239,197,225),1.8));
+    painter.setPen(QPen(QColor("#56351f"), 1.2));
     painter.drawRoundedRect(r.adjusted(2,2,-2,-3),9,9);
-    painter.setPen(QPen(QColor(65,37,18,150),1.0));
+    painter.setPen(QPen(QColor("#3b2416"), 1.0));
     painter.drawLine(QPointF(r.left()+8,r.bottom()-3),QPointF(r.right()-8,r.bottom()-3));
 
     const QString name = button->objectName();
@@ -335,12 +337,9 @@ void paintAlpineButton(QPushButton *button)
     const qreal contentScale = qBound(0.62, button->height() / 36.0, 1.0);
     static const int alpineFontId = QFontDatabase::addApplicationFont(":/alpine/BreeSerif-Regular.ttf");
     Q_UNUSED(alpineFontId);
-    QFont f("Bree Serif", function ? 19 : 26, QFont::Bold);
-    if (name=="pushButton_pi" || name=="pushButton_sqrt") f.setPointSize(31);
-    if (name=="pushButton_changeDegreesMode") f.setPointSize(23);
-    if (name=="pushButton_edx") f.setPointSize(23);
-    if (name=="pushButton_equals") f.setPointSize(31);
-    if (name=="pushButton_erase_left") f.setPointSize(20);
+    // Use one consistent type size for all engraved text labels. The
+    // button-specific drawing branches below continue to handle custom symbols.
+    QFont f("Bree Serif", 24, QFont::Bold);
     f.setPointSizeF(f.pointSizeF() * contentScale);
     f.setItalic(function || name=="pushButton_pi" || name=="pushButton_changeDegreesMode");
     // Keep function labels crisp: no offset lettering or drop shadow.
