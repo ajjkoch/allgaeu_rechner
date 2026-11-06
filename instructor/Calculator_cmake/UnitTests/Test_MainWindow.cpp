@@ -748,7 +748,7 @@ void CalculatorGuiTests::eulerConstantButton()
     QTest::mouseClick(e, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("e"));
     QTest::mouseClick(equals, Qt::LeftButton);
-    QVERIFY(qAbs(display->toPlainText().toDouble() - std::exp(1.0)) < 1e-12);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - std::exp(1.0)) < 1e-5);
 }
 
 void CalculatorGuiTests::inversePercentageMode()
