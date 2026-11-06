@@ -339,40 +339,60 @@ void paintAlpineButton(QPushButton *button)
                               button->rect().top()+qRound(5 * contentScale),
                               graphWidth, graphHeight);
         icon.paint(&painter, graphRect);
-        painter.drawText(QRectF(r.left()+3,r.center().y()+4,r.width()-6,r.height()/2-3),Qt::AlignHCenter|Qt::AlignVCenter,button->text());
+        // Move only the sin/cos/tan label upward; leave the curve untouched.
+        painter.drawText(QRectF(r.left()+3,r.center().y()+1,r.width()-6,r.height()/2-3),
+                         Qt::AlignHCenter|Qt::AlignVCenter,button->text());
     } else if (name=="pushButton_pi" || name=="pushButton_sqrt" || name=="pushButton_x2" ||
                name=="pushButton_changeDegreesMode") {
         if (name=="pushButton_sqrt") {
-            // Draw the radical explicitly so its overbar is visible on every font/platform.
+            // Standard square-root notation: radical with an x under the vinculum.
             const qreal cx = r.center().x();
-            const qreal cy = r.top() + r.height() * 0.29;
+            const qreal cy = r.center().y();
             QPainterPath radical;
-            radical.moveTo(cx - 17, cy + 4);
-            radical.lineTo(cx - 10, cy + 9);
-            radical.lineTo(cx - 2, cy - 9);
-            radical.lineTo(cx + 18, cy - 9);
-            painter.setPen(QPen(ink, 3.2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            radical.moveTo(cx - 19, cy + 2);
+            radical.lineTo(cx - 12, cy + 8);
+            radical.lineTo(cx - 4, cy - 9);
+            radical.lineTo(cx + 19, cy - 9);
+            painter.setPen(QPen(ink, 3.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter.drawPath(radical);
+            QFont radicandFont("Georgia", qMax(10, qRound(17 * contentScale)), QFont::Bold);
+            painter.setFont(radicandFont);
+            painter.drawText(QRectF(cx-1, cy-8, 17, 18), Qt::AlignCenter, "x");
+        } else if (name=="pushButton_pi" || name=="pushButton_x2") {
+            // The mathematical symbol is self-explanatory; no textual caption.
+            painter.drawText(r.adjusted(3, 2, -3, -2), Qt::AlignCenter, button->text());
         } else {
             painter.drawText(QRectF(r.left()+3,r.top()+5,r.width()-6,r.height()*0.58),
                              Qt::AlignCenter,button->text());
+            QFont sub("Georgia", qMax(8, qRound(12 * contentScale)), QFont::Bold);
+            sub.setItalic(true);
+            painter.setFont(sub);
+            painter.drawText(QRectF(r.left()+3,r.center().y()+3,r.width()-6,r.height()/2-4),
+                             Qt::AlignCenter,"Grad");
         }
-        QFont sub("Georgia", qMax(8, qRound(12 * contentScale)), QFont::Bold); sub.setItalic(true); painter.setFont(sub);
-        QString caption = name=="pushButton_pi" ? "Pi" : name=="pushButton_sqrt" ? "Wurzel" :
-                          name=="pushButton_x2" ? "Potenz" : "Grad";
-        painter.drawText(QRectF(r.left()+3,r.center().y()+3,r.width()-6,r.height()/2-4),Qt::AlignCenter,caption);
     } else if (name=="pushButton_erase_left") {
-        const qreal cx=r.center().x(), cy=r.center().y();
+        // Center the backspace glyph and keep at least 3 px clear space to
+        // every button edge, independent of the actual key dimensions.
+        const QRectF bounds = QRectF(r).adjusted(3, 3, -3, -3);
+        const qreal cx = bounds.center().x();
+        const qreal cy = bounds.center().y();
+        const qreal halfH = bounds.height() * 0.42;
+        const qreal left = bounds.left() + bounds.width() * 0.12;
+        const qreal right = bounds.right() - bounds.width() * 0.08;
+        const qreal notch = bounds.left() + bounds.width() * 0.42;
         QPainterPath key;
-        key.moveTo(cx-35,cy); key.lineTo(cx-17,cy-18);
-        key.lineTo(cx+32,cy-18); key.lineTo(cx+32,cy+18);
-        key.lineTo(cx-17,cy+18); key.closeSubpath();
-        painter.setPen(QPen(QColor("#fff0cf"),4.2,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
-        painter.drawPath(key.translated(0,1.5));
-        painter.setPen(QPen(ink,3.2,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+        key.moveTo(left, cy);
+        key.lineTo(notch, cy-halfH);
+        key.lineTo(right, cy-halfH);
+        key.lineTo(right, cy+halfH);
+        key.lineTo(notch, cy+halfH);
+        key.closeSubpath();
+        painter.setPen(QPen(QColor("#fff0cf"),3.0,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
         painter.drawPath(key);
-        painter.drawLine(QPointF(cx+7,cy-7),QPointF(cx-7,cy+7));
-        painter.drawLine(QPointF(cx-7,cy-7),QPointF(cx+7,cy+7));
+        painter.setPen(QPen(ink,2.4,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+        const qreal cross = qMin(bounds.width(), bounds.height()) * 0.16;
+        painter.drawLine(QPointF(cx+cross,cy-cross),QPointF(cx-cross,cy+cross));
+        painter.drawLine(QPointF(cx-cross,cy-cross),QPointF(cx+cross,cy+cross));
     } else {
         painter.drawText(r.adjusted(3,2,-3,-3),Qt::AlignCenter,button->text());
     }
