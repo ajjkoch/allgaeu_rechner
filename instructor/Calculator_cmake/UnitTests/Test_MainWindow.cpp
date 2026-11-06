@@ -1,5 +1,7 @@
 #include <QtTest>
 
+#include <cmath>
+
 #include <QApplication>
 #include <QEvent>
 #include <QPushButton>
