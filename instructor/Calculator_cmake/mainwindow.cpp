@@ -119,7 +119,9 @@ protected:
         // The surrounding bands use a warm wood tone so the image keeps its
         // natural proportions on narrow phone screens.
         painter.fillRect(rect(), QColor("#8b552d"));
-        const QPixmap scaled = m_image.scaled(size(), Qt::KeepAspectRatio,
+        // Fill the complete display. On devices with a different aspect ratio,
+        // the background artwork is intentionally stretched rather than letterboxed.
+        const QPixmap scaled = m_image.scaled(size(), Qt::IgnoreAspectRatio,
                                                Qt::SmoothTransformation);
         const int x = (width() - scaled.width()) / 2;
         const int y = (height() - scaled.height()) / 2;
