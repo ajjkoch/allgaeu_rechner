@@ -967,6 +967,7 @@ void MainWindow::inv_pressed()
     if(m_isInverted == false){
         ui->pushButton_x2->setProperty("inverseRoot", true);
         ui->pushButton_x2->setToolTip("x-te Wurzel aus y");
+        ui->pushButton_x2->update();
         ui->pushButton_sin->setText("asin");
         ui->pushButton_cos->setText("acos");
         ui->pushButton_tan->setText("atan");
@@ -975,6 +976,7 @@ void MainWindow::inv_pressed()
     }else{
         ui->pushButton_x2->setProperty("inverseRoot", false);
         ui->pushButton_x2->setToolTip("Potenz x hoch y");
+        ui->pushButton_x2->update();
         ui->pushButton_sin->setText("sin");
         ui->pushButton_cos->setText("cos");
         ui->pushButton_tan->setText("tan");
