@@ -381,13 +381,7 @@ void paintAlpineButton(QPushButton *button)
                 painter.drawText(r.adjusted(3, 2, -3, -2), Qt::AlignCenter, "xʸ");
             }
         } else {
-            painter.drawText(QRectF(r.left()+3,r.top()+5,r.width()-6,r.height()*0.58),
-                             Qt::AlignCenter,button->text());
-            QFont sub("Georgia", qMax(8, qRound(12 * contentScale)), QFont::Bold);
-            sub.setItalic(true);
-            painter.setFont(sub);
-            painter.drawText(QRectF(r.left()+3,r.center().y()+3,r.width()-6,r.height()/2-4),
-                             Qt::AlignCenter,"Grad");
+            painter.drawText(r.adjusted(3, 2, -3, -2), Qt::AlignCenter, button->text());
         }
     } else if (name=="pushButton_erase_left") {
         // Center the backspace glyph and keep at least 3 px clear space to
@@ -438,6 +432,7 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_clear", "utility"}, {"pushButton_erase_left", "utility"},
         {"pushButton_plusminus", "utility"},
         {"pushButton_bracket_left", "utility"}, {"pushButton_bracket_right", "utility"},
+        {"pushButton_bracket_right_end", "utility"},
         {"pushButton_decimal", "utility"}, {"pushButton_cursor_left", "utility"},
         {"pushButton_cursor_right", "utility"}, {"pushButton_history_back", "utility"},
         {"pushButton_history_forward", "utility"}
@@ -461,6 +456,7 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_edx", "Kehrwert 1/x berechnen"},
         {"pushButton_inv", "Umkehrfunktionen aktivieren"},
         {"pushButton_changeDegreesMode", "Winkelmaß zwischen Grad und Radiant wechseln"},
+        {"pushButton_bracket_right_end", "Schließende Klammer am Ende des Ausdrucks einfügen"},
         {"pushButton_clear", "Eingabe vollständig löschen"},
         {"pushButton_erase_left", "Zeichen links vom Cursor löschen"},
         {"pushButton_equals", "Ausdruck berechnen"},
@@ -551,6 +547,25 @@ MainWindow::MainWindow(QWidget *parent)
     constantLayout->addWidget(eButton);
     ui->gridLayout->addWidget(constantStack, 1, 0);
 
+    // Share the angle-mode key's grid cell with a dedicated end-parenthesis key.
+    auto *angleButton = ui->pushButton_changeDegreesMode;
+    auto *angleStack = new QWidget(angleButton->parentWidget());
+    angleStack->setObjectName("angleButtonStack");
+    auto *angleLayout = new QVBoxLayout(angleStack);
+    angleLayout->setContentsMargins(0, 0, 0, 0);
+    angleLayout->setSpacing(1);
+    ui->gridLayout->removeWidget(angleButton);
+    angleButton->setParent(angleStack);
+    angleLayout->addWidget(angleButton);
+    auto *rightEndButton = new QPushButton(")", angleStack);
+    rightEndButton->setObjectName("pushButton_bracket_right_end");
+    rightEndButton->setFont(angleButton->font());
+    rightEndButton->setStyleSheet(angleButton->styleSheet());
+    rightEndButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+    rightEndButton->setFocusPolicy(Qt::NoFocus);
+    angleLayout->addWidget(rightEndButton);
+    ui->gridLayout->addWidget(angleStack, 1, 1);
+
     applyAlpineTheme(this);
     auto *background = new AlpineBackground(ui->centralwidget);
     background->setGeometry(ui->centralwidget->rect());
@@ -605,6 +620,7 @@ MainWindow::MainWindow(QWidget *parent)
         {"pushButton_decimal", Action::Decimal},
         {"pushButton_bracket_left", Action::OpenParenthesis},
         {"pushButton_bracket_right", Action::CloseParenthesis},
+        {"pushButton_bracket_right_end", Action::EndCloseParenthesis},
         {"pushButton_sqrt", Action::SquareRoot}, {"pushButton_x2", Action::Power},
         {"pushButton_sin", Action::Sine}, {"pushButton_cos", Action::Cosine},
         {"pushButton_tan", Action::Tangent}, {"pushButton_log", Action::Log10},
@@ -669,6 +685,13 @@ void MainWindow::dispatchAction(CalculatorAction action)
     case CalculatorAction::Decimal: decimal_pressed(); break;
     case CalculatorAction::OpenParenthesis: left_bracked_pressed(); break;
     case CalculatorAction::CloseParenthesis: right_bracked_pressed(); break;
+    case CalculatorAction::EndCloseParenthesis: {
+        QTextCursor cursor = ui->textEdit->textCursor();
+        cursor.movePosition(QTextCursor::End);
+        ui->textEdit->setTextCursor(cursor);
+        right_bracked_pressed();
+        break;
+    }
     case CalculatorAction::SquareRoot: sqrt_pressed(); break;
     case CalculatorAction::Power: power_pressed(); break;
     case CalculatorAction::Sine: sin_pressed(); break;
