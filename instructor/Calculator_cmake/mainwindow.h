@@ -29,7 +29,7 @@ public:
         OpenParenthesis, CloseParenthesis,
         SquareRoot, Power, Sine, Cosine, Tangent,
         Log10, NaturalLog, Inverse, Modulo, Reciprocal,
-        Percent, Pi, ToggleAngleMode,
+        Percent, Pi, Euler, ToggleAngleMode,
         CursorLeft, CursorRight, HistoryBack, HistoryForward
     };
 
