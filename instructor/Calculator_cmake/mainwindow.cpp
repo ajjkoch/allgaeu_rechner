@@ -9,6 +9,7 @@
 #include <QLinearGradient>
 #include <QMap>
 #include <QWidget>
+#include <QVBoxLayout>
 #include <QFile>
 #include <QPixmap>
 #include <cmath>
@@ -491,6 +492,26 @@ MainWindow::MainWindow(QWidget *parent)
     , m_hpos(0)
 {
     ui->setupUi(this);
+
+    // Split the existing pi key vertically and place Euler's constant below it.
+    auto *piButton = ui->pushButton_pi;
+    auto *constantStack = new QWidget(piButton->parentWidget());
+    constantStack->setObjectName("constantButtonStack");
+    auto *constantLayout = new QVBoxLayout(constantStack);
+    constantLayout->setContentsMargins(0, 0, 0, 0);
+    constantLayout->setSpacing(1);
+    ui->gridLayout->removeWidget(piButton);
+    piButton->setParent(constantStack);
+    constantLayout->addWidget(piButton);
+    auto *eButton = new QPushButton(QString::fromUtf8("e"), constantStack);
+    eButton->setObjectName("pushButton_e");
+    eButton->setFont(piButton->font());
+    eButton->setStyleSheet(piButton->styleSheet());
+    eButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+    eButton->setFocusPolicy(Qt::NoFocus);
+    constantLayout->addWidget(eButton);
+    ui->gridLayout->addWidget(constantStack, 1, 0);
+
     applyAlpineTheme(this);
     auto *background = new AlpineBackground(ui->centralwidget);
     background->setGeometry(ui->centralwidget->rect());
@@ -558,6 +579,12 @@ MainWindow::MainWindow(QWidget *parent)
         {"pushButton_history_forward", Action::HistoryForward}
     };
 
+    eButton->setProperty("calculatorActionId", static_cast<int>(Action::Euler));
+    connect(eButton, &QPushButton::clicked, this, [this, eButton]() {
+        dispatchAction(static_cast<CalculatorAction>(
+            eButton->property("calculatorActionId").toInt()));
+    });
+
     for (auto it = actions.cbegin(); it != actions.cend(); ++it) {
         auto *button = findChild<QPushButton *>(it.key());
         if (!button)
@@ -615,6 +642,7 @@ void MainWindow::dispatchAction(CalculatorAction action)
     case CalculatorAction::Reciprocal: edx_pressed(); break;
     case CalculatorAction::Percent: percent_pressed(); break;
     case CalculatorAction::Pi: pi_pressed(); break;
+    case CalculatorAction::Euler: insertRightAlignedText(ui->textEdit, "e"); break;
     case CalculatorAction::ToggleAngleMode: degreesMode_pressed(); break;
     case CalculatorAction::CursorLeft: move_left_pressed(); break;
     case CalculatorAction::CursorRight: move_right_pressed(); break;
