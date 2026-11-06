@@ -110,13 +110,20 @@ protected:
     void paintEvent(QPaintEvent *) override
     {
         QPainter painter(this);
-        if (!m_image.isNull()) {
-            const QSize scaled = m_image.size().scaled(size(), Qt::KeepAspectRatioByExpanding);
-            const QRect source((scaled.width() - width()) / 2,
-                               (scaled.height() - height()) / 2,
-                               width(), height());
-            painter.drawPixmap(rect(), m_image, source);
+        painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+        if (m_image.isNull()) {
+            painter.fillRect(rect(), QColor("#8b552d"));
+            return;
         }
+
+        // Scale first, then crop in the scaled pixmap's coordinate system.
+        // The previous code calculated the crop from the scaled dimensions
+        // but applied it to the original pixmap, exposing only a thin strip.
+        const QPixmap scaled = m_image.scaled(size(), Qt::KeepAspectRatioByExpanding,
+                                               Qt::SmoothTransformation);
+        const int x = qMax(0, (scaled.width() - width()) / 2);
+        const int y = qMax(0, (scaled.height() - height()) / 2);
+        painter.drawPixmap(rect(), scaled, QRect(x, y, width(), height()));
     }
 
 private:
