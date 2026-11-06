@@ -1,5 +1,5 @@
 <RCC>
   <qresource prefix="/alpine">
-    <file alias="background.jpg.b64">resources/allgaeu_background.jpg.b64</file>
+    <file alias="background.jpg">resources/allgaeu_background.jpg</file>
   </qresource>
 </RCC>
