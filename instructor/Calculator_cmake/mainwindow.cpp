@@ -11,6 +11,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QFile>
+#include <QFontDatabase>
 #include <QPixmap>
 #include <cmath>
 
