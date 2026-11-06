@@ -322,7 +322,21 @@ void paintAlpineButton(QPushButton *button)
         painter.drawText(QRectF(r.left()+3,r.center().y()+4,r.width()-6,r.height()/2-3),Qt::AlignHCenter|Qt::AlignVCenter,button->text());
     } else if (name=="pushButton_pi" || name=="pushButton_sqrt" || name=="pushButton_x2" ||
                name=="pushButton_changeDegreesMode") {
-        painter.drawText(QRectF(r.left()+3,r.top()+5,r.width()-6,r.height()*0.58),Qt::AlignCenter,button->text());
+        if (name=="pushButton_sqrt") {
+            // Draw the radical explicitly so its overbar is visible on every font/platform.
+            const qreal cx = r.center().x();
+            const qreal cy = r.top() + r.height() * 0.29;
+            QPainterPath radical;
+            radical.moveTo(cx - 22, cy + 5);
+            radical.lineTo(cx - 13, cy + 12);
+            radical.lineTo(cx - 3, cy - 12);
+            radical.lineTo(cx + 23, cy - 12);
+            painter.setPen(QPen(ink, 4.2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            painter.drawPath(radical);
+        } else {
+            painter.drawText(QRectF(r.left()+3,r.top()+5,r.width()-6,r.height()*0.58),
+                             Qt::AlignCenter,button->text());
+        }
         QFont sub("Georgia", 12, QFont::Bold); sub.setItalic(true); painter.setFont(sub);
         QString caption = name=="pushButton_pi" ? "Pi" : name=="pushButton_sqrt" ? "Wurzel" :
                           name=="pushButton_x2" ? "Potenz" : "Grad";
@@ -374,7 +388,7 @@ void applyAlpineTheme(QWidget *window)
     // Object names and calculatorActionId remain the only source of action semantics.
     const QMap<QString, QString> labels = {
         {"pushButton_plusminus", "±"}, {"pushButton_sqrt", "√"},
-        {"pushButton_x2", "x²"}, {"pushButton_edx", "1/x"},
+        {"pushButton_x2", "xʸ"}, {"pushButton_edx", "1/x"},
         {"pushButton_inv", "INV"}, {"pushButton_mul", "×"},
         {"pushButton_erase_left", ""}, {"pushButton_cursor_left", "←"},
         {"pushButton_cursor_right", "→"}, {"pushButton_history_back", "↑"},
