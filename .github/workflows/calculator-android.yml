@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - refactor_design
+      - refactor_dreiteilung
     paths:
       - "common/Util.h"
       - "instructor/Calculator_cmake/**"
