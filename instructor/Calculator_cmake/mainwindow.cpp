@@ -114,14 +114,16 @@ protected:
             return;
         }
 
-        // Scale first, then crop in the scaled pixmap's coordinate system.
-        // The previous code calculated the crop from the scaled dimensions
-        // but applied it to the original pixmap, exposing only a thin strip.
-        const QPixmap scaled = m_image.scaled(size(), Qt::KeepAspectRatioByExpanding,
+        // Show the complete portrait artwork instead of filling the viewport
+        // by cropping away the title on the left and the edelweiss on the right.
+        // The surrounding bands use a warm wood tone so the image keeps its
+        // natural proportions on narrow phone screens.
+        painter.fillRect(rect(), QColor("#8b552d"));
+        const QPixmap scaled = m_image.scaled(size(), Qt::KeepAspectRatio,
                                                Qt::SmoothTransformation);
-        const int x = qMax(0, (scaled.width() - width()) / 2);
-        const int y = qMax(0, (scaled.height() - height()) / 2);
-        painter.drawPixmap(rect(), scaled, QRect(x, y, width(), height()));
+        const int x = (width() - scaled.width()) / 2;
+        const int y = (height() - scaled.height()) / 2;
+        painter.drawPixmap(x, y, scaled);
     }
 
 private:
@@ -332,11 +334,11 @@ void paintAlpineButton(QPushButton *button)
             const qreal cx = r.center().x();
             const qreal cy = r.top() + r.height() * 0.29;
             QPainterPath radical;
-            radical.moveTo(cx - 22, cy + 5);
-            radical.lineTo(cx - 13, cy + 12);
-            radical.lineTo(cx - 3, cy - 12);
-            radical.lineTo(cx + 23, cy - 12);
-            painter.setPen(QPen(ink, 4.2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            radical.moveTo(cx - 17, cy + 4);
+            radical.lineTo(cx - 10, cy + 9);
+            radical.lineTo(cx - 2, cy - 9);
+            radical.lineTo(cx + 18, cy - 9);
+            painter.setPen(QPen(ink, 3.2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter.drawPath(radical);
         } else {
             painter.drawText(QRectF(r.left()+3,r.top()+5,r.width()-6,r.height()*0.58),
