@@ -359,7 +359,9 @@ void paintAlpineButton(QPushButton *button)
                          Qt::AlignHCenter|Qt::AlignVCenter,button->text());
     } else if (name=="pushButton_pi" || name=="pushButton_sqrt" || name=="pushButton_x2" ||
                name=="pushButton_changeDegreesMode") {
-        if (name=="pushButton_sqrt") {
+        if (name=="pushButton_sqrt" && button->property("inverseSquare").toBool()) {
+            painter.drawText(r.adjusted(3, 2, -3, -2), Qt::AlignCenter, "x²");
+        } else if (name=="pushButton_sqrt") {
             // Standard square-root notation: radical with an x under the vinculum.
             const qreal cx = r.center().x();
             const qreal cy = r.center().y();
@@ -443,7 +445,8 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_sin", "function"}, {"pushButton_cos", "function"},
         {"pushButton_tan", "function"}, {"pushButton_log", "function"},
         {"pushButton_ln", "function"}, {"pushButton_edx", "function"},
-        {"pushButton_mod", "function"}, {"pushButton_percent", "function"},
+        {"pushButton_mod", "function"}, {"pushButton_fact", "function"},
+        {"pushButton_percent", "function"},
         {"pushButton_inv", "function"}, {"pushButton_x2", "function"},
         {"pushButton_plus", "operator"}, {"pushButton_minus", "operator"},
         {"pushButton_mul", "operator"}, {"pushButton_divided", "operator"},
@@ -471,7 +474,7 @@ void applyAlpineTheme(QWidget *window)
 
     const QMap<QString, QString> hints = {
         {"pushButton_pi", "Konstante π einfügen"},
-        {"pushButton_sqrt", "Quadratwurzel √x berechnen"},
+        {"pushButton_sqrt", "Quadratwurzel √x berechnen; mit INV: Quadrat x² berechnen"},
         {"pushButton_x2", "Potenz x hoch y; mit INV: x-te Wurzel aus y"},
         {"pushButton_edx", "Kehrwert 1/x berechnen"},
         {"pushButton_inv", "Umkehrfunktionen aktivieren"},
@@ -486,6 +489,7 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_history_forward", "Nächsten Verlaufseintrag anzeigen"},
         {"pushButton_percent", "Prozentfunktion"},
         {"pushButton_mod", "Modulo – Rest einer Division"},
+        {"pushButton_fact", "Fakultät n! berechnen"},
         {"pushButton_plusminus", "Vorzeichen wechseln"}
     };
 
@@ -566,6 +570,26 @@ MainWindow::MainWindow(QWidget *parent)
     eButton->setFocusPolicy(Qt::NoFocus);
     constantLayout->addWidget(eButton);
     ui->gridLayout->addWidget(constantStack, 1, 0);
+
+    // Split the modulo key vertically and place factorial below it.
+    auto *modButton = ui->pushButton_mod;
+    auto *modStack = new QWidget(modButton->parentWidget());
+    modStack->setObjectName("modButtonStack");
+    auto *modLayout = new QVBoxLayout(modStack);
+    modLayout->setContentsMargins(0, 0, 0, 0);
+    modLayout->setSpacing(1);
+    ui->gridLayout->removeWidget(modButton);
+    modButton->setParent(modStack);
+    modLayout->addWidget(modButton);
+    auto *factorialButton = new QPushButton("fak", modStack);
+    factorialButton->setObjectName("pushButton_fact");
+    factorialButton->setFont(modButton->font());
+    factorialButton->setStyleSheet(modButton->styleSheet());
+    factorialButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+    factorialButton->setFocusPolicy(Qt::NoFocus);
+    factorialButton->setToolTip("Fakultät n! berechnen");
+    modLayout->addWidget(factorialButton);
+    ui->gridLayout->addWidget(modStack, 10, 0);
 
     // Share the angle-mode key's grid cell with a dedicated end-parenthesis key.
     auto *angleButton = ui->pushButton_changeDegreesMode;
@@ -676,7 +700,8 @@ MainWindow::MainWindow(QWidget *parent)
         {"pushButton_sin", Action::Sine}, {"pushButton_cos", Action::Cosine},
         {"pushButton_tan", Action::Tangent}, {"pushButton_log", Action::Log10},
         {"pushButton_ln", Action::NaturalLog}, {"pushButton_inv", Action::Inverse},
-        {"pushButton_mod", Action::Modulo}, {"pushButton_edx", Action::Reciprocal},
+        {"pushButton_mod", Action::Modulo}, {"pushButton_fact", Action::Factorial},
+        {"pushButton_edx", Action::Reciprocal},
         {"pushButton_percent", Action::Percent}, {"pushButton_pi", Action::Pi},
         {"pushButton_changeDegreesMode", Action::ToggleAngleMode},
         {"pushButton_cursor_left", Action::CursorLeft},
@@ -752,6 +777,7 @@ void MainWindow::dispatchAction(CalculatorAction action)
     case CalculatorAction::NaturalLog: ln_pressed(); break;
     case CalculatorAction::Inverse: inv_pressed(); break;
     case CalculatorAction::Modulo: mod_pressed(); break;
+    case CalculatorAction::Factorial: insertRightAlignedText(ui->textEdit, "!"); break;
     case CalculatorAction::Reciprocal: edx_pressed(); break;
     case CalculatorAction::Percent: percent_pressed(); break;
     case CalculatorAction::Pi: pi_pressed(); break;
@@ -978,7 +1004,7 @@ void MainWindow::right_bracked_pressed()
 /** @brief Inserts the square-root function prefix. */
 void MainWindow::sqrt_pressed()
 {
-    insertRightAlignedText(ui->textEdit,"sqrt(");
+    insertRightAlignedText(ui->textEdit, m_isInverted ? "^2" : "sqrt(");
 }
 
 /** @brief Inserts the exponentiation operator. */
@@ -1033,6 +1059,9 @@ void MainWindow::inv_pressed()
         ui->pushButton_x2->setProperty("inverseRoot", true);
         ui->pushButton_x2->setToolTip("x-te Wurzel aus y");
         ui->pushButton_x2->update();
+        ui->pushButton_sqrt->setProperty("inverseSquare", true);
+        ui->pushButton_sqrt->setToolTip("Quadrat x² berechnen");
+        ui->pushButton_sqrt->update();
         ui->pushButton_sin->setText("asin");
         ui->pushButton_cos->setText("acos");
         ui->pushButton_tan->setText("atan");
@@ -1042,6 +1071,9 @@ void MainWindow::inv_pressed()
         ui->pushButton_x2->setProperty("inverseRoot", false);
         ui->pushButton_x2->setToolTip("Potenz x hoch y");
         ui->pushButton_x2->update();
+        ui->pushButton_sqrt->setProperty("inverseSquare", false);
+        ui->pushButton_sqrt->setToolTip("Quadratwurzel √x berechnen");
+        ui->pushButton_sqrt->update();
         ui->pushButton_sin->setText("sin");
         ui->pushButton_cos->setText("cos");
         ui->pushButton_tan->setText("tan");

@@ -30,7 +30,7 @@ public:
         SquareRoot, Power, Sine, Cosine, Tangent,
         Log10, NaturalLog, Inverse, Modulo, Reciprocal,
         Percent, Pi, Euler, ToggleAngleMode,
-        CursorLeft, CursorRight, HistoryBack, HistoryForward
+        CursorLeft, CursorRight, HistoryBack, HistoryForward, Factorial
     };
 
     /** @brief Creates the calculator window, initializes its state and connects UI signals. */

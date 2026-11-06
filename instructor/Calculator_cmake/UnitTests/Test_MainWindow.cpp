@@ -26,6 +26,8 @@ private slots:
     void percentageOperation();
     void trigonometricFunctions();
     void squareRootAndPower();
+    void inverseSquareUsesSquareRootKey();
+    void factorialButton();
     void inversePowerUsesNthRoot();
     void tangentInDegrees();
     void radiansMode();
@@ -1594,6 +1596,55 @@ void CalculatorGuiTests::allArithmeticOperatorButtons()
         QTest::mouseClick(equals, Qt::LeftButton);
         QCOMPARE(display->toPlainText(), QString::fromLatin1(test.expected));
     }
+}
+
+void CalculatorGuiTests::factorialButton()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *five = window.findChild<QPushButton *>("pushButton_5");
+    auto *factorial = window.findChild<QPushButton *>("pushButton_fact");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(five);
+    QVERIFY(factorial);
+    QVERIFY(equals);
+
+    QTest::mouseClick(five, Qt::LeftButton);
+    QTest::mouseClick(factorial, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("5!"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("120"));
+}
+
+void CalculatorGuiTests::inverseSquareUsesSquareRootKey()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
+    auto *squareRoot = window.findChild<QPushButton *>("pushButton_sqrt");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(inverse);
+    QVERIFY(squareRoot);
+    QVERIFY(equals);
+
+    display->setPlainText("5");
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QVERIFY(squareRoot->property("inverseSquare").toBool());
+    QTest::mouseClick(squareRoot, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("5^2"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("25"));
+
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QVERIFY(!squareRoot->property("inverseSquare").toBool());
 }
 
 QTEST_MAIN(CalculatorGuiTests)
