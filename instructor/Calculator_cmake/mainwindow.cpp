@@ -341,7 +341,7 @@ void paintAlpineButton(QPushButton *button)
     // button-specific drawing branches below continue to handle custom symbols.
     QFont f("Bree Serif", 24, QFont::Bold);
     f.setPointSizeF(f.pointSizeF() * contentScale);
-    f.setItalic(function || name=="pushButton_pi" || name=="pushButton_changeDegreesMode");
+    f.setItalic(function || name=="pushButton_changeDegreesMode");
     // Keep function labels crisp: no offset lettering or drop shadow.
     painter.setPen(ink);
     painter.setFont(f);
@@ -440,7 +440,7 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_4", "digit"}, {"pushButton_5", "digit"},
         {"pushButton_6", "digit"}, {"pushButton_7", "digit"},
         {"pushButton_8", "digit"}, {"pushButton_9", "digit"},
-        {"pushButton_pi", "constant"}, {"pushButton_sqrt", "operator"},
+        {"pushButton_pi", "digit"}, {"pushButton_sqrt", "operator"},
         {"pushButton_changeDegreesMode", "constant"},
         {"pushButton_sin", "function"}, {"pushButton_cos", "function"},
         {"pushButton_tan", "function"}, {"pushButton_log", "function"},
@@ -455,6 +455,7 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_plusminus", "utility"},
         {"pushButton_bracket_left", "utility"}, {"pushButton_bracket_right", "utility"},
         {"pushButton_bracket_right_end", "utility"},
+        {"pushButton_bracket_left_start", "utility"},
         {"pushButton_decimal", "utility"}, {"pushButton_cursor_left", "utility"},
         {"pushButton_cursor_right", "utility"}, {"pushButton_history_back", "utility"},
         {"pushButton_history_forward", "utility"}
@@ -466,7 +467,8 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_plusminus", "±"}, {"pushButton_sqrt", "√"},
         {"pushButton_x2", "xʸ"}, {"pushButton_edx", "1/x"},
         {"pushButton_inv", "INV"}, {"pushButton_mul", "×"},
-        {"pushButton_bracket_right_end", "→)"},
+        {"pushButton_bracket_right_end", "->)"},
+        {"pushButton_bracket_left_start", "(<-"},
         {"pushButton_erase_left", ""}, {"pushButton_cursor_left", "←"},
         {"pushButton_cursor_right", "→"}, {"pushButton_history_back", "↑"},
         {"pushButton_history_forward", "↓"}
@@ -480,6 +482,7 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_inv", "Umkehrfunktionen aktivieren"},
         {"pushButton_changeDegreesMode", "Winkelmaß zwischen Grad und Radiant wechseln"},
         {"pushButton_bracket_right_end", "Schließende Klammer am Ende des Ausdrucks einfügen"},
+        {"pushButton_bracket_left_start", "Öffnende Klammer am Anfang des gesamten Ausdrucks einfügen"},
         {"pushButton_clear", "Eingabe vollständig löschen"},
         {"pushButton_erase_left", "Zeichen links vom Cursor löschen"},
         {"pushButton_equals", "Ausdruck berechnen"},
@@ -591,7 +594,7 @@ MainWindow::MainWindow(QWidget *parent)
     modLayout->addWidget(factorialButton);
     ui->gridLayout->addWidget(modStack, 10, 0);
 
-    // Share the angle-mode key's grid cell with a dedicated end-parenthesis key.
+    // Keep the angle-mode key above a compact two-key parenthesis stack.
     auto *angleButton = ui->pushButton_changeDegreesMode;
     auto *angleStack = new QWidget(angleButton->parentWidget());
     angleStack->setObjectName("angleButtonStack");
@@ -601,7 +604,16 @@ MainWindow::MainWindow(QWidget *parent)
     ui->gridLayout->removeWidget(angleButton);
     angleButton->setParent(angleStack);
     angleLayout->addWidget(angleButton);
-    auto *rightEndButton = new QPushButton(")", angleStack);
+
+    auto *startOpenButton = new QPushButton("(<-", angleStack);
+    startOpenButton->setObjectName("pushButton_bracket_left_start");
+    startOpenButton->setFont(angleButton->font());
+    startOpenButton->setStyleSheet(angleButton->styleSheet());
+    startOpenButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+    startOpenButton->setFocusPolicy(Qt::NoFocus);
+    angleLayout->addWidget(startOpenButton);
+
+    auto *rightEndButton = new QPushButton("->)", angleStack);
     rightEndButton->setObjectName("pushButton_bracket_right_end");
     rightEndButton->setFont(angleButton->font());
     rightEndButton->setStyleSheet(angleButton->styleSheet());
@@ -696,6 +708,7 @@ MainWindow::MainWindow(QWidget *parent)
         {"pushButton_bracket_left", Action::OpenParenthesis},
         {"pushButton_bracket_right", Action::CloseParenthesis},
         {"pushButton_bracket_right_end", Action::EndCloseParenthesis},
+        {"pushButton_bracket_left_start", Action::StartOpenParenthesis},
         {"pushButton_sqrt", Action::SquareRoot}, {"pushButton_x2", Action::Power},
         {"pushButton_sin", Action::Sine}, {"pushButton_cos", Action::Cosine},
         {"pushButton_tan", Action::Tangent}, {"pushButton_log", Action::Log10},
@@ -766,6 +779,13 @@ void MainWindow::dispatchAction(CalculatorAction action)
         cursor.movePosition(QTextCursor::End);
         ui->textEdit->setTextCursor(cursor);
         right_bracked_pressed();
+        break;
+    }
+    case CalculatorAction::StartOpenParenthesis: {
+        QTextCursor cursor = ui->textEdit->textCursor();
+        cursor.movePosition(QTextCursor::Start);
+        ui->textEdit->setTextCursor(cursor);
+        left_bracked_pressed();
         break;
     }
     case CalculatorAction::SquareRoot: sqrt_pressed(); break;

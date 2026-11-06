@@ -18,6 +18,8 @@ private slots:
     void allArithmeticOperatorButtons();
     void cursorEditingAndBackspace();
     void endParenthesisButtonAppendsAtExpressionEnd();
+    void startParenthesisButtonInsertsAtExpressionStart();
+    void piButtonUsesDigitWoodStyle();
     void directDisplayEditing();
     void errorRecovery();
     void historyNavigation();
@@ -121,6 +123,36 @@ void CalculatorGuiTests::endParenthesisButtonAppendsAtExpressionEnd()
     QTest::mouseClick(rightEnd, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("(12+3)"));
     QCOMPARE(display->textCursor().position(), display->toPlainText().size());
+}
+
+void CalculatorGuiTests::startParenthesisButtonInsertsAtExpressionStart()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *startOpen = window.findChild<QPushButton *>("pushButton_bracket_left_start");
+    QVERIFY(display);
+    QVERIFY(startOpen);
+
+    display->setPlainText("12+3");
+    QTextCursor cursor = display->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    display->setTextCursor(cursor);
+
+    QTest::mouseClick(startOpen, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("(12+3"));
+    QCOMPARE(display->textCursor().position(), 1);
+}
+
+void CalculatorGuiTests::piButtonUsesDigitWoodStyle()
+{
+    MainWindow window;
+    window.show();
+
+    auto *pi = window.findChild<QPushButton *>("pushButton_pi");
+    QVERIFY(pi);
+    QCOMPARE(pi->property("role").toString(), QString("digit"));
 }
 
 void CalculatorGuiTests::digitButtonsAndAddition()
