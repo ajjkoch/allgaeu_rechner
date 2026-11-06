@@ -427,7 +427,7 @@ void applyAlpineTheme(QWidget *window)
             background-color: #f6f0d9; color: #28190c;
             border: 3px solid #6b431f; border-top: 3px solid #f5d99e;
             border-bottom: 5px solid #39200e; border-radius: 13px;
-            padding: 7px 10px; font: bold 23pt "Georgia";
+            padding: 7px 10px;
         }
         QPushButton { background: transparent; border: none; padding: 1px; }
         QWidget#alpineHeader, QWidget#alpineFooter { border: 2px solid #70451f; border-radius: 7px; }
@@ -495,11 +495,11 @@ MainWindow::MainWindow(QWidget *parent)
     bottomClearance->setAttribute(Qt::WA_TransparentForMouseEvents);
     topClearance->setStyleSheet("background: transparent;");
     bottomClearance->setStyleSheet("background: transparent;");
-    ui->verticalLayout->insertWidget(0, topClearance, 3);
-    ui->verticalLayout->insertWidget(2, bottomClearance, 3);
-    ui->verticalLayout->setStretch(0, 3);
-    ui->verticalLayout->setStretch(1, 30);
-    ui->verticalLayout->setStretch(2, 3);
+    ui->verticalLayout->insertWidget(0, topClearance, 60);
+    ui->verticalLayout->insertWidget(2, bottomClearance, 42);
+    ui->verticalLayout->setStretch(0, 60);
+    ui->verticalLayout->setStretch(1, 300);
+    ui->verticalLayout->setStretch(2, 42);
 
     ui->gridLayout->setHorizontalSpacing(5);
     ui->gridLayout->setVerticalSpacing(5);
@@ -618,9 +618,20 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         // Button heights are managed by the expanding grid layout.
     }
 
-    if (qobject_cast<QPushButton *>(watched) && event->type() == QEvent::Paint) {
-        paintAlpineButton(qobject_cast<QPushButton *>(watched));
-        return true;
+    if (auto *button = qobject_cast<QPushButton *>(watched)) {
+        if (event->type() == QEvent::Resize) {
+            // The display follows the exact same scale as the key lettering.
+            // Updating only its font leaves the document and cursor untouched.
+            const qreal scale = qBound(0.62, button->height() / 36.0, 1.0);
+            QFont displayFont("Georgia");
+            displayFont.setBold(true);
+            displayFont.setPointSizeF(23.0 * scale);
+            ui->textEdit->setFont(displayFont);
+        }
+        if (event->type() == QEvent::Paint) {
+            paintAlpineButton(button);
+            return true;
+        }
     }
 
     if (watched == ui->textEdit && event->type() == QEvent::KeyPress) {
