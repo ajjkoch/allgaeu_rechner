@@ -384,6 +384,9 @@ void paintAlpineButton(QPushButton *button)
             painter.drawText(r.adjusted(3, 2, -3, -2), Qt::AlignCenter, button->text());
         }
     } else if (name=="pushButton_erase_left") {
+        // Shift the complete backspace symbol (outline and cross) 3 px left.
+        painter.save();
+        painter.translate(-3.0, 0.0);
         // Center the backspace glyph and keep at least 3 px clear space to
         // every button edge, independent of the actual key dimensions.
         const QRectF bounds = QRectF(r).adjusted(3, 3, -3, -5);
@@ -406,6 +409,7 @@ void paintAlpineButton(QPushButton *button)
         const qreal cross = qMin(bounds.width(), bounds.height()) * 0.16;
         painter.drawLine(QPointF(cx+cross,cy-cross),QPointF(cx-cross,cy+cross));
         painter.drawLine(QPointF(cx-cross,cy-cross),QPointF(cx+cross,cy+cross));
+        painter.restore();
     } else {
         painter.drawText(r.adjusted(3,2,-3,-3),Qt::AlignCenter,button->text());
     }
@@ -444,6 +448,7 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_plusminus", "±"}, {"pushButton_sqrt", "√"},
         {"pushButton_x2", "xʸ"}, {"pushButton_edx", "1/x"},
         {"pushButton_inv", "INV"}, {"pushButton_mul", "×"},
+        {"pushButton_bracket_right_end", "→)"},
         {"pushButton_erase_left", ""}, {"pushButton_cursor_left", "←"},
         {"pushButton_cursor_right", "→"}, {"pushButton_history_back", "↑"},
         {"pushButton_history_forward", "↓"}
