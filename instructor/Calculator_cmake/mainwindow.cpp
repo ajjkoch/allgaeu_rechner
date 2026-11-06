@@ -302,12 +302,15 @@ void paintAlpineButton(QPushButton *button)
     const bool function = role=="function" || trig;
     const QColor ink = name=="pushButton_equals" ? QColor("#fff3cf") :
                        name=="pushButton_clear" ? QColor("#431b12") : QColor("#291307");
+    // Keep lettering proportional when the reserved background bands reduce key height.
+    const qreal contentScale = qBound(0.62, button->height() / 36.0, 1.0);
     QFont f("Georgia", function ? 19 : 26, QFont::Black);
     if (name=="pushButton_pi" || name=="pushButton_sqrt") f.setPointSize(31);
     if (name=="pushButton_changeDegreesMode") f.setPointSize(23);
     if (name=="pushButton_edx") f.setPointSize(23);
     if (name=="pushButton_equals") f.setPointSize(31);
     if (name=="pushButton_erase_left") f.setPointSize(20);
+    f.setPointSizeF(f.pointSizeF() * contentScale);
     f.setItalic(function || name=="pushButton_pi" || name=="pushButton_changeDegreesMode");
     // Keep function labels crisp: no offset lettering or drop shadow.
     painter.setPen(ink);
@@ -315,7 +318,11 @@ void paintAlpineButton(QPushButton *button)
 
     if (trig) {
         QIcon icon = button->icon();
-        const QRect graphRect(button->rect().center().x()-26, button->rect().top()+5, 52, 25);
+        const int graphWidth = qRound(52 * contentScale);
+        const int graphHeight = qRound(25 * contentScale);
+        const QRect graphRect(button->rect().center().x()-graphWidth/2,
+                              button->rect().top()+qRound(5 * contentScale),
+                              graphWidth, graphHeight);
         icon.paint(&painter, graphRect);
         painter.drawText(QRectF(r.left()+3,r.center().y()+4,r.width()-6,r.height()/2-3),Qt::AlignHCenter|Qt::AlignVCenter,button->text());
     } else if (name=="pushButton_pi" || name=="pushButton_sqrt" || name=="pushButton_x2" ||
@@ -335,7 +342,7 @@ void paintAlpineButton(QPushButton *button)
             painter.drawText(QRectF(r.left()+3,r.top()+5,r.width()-6,r.height()*0.58),
                              Qt::AlignCenter,button->text());
         }
-        QFont sub("Georgia", 12, QFont::Bold); sub.setItalic(true); painter.setFont(sub);
+        QFont sub("Georgia", qMax(8, qRound(12 * contentScale)), QFont::Bold); sub.setItalic(true); painter.setFont(sub);
         QString caption = name=="pushButton_pi" ? "Pi" : name=="pushButton_sqrt" ? "Wurzel" :
                           name=="pushButton_x2" ? "Potenz" : "Grad";
         painter.drawText(QRectF(r.left()+3,r.center().y()+3,r.width()-6,r.height()/2-4),Qt::AlignCenter,caption);
@@ -474,8 +481,26 @@ MainWindow::MainWindow(QWidget *parent)
     auto *background = new AlpineBackground(ui->centralwidget);
     background->setGeometry(ui->centralwidget->rect());
     background->lower();
-    ui->verticalLayout->setSpacing(5);
+    ui->verticalLayout->setSpacing(0);
     ui->verticalLayout->setContentsMargins(7, 7, 7, 7);
+
+    // Reserve transparent bands above and below the calculator so the full
+    // alpine photograph remains visible. 3:30:3 gives each band about
+    // 1.5 of the grid's 15 row-heights without covering the background.
+    auto *topClearance = new QWidget(ui->centralwidget);
+    auto *bottomClearance = new QWidget(ui->centralwidget);
+    topClearance->setObjectName("topBackgroundClearance");
+    bottomClearance->setObjectName("bottomBackgroundClearance");
+    topClearance->setAttribute(Qt::WA_TransparentForMouseEvents);
+    bottomClearance->setAttribute(Qt::WA_TransparentForMouseEvents);
+    topClearance->setStyleSheet("background: transparent;");
+    bottomClearance->setStyleSheet("background: transparent;");
+    ui->verticalLayout->insertWidget(0, topClearance, 3);
+    ui->verticalLayout->insertWidget(2, bottomClearance, 3);
+    ui->verticalLayout->setStretch(0, 3);
+    ui->verticalLayout->setStretch(1, 30);
+    ui->verticalLayout->setStretch(2, 3);
+
     ui->gridLayout->setHorizontalSpacing(5);
     ui->gridLayout->setVerticalSpacing(5);
     // Let the grid distribute the available height naturally. A fixed maximum
