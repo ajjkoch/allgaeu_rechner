@@ -66,7 +66,7 @@ static bool compareDoubles(double a, double b, double epsilon = 1e-9)
  *
  * Supported operators:
  *   + - * /       arithmetic
- *   mod           floating-point remainder
+ *   mod           floating-point remainder\n *   root          x-th root (y root x means x-th root of y)
  *   %             percentage (a % b means a * b / 100)
  *   ^             right-associative exponentiation
  *   !             factorial
@@ -308,6 +308,22 @@ private:
                         throw std::domain_error("Modulo by zero");
                     }
                     left = checked(std::fmod(left, right));
+                } else if (consumeWord("root")) {
+                    // "y root x" means the x-th root of y.
+                    const double index = parseUnary();
+                    if (index == 0.0) {
+                        throw std::domain_error("Root index is zero");
+                    }
+                    if (left < 0.0) {
+                        if (std::floor(index) != index ||
+                            std::fmod(std::fabs(index), 2.0) != 1.0) {
+                            throw std::domain_error(
+                                "Even root of a negative number is undefined");
+                        }
+                        left = checked(-std::pow(-left, 1.0 / index));
+                    } else {
+                        left = checked(std::pow(left, 1.0 / index));
+                    }
                 } else {
                     return left;
                 }
