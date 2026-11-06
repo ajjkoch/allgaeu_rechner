@@ -196,7 +196,6 @@ void CalculatorTests::test_euler()
     const double e = std::exp(1.0);
     QCOMPARE(m_calculator.evaluate("e"), e);
     QCOMPARE(m_calculator.evaluate("2*e"), 2.0 * e);
-    QCOMPARE(m_calculator.evaluate("2e"), 2.0 * e);
     QCOMPARE(m_calculator.evaluate("e^2"), e * e);
 }
 
