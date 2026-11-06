@@ -107,11 +107,16 @@ public:
             // keeps the mountain panorama and title; the center is plain wood;
             // the footer contains the lower Allgäu landscape.
             const int imageHeight = m_image.height();
-            m_header = m_image.copy(0, 0, m_image.width(), qRound(imageHeight * 0.18));
-            m_wood = m_image.copy(0, qRound(imageHeight * 0.18), m_image.width(),
-                                  qRound(imageHeight * 0.70));
-            m_footer = m_image.copy(0, qRound(imageHeight * 0.88), m_image.width(),
-                                    imageHeight - qRound(imageHeight * 0.88));
+            // Keep the complete mountain/title sign in the header. The
+            // center crop contains only the wooden planks; the footer starts
+            // where the lower mountain panorama begins.
+            const int headerEnd = qRound(imageHeight * 0.20);
+            const int footerStart = qRound(imageHeight * 0.82);
+            m_header = m_image.copy(0, 0, m_image.width(), headerEnd);
+            m_wood = m_image.copy(0, headerEnd, m_image.width(),
+                                  footerStart - headerEnd);
+            m_footer = m_image.copy(0, footerStart, m_image.width(),
+                                    imageHeight - footerStart);
         }
     }
 
