@@ -17,6 +17,7 @@ private slots:
     void digitButtonsAndAddition();
     void allArithmeticOperatorButtons();
     void cursorEditingAndBackspace();
+    void endParenthesisButtonAppendsAtExpressionEnd();
     void directDisplayEditing();
     void errorRecovery();
     void historyNavigation();
@@ -98,6 +99,26 @@ void CalculatorGuiTests::inversePowerUsesNthRoot()
     display->setPlainText("(-8) root 3");
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("-2"));
+}
+
+void CalculatorGuiTests::endParenthesisButtonAppendsAtExpressionEnd()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *rightEnd = window.findChild<QPushButton *>("pushButton_bracket_right_end");
+    QVERIFY(display);
+    QVERIFY(rightEnd);
+
+    display->setPlainText("(12+3");
+    QTextCursor cursor = display->textCursor();
+    cursor.movePosition(QTextCursor::Start);
+    display->setTextCursor(cursor);
+
+    QTest::mouseClick(rightEnd, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("(12+3)"));
+    QCOMPARE(display->textCursor().position(), display->toPlainText().size());
 }
 
 void CalculatorGuiTests::digitButtonsAndAddition()
