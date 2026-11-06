@@ -8,6 +8,7 @@ on:
       - main
       - refactor_design
       - refactor_dreiteilung
+      - extend_calculator
     paths:
       - "common/Util.h"
       - "common/test_common.cmake"
