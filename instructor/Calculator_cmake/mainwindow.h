@@ -26,7 +26,7 @@ public:
         Digit5, Digit6, Digit7, Digit8, Digit9,
         Add, Subtract, Multiply, Divide,
         Equals, Clear, Backspace, ToggleSign, Decimal,
-        OpenParenthesis, CloseParenthesis,
+        OpenParenthesis, CloseParenthesis, EndCloseParenthesis,
         SquareRoot, Power, Sine, Cosine, Tangent,
         Log10, NaturalLog, Inverse, Modulo, Reciprocal,
         Percent, Pi, Euler, ToggleAngleMode,
