@@ -34,6 +34,7 @@ private slots:
     void tangentDomainError();
     void exponentialAndFactorial();
     void piConstantAndDecimalInput();
+    void eulerConstantButton();
     void inversePercentageMode();
     void inverseTrigonometricDomainError();
     void reciprocalOfZeroError();
@@ -724,6 +725,28 @@ void CalculatorGuiTests::piConstantAndDecimalInput()
     QCOMPARE(display->toPlainText(), QString("1.5+0.5"));
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("2"));
+}
+
+void CalculatorGuiTests::eulerConstantButton()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *pi = window.findChild<QPushButton *>("pushButton_pi");
+    auto *e = window.findChild<QPushButton *>("pushButton_e");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    QVERIFY(display);
+    QVERIFY(pi);
+    QVERIFY(e);
+    QVERIFY(equals);
+    QVERIFY(pi->height() > 0);
+    QVERIFY(e->height() > 0);
+
+    QTest::mouseClick(e, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("e"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - std::exp(1.0)) < 1e-12);
 }
 
 void CalculatorGuiTests::inversePercentageMode()
