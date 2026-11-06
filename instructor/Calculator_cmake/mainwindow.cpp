@@ -316,7 +316,7 @@ void paintAlpineButton(QPushButton *button)
         painter.fillRect(r, tint);
     painter.restore();
 
-    painter.setPen(QPen(QColor("#68401f"), 1.2));
+    painter.setPen(QPen(QColor("#70451f"), 1.2));
     painter.setBrush(Qt::NoBrush);
     painter.drawRoundedRect(r, 11, 11);
 
@@ -335,7 +335,7 @@ void paintAlpineButton(QPushButton *button)
     const qreal contentScale = qBound(0.62, button->height() / 36.0, 1.0);
     static const int alpineFontId = QFontDatabase::addApplicationFont(":/alpine/BreeSerif-Regular.ttf");
     Q_UNUSED(alpineFontId);
-    QFont f("Bree Serif", function ? 19 : 26, QFont::Black);
+    QFont f("Bree Serif", function ? 19 : 26, QFont::Bold);
     if (name=="pushButton_pi" || name=="pushButton_sqrt") f.setPointSize(31);
     if (name=="pushButton_changeDegreesMode") f.setPointSize(23);
     if (name=="pushButton_edx") f.setPointSize(23);
@@ -405,7 +405,7 @@ void paintAlpineButton(QPushButton *button)
         painter.translate(-3.0, 0.0);
         // Center the backspace glyph and keep at least 3 px clear space to
         // every button edge, independent of the actual key dimensions.
-        const QRectF bounds = QRectF(r).adjusted(3, 3, -3, -5);
+        const QRectF bounds = QRectF(r).adjusted(4, 4, -4, -6);
         const qreal cx = bounds.center().x() - 2.0;
         const qreal cy = bounds.center().y();
         const qreal halfH = bounds.height() * 0.42;
@@ -439,7 +439,7 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_4", "digit"}, {"pushButton_5", "digit"},
         {"pushButton_6", "digit"}, {"pushButton_7", "digit"},
         {"pushButton_8", "digit"}, {"pushButton_9", "digit"},
-        {"pushButton_pi", "constant"}, {"pushButton_sqrt", "constant"},
+        {"pushButton_pi", "constant"}, {"pushButton_sqrt", "operator"},
         {"pushButton_changeDegreesMode", "constant"},
         {"pushButton_sin", "function"}, {"pushButton_cos", "function"},
         {"pushButton_tan", "function"}, {"pushButton_log", "function"},
@@ -615,6 +615,28 @@ MainWindow::MainWindow(QWidget *parent)
     ui->gridLayout->setContentsMargins(5, 0, 5, 0);
     ui->gridLayout->setHorizontalSpacing(5);
     ui->gridLayout->setVerticalSpacing(5);
+
+    // Every occupied grid row uses the tallest control in that row as its
+    // minimum height, so neighboring keys line up exactly.
+    for (int row = 0; row < ui->gridLayout->rowCount(); ++row) {
+        int tallest = 0;
+        for (int column = 0; column < ui->gridLayout->columnCount(); ++column) {
+            if (QLayoutItem *item = ui->gridLayout->itemAtPosition(row, column)) {
+                if (QWidget *widget = item->widget())
+                    tallest = qMax(tallest, widget->sizeHint().height());
+            }
+        }
+        if (tallest == 0)
+            continue;
+        for (int column = 0; column < ui->gridLayout->columnCount(); ++column) {
+            if (QLayoutItem *item = ui->gridLayout->itemAtPosition(row, column)) {
+                if (QWidget *widget = item->widget()) {
+                    widget->setMinimumHeight(tallest);
+                    widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+                }
+            }
+        }
+    }
     // Let the grid distribute the available height naturally. A fixed maximum
     // here capped every key at 30 px on common phone sizes and clipped its artwork.
     // Use one stable display font. Resizing individual controls must never
