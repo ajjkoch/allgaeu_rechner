@@ -82,9 +82,9 @@ void CalculatorGuiTests::inversePowerUsesNthRoot()
 
     QTest::mouseClick(inverse, Qt::LeftButton);
     QVERIFY(power->property("inverseRoot").toBool());
-    display->setPlainText("8");
+    QTest::mouseClick(window.findChild<QPushButton *>("pushButton_8"), Qt::LeftButton);
     QTest::mouseClick(power, Qt::LeftButton);
-    display->insertPlainText("3");
+    QTest::mouseClick(window.findChild<QPushButton *>("pushButton_3"), Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("8 root 3"));
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("2"));
