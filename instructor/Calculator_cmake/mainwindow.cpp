@@ -332,7 +332,9 @@ void paintAlpineButton(QPushButton *button)
                        name=="pushButton_clear" ? QColor("#431b12") : QColor("#291307");
     // Keep lettering proportional when the reserved background bands reduce key height.
     const qreal contentScale = qBound(0.62, button->height() / 36.0, 1.0);
-    QFont f("Georgia", function ? 19 : 26, QFont::Black);
+    static const int alpineFontId = QFontDatabase::addApplicationFont(":/alpine/BreeSerif-Regular.ttf");
+    Q_UNUSED(alpineFontId);
+    QFont f("Bree Serif", function ? 19 : 26, QFont::Black);
     if (name=="pushButton_pi" || name=="pushButton_sqrt") f.setPointSize(31);
     if (name=="pushButton_changeDegreesMode") f.setPointSize(23);
     if (name=="pushButton_edx") f.setPointSize(23);
