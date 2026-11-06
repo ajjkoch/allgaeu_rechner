@@ -280,32 +280,45 @@ void paintAlpineButton(QPushButton *button)
     const QRectF r = button->rect().adjusted(1.5, 1.5, -1.5, -2.5);
     const QString role = button->property("role").toString();
     const bool pressed = button->isDown();
-    QColor top("#f4c27c"), middle("#dfa45d"), bottom("#b87536");
-    if (role == "function") { top=QColor("#d9d78a"); middle=QColor("#b8b96a"); bottom=QColor("#858b3d"); }
-    if (role == "operator") { top=QColor("#d9d78a"); middle=QColor("#b8b96a"); bottom=QColor("#858b3d"); }
-    if (role == "utility") { top=QColor("#f8e2b7"); middle=QColor("#e8c58d"); bottom=QColor("#b98b52"); }
-    if (button->objectName() == "pushButton_clear") { top=QColor("#eaa08a"); middle=QColor("#c96f58"); bottom=QColor("#8e4538"); }
-    if (button->objectName() == "pushButton_equals") { top=QColor("#4f9b20"); middle=QColor("#26730d"); bottom=QColor("#124407"); }
-    if (pressed) { top=top.darker(115); middle=middle.darker(115); bottom=bottom.darker(115); }
 
-    QLinearGradient wood(r.topLeft(), r.bottomLeft());
-    wood.setColorAt(0, top.lighter(118)); wood.setColorAt(0.45, middle); wood.setColorAt(1, bottom);
+    // Reuse the actual wood photograph from the calculator's middle background.
+    // A narrow central crop avoids copying the side frame into the key faces.
+    static const QPixmap woodTexture(":/alpine/mid.jpg");
+    painter.save();
+    QPainterPath faceClip;
+    faceClip.addRoundedRect(r, 11, 11);
+    painter.setClipPath(faceClip);
+    if (!woodTexture.isNull()) {
+        const int sourceWidth = qMax(1, woodTexture.width() * 3 / 5);
+        const int sourceX = (woodTexture.width() - sourceWidth) / 2;
+        painter.drawPixmap(r, woodTexture,
+                           QRect(sourceX, 0, sourceWidth, woodTexture.height()));
+    } else {
+        painter.fillRect(r, QColor("#c58b50"));
+    }
+
+    // Retain the existing key categories as subtle stains over the same wood.
+    QColor tint(0, 0, 0, 0);
+    if (role == "function" || role == "operator")
+        tint = QColor(132, 145, 65, 78);
+    else if (role == "utility" || role == "constant")
+        tint = QColor(246, 207, 145, 65);
+    if (button->objectName() == "pushButton_clear")
+        tint = QColor(174, 65, 43, 125);
+    if (button->objectName() == "pushButton_equals")
+        tint = QColor(27, 105, 14, 205);
+    if (pressed)
+        tint = tint.isValid() ? QColor(tint.red(), tint.green(), tint.blue(),
+                                      qMin(220, tint.alpha() + 35))
+                              : QColor(45, 25, 12, 75);
+    if (tint.alpha() > 0)
+        painter.fillRect(r, tint);
+    painter.restore();
+
     painter.setPen(QPen(QColor("#68401f"), 1.2));
-    painter.setBrush(wood);
+    painter.setBrush(Qt::NoBrush);
     painter.drawRoundedRect(r, 11, 11);
 
-    painter.save();
-    QPainterPath clip; clip.addRoundedRect(r.adjusted(2,2,-2,-2),9,9);
-    painter.setClipPath(clip);
-    for (int i=0; i<17; ++i) {
-        const qreal y = r.top()+3+i*(r.height()-6)/16.0;
-        QPainterPath grain;
-        grain.moveTo(r.left()-4,y);
-        grain.cubicTo(r.left()+r.width()*0.18,y-4+(i%4),r.left()+r.width()*0.68,y+4-(i%3),r.right()+4,y-1);
-        painter.setPen(QPen(QColor(64,29,9, i%2 ? 88 : 55), i%4==0 ? 1.7 : 1.0));
-        painter.drawPath(grain);
-    }
-    painter.restore();
     painter.setBrush(Qt::NoBrush);
     painter.setPen(QPen(QColor(255,239,197,225),1.8));
     painter.drawRoundedRect(r.adjusted(2,2,-2,-3),9,9);
