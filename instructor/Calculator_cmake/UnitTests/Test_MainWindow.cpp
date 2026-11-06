@@ -1636,6 +1636,9 @@ void CalculatorGuiTests::inverseSquareUsesSquareRootKey()
     QVERIFY(equals);
 
     display->setPlainText("5");
+    QTextCursor inputCursor = display->textCursor();
+    inputCursor.movePosition(QTextCursor::End);
+    display->setTextCursor(inputCursor);
     QTest::mouseClick(inverse, Qt::LeftButton);
     QVERIFY(squareRoot->property("inverseSquare").toBool());
     QTest::mouseClick(squareRoot, Qt::LeftButton);
