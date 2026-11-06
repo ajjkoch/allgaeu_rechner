@@ -275,9 +275,6 @@ void paintAlpineButton(QPushButton *button)
     if (button->objectName() == "pushButton_equals") { top=QColor("#4f9b20"); middle=QColor("#26730d"); bottom=QColor("#124407"); }
     if (pressed) { top=top.darker(115); middle=middle.darker(115); bottom=bottom.darker(115); }
 
-    painter.setPen(QPen(QColor(55,35,18,190), 2.0));
-    painter.setBrush(QColor("#4a2b16"));
-    painter.drawRoundedRect(r.adjusted(0,1,0,1), 12, 12);
     QLinearGradient wood(r.topLeft(), r.bottomLeft());
     wood.setColorAt(0, top.lighter(118)); wood.setColorAt(0.45, middle); wood.setColorAt(1, bottom);
     painter.setPen(QPen(QColor("#68401f"), 1.2));
@@ -314,11 +311,9 @@ void paintAlpineButton(QPushButton *button)
     if (name=="pushButton_equals") f.setPointSize(31);
     if (name=="pushButton_erase_left") f.setPointSize(20);
     f.setItalic(function || name=="pushButton_pi" || name=="pushButton_changeDegreesMode");
-    // A restrained engraved shadow gives the lettering the depth of the reference.
-    painter.setPen(QColor(255,226,174,150));
+    // Keep function labels crisp: no offset lettering or drop shadow.
+    painter.setPen(ink);
     painter.setFont(f);
-    painter.drawText(r.adjusted(3,4,-3,-1), Qt::AlignCenter, button->text());
-    painter.setPen(ink); painter.setFont(f);
 
     if (trig) {
         QIcon icon = button->icon();
@@ -469,8 +464,11 @@ MainWindow::MainWindow(QWidget *parent)
     background->lower();
     ui->verticalLayout->setSpacing(5);
     ui->verticalLayout->setContentsMargins(7, 7, 7, 7);
-    ui->gridLayout->setHorizontalSpacing(4);
-    ui->gridLayout->setVerticalSpacing(4);
+    ui->gridLayout->setHorizontalSpacing(5);
+    ui->gridLayout->setVerticalSpacing(5);
+    const int buttonMaxHeight = qMax(30, ui->centralwidget->height() / 19);
+    for (QPushButton *button : ui->centralwidget->findChildren<QPushButton *>())
+        button->setMaximumHeight(buttonMaxHeight);
     ui->textEdit->installEventFilter(this);
     ui->centralwidget->installEventFilter(this);
 
@@ -581,6 +579,9 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     if (watched == ui->centralwidget && event->type() == QEvent::Resize) {
         if (auto *background = ui->centralwidget->findChild<QWidget *>("alpineBackground"))
             background->setGeometry(ui->centralwidget->rect());
+        const int buttonMaxHeight = qMax(30, ui->centralwidget->height() / 19);
+        for (QPushButton *button : ui->centralwidget->findChildren<QPushButton *>())
+            button->setMaximumHeight(buttonMaxHeight);
     }
 
     if (qobject_cast<QPushButton *>(watched) && event->type() == QEvent::Paint) {
