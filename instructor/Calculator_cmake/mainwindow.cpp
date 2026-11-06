@@ -99,8 +99,19 @@ public:
         setAttribute(Qt::WA_TransparentForMouseEvents);
         setAttribute(Qt::WA_StyledBackground, false);
         QFile file(":/alpine/background.jpg");
-        if (file.open(QIODevice::ReadOnly)) {
+        if (file.open(QIODevice::ReadOnly))
             m_image.load(file.fileName());
+
+        if (!m_image.isNull()) {
+            // The three areas are cropped from the existing artwork. The header
+            // keeps the mountain panorama and title; the center is plain wood;
+            // the footer contains the lower Allgäu landscape.
+            const int imageHeight = m_image.height();
+            m_header = m_image.copy(0, 0, m_image.width(), qRound(imageHeight * 0.18));
+            m_wood = m_image.copy(0, qRound(imageHeight * 0.18), m_image.width(),
+                                  qRound(imageHeight * 0.70));
+            m_footer = m_image.copy(0, qRound(imageHeight * 0.88), m_image.width(),
+                                    imageHeight - qRound(imageHeight * 0.88));
         }
     }
 
@@ -109,29 +120,27 @@ protected:
     {
         QPainter painter(this);
         painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
-        if (m_image.isNull()) {
-            painter.fillRect(rect(), QColor("#8b552d"));
-            return;
-        }
-
-        // Show the complete portrait artwork instead of filling the viewport
-        // by cropping away the title on the left and the edelweiss on the right.
-        // The surrounding bands use a warm wood tone so the image keeps its
-        // natural proportions on narrow phone screens.
         painter.fillRect(rect(), QColor("#8b552d"));
-        // Fill the complete display. On devices with a different aspect ratio,
-        // the background artwork is intentionally stretched rather than letterboxed.
-        const QPixmap scaled = m_image.scaled(size(), Qt::IgnoreAspectRatio,
-                                               Qt::SmoothTransformation);
-        const int x = (width() - scaled.width()) / 2;
-        const int y = (height() - scaled.height()) / 2;
-        painter.drawPixmap(x, y, scaled);
+        if (m_image.isNull())
+            return;
+
+        // Match the existing transparent layout clearances: compact header,
+        // flexible wooden center, compact footer. Each slice fills its region.
+        const int headerHeight = qRound(height() * 0.15);
+        const int footerHeight = qRound(height() * 0.10);
+        const int woodHeight = qMax(0, height() - headerHeight - footerHeight);
+
+        painter.drawPixmap(QRect(0, 0, width(), headerHeight), m_header);
+        painter.drawPixmap(QRect(0, headerHeight, width(), woodHeight), m_wood);
+        painter.drawPixmap(QRect(0, headerHeight + woodHeight, width(), footerHeight), m_footer);
     }
 
 private:
     QPixmap m_image;
+    QPixmap m_header;
+    QPixmap m_wood;
+    QPixmap m_footer;
 };
-
 class AlpineHeader final : public QWidget
 {
 public:
