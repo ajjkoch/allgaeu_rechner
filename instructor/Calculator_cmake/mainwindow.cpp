@@ -98,26 +98,10 @@ public:
         setObjectName("alpineBackground");
         setAttribute(Qt::WA_TransparentForMouseEvents);
         setAttribute(Qt::WA_StyledBackground, false);
-        QFile file(":/alpine/background.jpg");
-        if (file.open(QIODevice::ReadOnly))
-            m_image.load(file.fileName());
 
-        if (!m_image.isNull()) {
-            // The three areas are cropped from the existing artwork. The header
-            // keeps the mountain panorama and title; the center is plain wood;
-            // the footer contains the lower Allgäu landscape.
-            const int imageHeight = m_image.height();
-            // Keep the complete mountain/title sign in the header. The
-            // center crop contains only the wooden planks; the footer starts
-            // where the lower mountain panorama begins.
-            const int headerEnd = qRound(imageHeight * 0.20);
-            const int footerStart = qRound(imageHeight * 0.82);
-            m_header = m_image.copy(0, 0, m_image.width(), headerEnd);
-            m_wood = m_image.copy(0, headerEnd, m_image.width(),
-                                  footerStart - headerEnd);
-            m_footer = m_image.copy(0, footerStart, m_image.width(),
-                                    imageHeight - footerStart);
-        }
+        m_header.load(":/alpine/header.jpg");
+        m_wood.load(":/alpine/mid.jpg");
+        m_footer.load(":/alpine/footer.jpg");
     }
 
 protected:
@@ -126,22 +110,34 @@ protected:
         QPainter painter(this);
         painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
         painter.fillRect(rect(), QColor("#8b552d"));
-        if (m_image.isNull())
+
+        if (m_header.isNull() || m_wood.isNull() || m_footer.isNull())
             return;
 
-        // Match the existing transparent layout clearances: compact header,
-        // flexible wooden center, compact footer. Each slice fills its region.
-        const int headerHeight = qRound(height() * 0.15);
-        const int footerHeight = qRound(height() * 0.10);
-        const int woodHeight = qMax(0, height() - headerHeight - footerHeight);
+        // Header and footer keep their original proportions. The middle image
+        // fills the remaining area and keeps its framed side rails continuous.
+        int headerHeight = qRound(width() * m_header.height()
+                                  / qreal(m_header.width()));
+        int footerHeight = qRound(width() * m_footer.height()
+                                  / qreal(m_footer.width()));
 
+        // On unusually short windows, scale both fixed bands down together
+        // rather than allowing them to cover the calculator controls.
+        const int availableBandsHeight = qMax(0, height() - 1);
+        const int requestedBandsHeight = headerHeight + footerHeight;
+        if (requestedBandsHeight > availableBandsHeight && requestedBandsHeight > 0) {
+            const qreal scale = availableBandsHeight / qreal(requestedBandsHeight);
+            headerHeight = qRound(headerHeight * scale);
+            footerHeight = qMax(0, availableBandsHeight - headerHeight);
+        }
+
+        const int woodHeight = qMax(0, height() - headerHeight - footerHeight);
         painter.drawPixmap(QRect(0, 0, width(), headerHeight), m_header);
         painter.drawPixmap(QRect(0, headerHeight, width(), woodHeight), m_wood);
         painter.drawPixmap(QRect(0, headerHeight + woodHeight, width(), footerHeight), m_footer);
     }
 
 private:
-    QPixmap m_image;
     QPixmap m_header;
     QPixmap m_wood;
     QPixmap m_footer;
