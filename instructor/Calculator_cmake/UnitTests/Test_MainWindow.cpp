@@ -25,6 +25,7 @@ private slots:
     void percentageOperation();
     void trigonometricFunctions();
     void squareRootAndPower();
+    void inversePowerUsesNthRoot();
     void tangentInDegrees();
     void radiansMode();
     void logarithmFunctions();
@@ -61,6 +62,43 @@ private slots:
     void guiBoundaryBranches();
     void guiSignAndEventFilterBoundaries();
 };
+
+void CalculatorGuiTests::inversePowerUsesNthRoot()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
+    auto *power = window.findChild<QPushButton *>("pushButton_x2");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+
+    QVERIFY(display);
+    QVERIFY(inverse);
+    QVERIFY(power);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QVERIFY(power->property("inverseRoot").toBool());
+    display->setPlainText("8");
+    QTest::mouseClick(power, Qt::LeftButton);
+    display->insertPlainText("3");
+    QCOMPARE(display->toPlainText(), QString("8 root 3"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("2"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("2^3");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("8"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("(-8) root 3");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("-2"));
+}
 
 void CalculatorGuiTests::digitButtonsAndAddition()
 {
