@@ -590,6 +590,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->verticalLayout->setStretch(1, 300);
     ui->verticalLayout->setStretch(2, 22);
 
+    // Keep the outer keys clear of the wooden side rails.
+    ui->gridLayout->setContentsMargins(3, 0, 3, 0);
     ui->gridLayout->setHorizontalSpacing(5);
     ui->gridLayout->setVerticalSpacing(5);
     // Let the grid distribute the available height naturally. A fixed maximum
@@ -722,16 +724,19 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         // Button heights are managed by the expanding grid layout.
     }
 
-    if (auto *button = qobject_cast<QPushButton *>(watched)) {
-        if (event->type() == QEvent::Resize) {
-            // The display follows the exact same scale as the key lettering.
-            // Updating only its font leaves the document and cursor untouched.
-            const qreal scale = qBound(0.62, button->height() / 36.0, 1.0);
-            QFont displayFont("Georgia");
-            displayFont.setBold(true);
-            displayFont.setPointSizeF(23.0 * scale);
+    if (watched == ui->textEdit && event->type() == QEvent::Resize) {
+        // Derive the display font only from the display itself. Previously every
+        // key resize overwrote it with that key's height, so the last resized
+        // button made the text jump between different sizes.
+        const qreal scale = qBound(0.80, ui->textEdit->height() / 48.0, 1.0);
+        QFont displayFont("Georgia");
+        displayFont.setBold(true);
+        displayFont.setPointSizeF(23.0 * scale);
+        if (ui->textEdit->font() != displayFont)
             ui->textEdit->setFont(displayFont);
-        }
+    }
+
+    if (auto *button = qobject_cast<QPushButton *>(watched)) {
         if (event->type() == QEvent::Paint) {
             paintAlpineButton(button);
             return true;
