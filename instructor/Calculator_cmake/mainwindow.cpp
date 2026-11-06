@@ -358,9 +358,28 @@ void paintAlpineButton(QPushButton *button)
             QFont radicandFont("Georgia", qMax(10, qRound(17 * contentScale)), QFont::Bold);
             painter.setFont(radicandFont);
             painter.drawText(QRectF(cx-1, cy-8, 17, 18), Qt::AlignCenter, "x");
-        } else if (name=="pushButton_pi" || name=="pushButton_x2") {
-            // The mathematical symbol is self-explanatory; no textual caption.
+        } else if (name=="pushButton_pi") {
             painter.drawText(r.adjusted(3, 2, -3, -2), Qt::AlignCenter, button->text());
+        } else if (name=="pushButton_x2") {
+            if (button->property("inverseRoot").toBool()) {
+                const qreal cx = r.center().x();
+                const qreal cy = r.center().y();
+                QFont indexFont("Georgia", qMax(9, qRound(13 * contentScale)), QFont::Bold);
+                painter.setFont(indexFont);
+                painter.drawText(QRectF(cx-23, cy-16, 15, 15), Qt::AlignCenter, "x");
+                QPainterPath radical;
+                radical.moveTo(cx-10, cy+1);
+                radical.lineTo(cx-5, cy+7);
+                radical.lineTo(cx+1, cy-8);
+                radical.lineTo(cx+22, cy-8);
+                painter.setPen(QPen(ink, 2.7, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+                painter.drawPath(radical);
+                QFont radicandFont("Georgia", qMax(11, qRound(18 * contentScale)), QFont::Bold);
+                painter.setFont(radicandFont);
+                painter.drawText(QRectF(cx+1, cy-7, 19, 19), Qt::AlignCenter, "y");
+            } else {
+                painter.drawText(r.adjusted(3, 2, -3, -2), Qt::AlignCenter, "xʸ");
+            }
         } else {
             painter.drawText(QRectF(r.left()+3,r.top()+5,r.width()-6,r.height()*0.58),
                              Qt::AlignCenter,button->text());
@@ -373,8 +392,8 @@ void paintAlpineButton(QPushButton *button)
     } else if (name=="pushButton_erase_left") {
         // Center the backspace glyph and keep at least 3 px clear space to
         // every button edge, independent of the actual key dimensions.
-        const QRectF bounds = QRectF(r).adjusted(3, 3, -3, -3);
-        const qreal cx = bounds.center().x();
+        const QRectF bounds = QRectF(r).adjusted(3, 3, -3, -5);
+        const qreal cx = bounds.center().x() - 2.0;
         const qreal cy = bounds.center().y();
         const qreal halfH = bounds.height() * 0.42;
         const qreal left = bounds.left() + bounds.width() * 0.12;
@@ -387,9 +406,9 @@ void paintAlpineButton(QPushButton *button)
         key.lineTo(right, cy+halfH);
         key.lineTo(notch, cy+halfH);
         key.closeSubpath();
-        painter.setPen(QPen(QColor("#fff0cf"),3.0,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+        painter.setPen(QPen(Qt::black,3.0,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
         painter.drawPath(key);
-        painter.setPen(QPen(ink,2.4,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
+        painter.setPen(QPen(Qt::black,2.4,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
         const qreal cross = qMin(bounds.width(), bounds.height()) * 0.16;
         painter.drawLine(QPointF(cx+cross,cy-cross),QPointF(cx-cross,cy+cross));
         painter.drawLine(QPointF(cx-cross,cy-cross),QPointF(cx+cross,cy+cross));
@@ -438,7 +457,7 @@ void applyAlpineTheme(QWidget *window)
     const QMap<QString, QString> hints = {
         {"pushButton_pi", "Konstante π einfügen"},
         {"pushButton_sqrt", "Quadratwurzel √x berechnen"},
-        {"pushButton_x2", "Potenz x hoch y"},
+        {"pushButton_x2", "Potenz x hoch y; mit INV: x-te Wurzel aus y"},
         {"pushButton_edx", "Kehrwert 1/x berechnen"},
         {"pushButton_inv", "Umkehrfunktionen aktivieren"},
         {"pushButton_changeDegreesMode", "Winkelmaß zwischen Grad und Radiant wechseln"},
@@ -900,7 +919,7 @@ void MainWindow::sqrt_pressed()
 /** @brief Inserts the exponentiation operator. */
 void MainWindow::power_pressed()
 {
-    insertRightAlignedText(ui->textEdit,"^");
+    insertRightAlignedText(ui->textEdit, m_isInverted ? " root " : "^");
 }
 
 /** @brief Inserts sine or inverse sine, depending on inverse-key state. */
@@ -946,12 +965,16 @@ void MainWindow::mod_pressed()
 void MainWindow::inv_pressed()
 {
     if(m_isInverted == false){
+        ui->pushButton_x2->setProperty("inverseRoot", true);
+        ui->pushButton_x2->setToolTip("x-te Wurzel aus y");
         ui->pushButton_sin->setText("asin");
         ui->pushButton_cos->setText("acos");
         ui->pushButton_tan->setText("atan");
         ui->pushButton_percent->setText("1/%");
         m_isInverted = true;
     }else{
+        ui->pushButton_x2->setProperty("inverseRoot", false);
+        ui->pushButton_x2->setToolTip("Potenz x hoch y");
         ui->pushButton_sin->setText("sin");
         ui->pushButton_cos->setText("cos");
         ui->pushButton_tan->setText("tan");
