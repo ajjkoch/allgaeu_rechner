@@ -21,6 +21,18 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    enum class CalculatorAction : int {
+        Digit0 = 1, Digit1, Digit2, Digit3, Digit4,
+        Digit5, Digit6, Digit7, Digit8, Digit9,
+        Add, Subtract, Multiply, Divide,
+        Equals, Clear, Backspace, ToggleSign, Decimal,
+        OpenParenthesis, CloseParenthesis, EndCloseParenthesis,
+        SquareRoot, Power, Sine, Cosine, Tangent,
+        Log10, NaturalLog, Inverse, Modulo, Reciprocal,
+        Percent, Pi, Euler, ToggleAngleMode,
+        CursorLeft, CursorRight, HistoryBack, HistoryForward
+    };
+
     /** @brief Creates the calculator window, initializes its state and connects UI signals. */
     MainWindow(QWidget *parent = nullptr);
     /** @brief Releases the generated UI object owned by this window. */
@@ -41,6 +53,7 @@ private:
      * @param textEdit Target text editor.
      * @param text Text to display.
      */
+    void dispatchAction(CalculatorAction action);
     void setRightAlignedText(QTextEdit *textEdit, const QString &text);
     /** @brief Inserts text at the current cursor and synchronizes the expression state.
      * @param textEdit Target text editor.

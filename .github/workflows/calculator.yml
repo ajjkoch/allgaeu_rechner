@@ -1,9 +1,14 @@
 name: Calculator CI
 
+# Regression tests also run on the design branch.
+
 on:
   push:
     branches:
       - main
+      - refactor_design
+      - refactor_dreiteilung
+      - extend_calculator
     paths:
       - "common/Util.h"
       - "common/test_common.cmake"

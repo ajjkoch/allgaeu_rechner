@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="/alpine">
+    <file alias="header.jpg">resources/allgaeu_header.jpg</file>
+    <file alias="mid.jpg">resources/allgaeu_mid.jpg</file>
+    <file alias="footer.jpg">resources/allgaeu_footer.jpg</file>
+    <file alias="BreeSerif-Regular.ttf">resources/BreeSerif-Regular.ttf</file>
+  </qresource>
+</RCC>

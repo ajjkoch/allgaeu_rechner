@@ -1,5 +1,7 @@
 #include <QtTest>
 
+#include <cmath>
+
 #include <QApplication>
 #include <QEvent>
 #include <QPushButton>
@@ -13,7 +15,9 @@ class CalculatorGuiTests : public QObject
 
 private slots:
     void digitButtonsAndAddition();
+    void allArithmeticOperatorButtons();
     void cursorEditingAndBackspace();
+    void endParenthesisButtonAppendsAtExpressionEnd();
     void directDisplayEditing();
     void errorRecovery();
     void historyNavigation();
@@ -22,6 +26,7 @@ private slots:
     void percentageOperation();
     void trigonometricFunctions();
     void squareRootAndPower();
+    void inversePowerUsesNthRoot();
     void tangentInDegrees();
     void radiansMode();
     void logarithmFunctions();
@@ -33,6 +38,7 @@ private slots:
     void tangentDomainError();
     void exponentialAndFactorial();
     void piConstantAndDecimalInput();
+    void eulerConstantButton();
     void inversePercentageMode();
     void inverseTrigonometricDomainError();
     void reciprocalOfZeroError();
@@ -57,6 +63,63 @@ private slots:
     void guiBoundaryBranches();
     void guiSignAndEventFilterBoundaries();
 };
+
+void CalculatorGuiTests::inversePowerUsesNthRoot()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
+    auto *power = window.findChild<QPushButton *>("pushButton_x2");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+
+    QVERIFY(display);
+    QVERIFY(inverse);
+    QVERIFY(power);
+    QVERIFY(equals);
+    QVERIFY(clear);
+
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QVERIFY(power->property("inverseRoot").toBool());
+    QTest::mouseClick(window.findChild<QPushButton *>("pushButton_8"), Qt::LeftButton);
+    QTest::mouseClick(power, Qt::LeftButton);
+    QTest::mouseClick(window.findChild<QPushButton *>("pushButton_3"), Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("8 root 3"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("2"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("2^3");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("8"));
+
+    QTest::mouseClick(clear, Qt::LeftButton);
+    display->setPlainText("(-8) root 3");
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("-2"));
+}
+
+void CalculatorGuiTests::endParenthesisButtonAppendsAtExpressionEnd()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *rightEnd = window.findChild<QPushButton *>("pushButton_bracket_right_end");
+    QVERIFY(display);
+    QVERIFY(rightEnd);
+
+    display->setPlainText("(12+3");
+    QTextCursor cursor = display->textCursor();
+    cursor.movePosition(QTextCursor::Start);
+    display->setTextCursor(cursor);
+
+    QTest::mouseClick(rightEnd, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("(12+3)"));
+    QCOMPARE(display->textCursor().position(), display->toPlainText().size());
+}
 
 void CalculatorGuiTests::digitButtonsAndAddition()
 {
@@ -723,6 +786,28 @@ void CalculatorGuiTests::piConstantAndDecimalInput()
     QCOMPARE(display->toPlainText(), QString("1.5+0.5"));
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("2"));
+}
+
+void CalculatorGuiTests::eulerConstantButton()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *pi = window.findChild<QPushButton *>("pushButton_pi");
+    auto *e = window.findChild<QPushButton *>("pushButton_e");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    QVERIFY(display);
+    QVERIFY(pi);
+    QVERIFY(e);
+    QVERIFY(equals);
+    QVERIFY(pi->height() > 0);
+    QVERIFY(e->height() > 0);
+
+    QTest::mouseClick(e, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("e"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QVERIFY(qAbs(display->toPlainText().toDouble() - std::exp(1.0)) < 1e-5);
 }
 
 void CalculatorGuiTests::inversePercentageMode()
@@ -1465,6 +1550,50 @@ void CalculatorGuiTests::guiSignAndEventFilterBoundaries()
     QCOMPARE(display->textCursor().position(), 1);
     QTest::keyClick(display, Qt::Key_Right);
     QCOMPARE(display->textCursor().position(), 2);
+}
+
+void CalculatorGuiTests::allArithmeticOperatorButtons()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    QVERIFY(display);
+    QVERIFY(clear);
+    QVERIFY(equals);
+
+    const struct {
+        const char *button;
+        const char *lastDigitButton;
+        const char *expression;
+        const char *expected;
+    } cases[] = {
+        {"pushButton_plus", "pushButton_3", "8+3", "11"},
+        {"pushButton_minus", "pushButton_3", "8-3", "5"},
+        {"pushButton_mul", "pushButton_3", "8*3", "24"},
+        {"pushButton_divided", "pushButton_2", "8/2", "4"}
+    };
+
+    auto *eight = window.findChild<QPushButton *>("pushButton_8");
+    QVERIFY(eight);
+
+    for (const auto &test : cases) {
+        auto *operation = window.findChild<QPushButton *>(test.button);
+        auto *lastDigit = window.findChild<QPushButton *>(test.lastDigitButton);
+        QVERIFY2(operation, test.button);
+        QVERIFY2(lastDigit, test.lastDigitButton);
+
+        QTest::mouseClick(clear, Qt::LeftButton);
+        QTest::mouseClick(eight, Qt::LeftButton);
+        QTest::mouseClick(operation, Qt::LeftButton);
+        QTest::mouseClick(lastDigit, Qt::LeftButton);
+
+        QCOMPARE(display->toPlainText(), QString::fromLatin1(test.expression));
+        QTest::mouseClick(equals, Qt::LeftButton);
+        QCOMPARE(display->toPlainText(), QString::fromLatin1(test.expected));
+    }
 }
 
 QTEST_MAIN(CalculatorGuiTests)
