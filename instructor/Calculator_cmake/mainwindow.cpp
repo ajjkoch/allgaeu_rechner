@@ -475,9 +475,9 @@ void applyAlpineTheme(QWidget *window)
         }
         QTextEdit#textEdit {
             background-color: #f6f0d9; color: #28190c;
-            border: 3px solid #6b431f; border-top: 3px solid #f5d99e;
-            border-bottom: 5px solid #39200e; border-radius: 13px;
-            padding: 7px 10px;
+            border: 2px solid #6b431f; border-top: 2px solid #f5d99e;
+            border-bottom: 3px solid #39200e; border-radius: 11px;
+            padding: 2px 8px;
         }
         QPushButton { background: transparent; border: none; padding: 1px; }
         QWidget#alpineHeader, QWidget#alpineFooter { border: 2px solid #70451f; border-radius: 7px; }
@@ -591,11 +591,18 @@ MainWindow::MainWindow(QWidget *parent)
     ui->verticalLayout->setStretch(2, 22);
 
     // Keep the outer keys clear of the wooden side rails.
-    ui->gridLayout->setContentsMargins(3, 0, 3, 0);
+    ui->gridLayout->setContentsMargins(5, 0, 5, 0);
     ui->gridLayout->setHorizontalSpacing(5);
     ui->gridLayout->setVerticalSpacing(5);
     // Let the grid distribute the available height naturally. A fixed maximum
     // here capped every key at 30 px on common phone sizes and clipped its artwork.
+    // Use one stable display font. Resizing individual controls must never
+    // change the expression font or cause visible vertical bouncing.
+    QFont expressionFont("Georgia", 18, QFont::Bold);
+    ui->textEdit->setFont(expressionFont);
+    ui->textEdit->setMinimumHeight(38);
+    ui->textEdit->setMaximumHeight(42);
+
     ui->textEdit->installEventFilter(this);
     ui->centralwidget->installEventFilter(this);
 
@@ -722,18 +729,6 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         if (auto *background = ui->centralwidget->findChild<QWidget *>("alpineBackground"))
             background->setGeometry(ui->centralwidget->rect());
         // Button heights are managed by the expanding grid layout.
-    }
-
-    if (watched == ui->textEdit && event->type() == QEvent::Resize) {
-        // Derive the display font only from the display itself. Previously every
-        // key resize overwrote it with that key's height, so the last resized
-        // button made the text jump between different sizes.
-        const qreal scale = qBound(0.80, ui->textEdit->height() / 48.0, 1.0);
-        QFont displayFont("Georgia");
-        displayFont.setBold(true);
-        displayFont.setPointSizeF(23.0 * scale);
-        if (ui->textEdit->font() != displayFont)
-            ui->textEdit->setFont(displayFont);
     }
 
     if (auto *button = qobject_cast<QPushButton *>(watched)) {
