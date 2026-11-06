@@ -417,11 +417,18 @@ private:
                     m_position += 2;
                     return checked(value * pi());
                 }
+                if (m_position < m_expression.size() && m_expression[m_position] == 'e') {
+                    ++m_position;
+                    return checked(value * std::exp(1.0));
+                }
                 return checked(value);
             }
 
             if (consumeWord("pi")) {
                 return pi();
+            }
+            if (consumeWord("e")) {
+                return std::exp(1.0);
             }
 
             if (std::isalpha(static_cast<unsigned char>(current()))) {
