@@ -146,7 +146,7 @@
        </spacer>
       </item>
       <item>
-       <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="1,1,1,1">
+       <layout class="QGridLayout" name="gridLayout" rowstretch="0,1,0,0,0,1,0,1,0,1,1,1,1,1,1" columnstretch="1,1,1,1">
         <property name="sizeConstraint">
          <enum>QLayout::SetNoConstraint</enum>
         </property>
