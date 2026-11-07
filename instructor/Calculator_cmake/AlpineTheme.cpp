@@ -101,30 +101,20 @@ void paintAlpineButton(QPushButton *button)
     const bool function = role=="function" || trig;
     const QColor ink = name=="pushButton_equals" ? QColor("#fff3cf") :
                        name=="pushButton_clear" ? QColor("#431b12") : QColor("#291307");
-    // Keep lettering proportional when the reserved background bands reduce key height.
-    const qreal contentScale = qBound(0.62, button->height() / 36.0, 1.0);
+    // One consistent, bold Bree Serif face and size for every button label.
+    // Scale only with available button height, never by button category.
+    const qreal contentScale = qBound(0.72, button->height() / 36.0, 1.0);
     static const int alpineFontId = QFontDatabase::addApplicationFont(":/alpine/BreeSerif-Regular.ttf");
     Q_UNUSED(alpineFontId);
-    // Use one consistent type size for all engraved text labels. The
-    // button-specific drawing branches below continue to handle custom symbols.
-    QFont f("Tahoma", 11, QFont::Bold);
+    QFont f("Bree Serif", 18, QFont::Bold);
     f.setPointSizeF(f.pointSizeF() * contentScale);
-    f.setItalic(function || name=="pushButton_changeDegreesMode");
-    // Keep function labels crisp: no offset lettering or drop shadow.
     painter.setPen(ink);
     painter.setFont(f);
 
     if (trig) {
-        QIcon icon = button->icon();
-        const int graphWidth = qRound(52 * contentScale);
-        const int graphHeight = qRound(25 * contentScale);
-        const QRect graphRect(button->rect().center().x()-graphWidth/2,
-                              button->rect().top()+qRound(5 * contentScale),
-                              graphWidth, graphHeight);
-        icon.paint(&painter, graphRect);
-        // Move only the sin/cos/tan label upward; leave the curve untouched.
-        painter.drawText(QRectF(r.left()+3,r.center().y()+1,r.width()-6,r.height()/2-3),
-                         Qt::AlignHCenter|Qt::AlignVCenter,button->text());
+        // Trigonometric labels sit in the true visual center of their key.
+        painter.drawText(r.adjusted(3, 2, -3, -2),
+                         Qt::AlignHCenter | Qt::AlignVCenter, button->text());
     } else if (name=="pushButton_pi" || name=="pushButton_sqrt" || name=="pushButton_x2" ||
                name=="pushButton_changeDegreesMode") {
         if (name=="pushButton_sqrt" && button->property("inverseSquare").toBool()) {
@@ -146,7 +136,7 @@ void paintAlpineButton(QPushButton *button)
             painter.setPen(QPen(ink, 3.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter.drawPath(radical);
             painter.restore();
-            QFont radicandFont("Tahoma", 10, QFont::Bold);
+            QFont radicandFont("Bree Serif", 14, QFont::Bold);
             painter.setFont(radicandFont);
             painter.drawText(QRectF(cx-1, cy-8, 17, 18), Qt::AlignCenter, "x");
         } else if (name=="pushButton_pi") {
@@ -156,7 +146,7 @@ void paintAlpineButton(QPushButton *button)
                 const qreal cx = r.center().x();
                 const qreal cy = r.center().y();
                 constexpr qreal inverseRadicalScale = 0.61; // approx. 22 px
-                QFont indexFont("Tahoma", 10, QFont::Bold);
+                QFont indexFont("Bree Serif", 14, QFont::Bold);
                 painter.setFont(indexFont);
                 painter.drawText(QRectF(cx-23, cy-16, 15, 15), Qt::AlignCenter, "x");
                 QPainterPath radical;
@@ -170,7 +160,7 @@ void paintAlpineButton(QPushButton *button)
                 painter.setPen(QPen(ink, 2.7, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
                 painter.drawPath(radical);
                 painter.restore();
-                QFont radicandFont("Tahoma", 10, QFont::Bold);
+                QFont radicandFont("Bree Serif", 14, QFont::Bold);
                 painter.setFont(radicandFont);
                 painter.drawText(QRectF(cx+1, cy-7, 19, 19), Qt::AlignCenter, "y");
             } else {
@@ -259,6 +249,9 @@ void apply(QWidget *window)
             border: 2px solid #6b431f; border-top: 2px solid #f5d99e;
             border-bottom: 3px solid #39200e; border-radius: 11px;
             padding: 2px 8px;
+            font-family: "Bree Serif";
+            font-size: 20pt;
+            font-weight: bold;
         }
     )");
     // Keep the filter owned by the window and paint every calculator key.
@@ -275,7 +268,7 @@ void apply(QWidget *window)
             button->setToolTip(hints.value(name));
         if (name == "pushButton_edx")
             button->setText("1/x");
-        button->setFont(QFont("Tahoma", 11));
+        button->setFont(QFont("Bree Serif", 18, QFont::Bold));
         // Geometry and size policy are owned by mainwindow.ui / Qt Designer.
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
