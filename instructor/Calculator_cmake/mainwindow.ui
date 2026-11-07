@@ -176,16 +176,6 @@
           <property name="layoutDirection">
            <enum>Qt::LeftToRight</enum>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-   border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
-          </property>
           <property name="text">
            <string>7</string>
           </property>
@@ -198,18 +188,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-  background-color: rgb(255, 204, 204);
-  border: 1px solid gray;
-}
-
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #FF7832, stop: 1 #FF9739);
-}</string>
           </property>
           <property name="text">
            <string>+</string>
@@ -224,18 +202,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-  background-color: rgb(255, 204, 204);
-  border: 1px solid gray;
-}
-
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #FF7832, stop: 1 #FF9739);
-}</string>
-          </property>
           <property name="text">
            <string>-</string>
           </property>
@@ -248,18 +214,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-  	background-color: rgb(204, 204, 255);
-  	border: 1px solid gray;
-}
-
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #FF7832, stop: 1 #FF9739);
-}</string>
           </property>
           <property name="text">
            <string>+/-</string>
@@ -274,17 +228,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
-          </property>
           <property name="text">
            <string>log</string>
           </property>
@@ -297,18 +240,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-  background-color: rgb(255, 204, 204);
-  border: 1px solid gray;
-}
-
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #FF7832, stop: 1 #FF9739);
-}</string>
           </property>
           <property name="text">
            <string>/</string>
@@ -323,17 +254,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
-          </property>
           <property name="text">
            <string>sin</string>
           </property>
@@ -346,16 +266,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-   border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
           </property>
           <property name="text">
            <string>9</string>
@@ -385,17 +295,6 @@ QPushButton:pressed {
             </property>
             <property name="cursor">
              <cursorShape>WaitCursor</cursorShape>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
             </property>
             <property name="text">
              <string>π</string>
@@ -435,16 +334,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-   border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
-          </property>
           <property name="text">
            <string>5</string>
           </property>
@@ -457,16 +346,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-   border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
           </property>
           <property name="text">
            <string>2</string>
@@ -481,17 +360,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(255, 204, 204);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
-          </property>
           <property name="text">
            <string>1/x</string>
           </property>
@@ -504,17 +372,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(252, 241, 194);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #fcd303);
-}</string>
           </property>
           <property name="text">
            <string>inv</string>
@@ -529,16 +386,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-   border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
-          </property>
           <property name="text">
            <string>4</string>
           </property>
@@ -551,17 +398,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
           </property>
           <property name="text">
            <string>tan</string>
@@ -576,16 +412,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-   border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
-          </property>
           <property name="text">
            <string>3</string>
           </property>
@@ -598,18 +424,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-  background-color: rgb(255, 255, 255);
-  border: 1px solid gray;
-}
-
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #FF7832, stop: 1 #FF9739);
-}</string>
           </property>
           <property name="text">
            <string>=</string>
@@ -674,16 +488,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
-          </property>
           <property name="text">
            <string>(</string>
           </property>
@@ -701,17 +505,6 @@ QPushButton:pressed {
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
             </property>
             <property name="text">
              <string>mod</string>
@@ -750,17 +543,6 @@ QPushButton:pressed {
             <height>16777215</height>
            </size>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-  	background-color: rgb(252, 241, 194);
-  	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
-          </property>
           <property name="text">
            <string>&lt;-</string>
           </property>
@@ -773,17 +555,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-  	background-color: rgb(252, 241, 194);
-  	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
           </property>
           <property name="text">
            <string>C</string>
@@ -798,16 +569,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-   border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
-          </property>
           <property name="text">
            <string>0</string>
           </property>
@@ -820,16 +581,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-   border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
           </property>
           <property name="text">
            <string>6</string>
@@ -844,18 +595,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-  background-color: rgb(255, 204, 204);
-  border: 1px solid gray;
-}
-
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #FF7832, stop: 1 #FF9739);
-}</string>
-          </property>
           <property name="text">
            <string>x</string>
           </property>
@@ -868,16 +607,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-   border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
           </property>
           <property name="text">
            <string>8</string>
@@ -892,17 +621,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
-          </property>
           <property name="text">
            <string>y^x</string>
           </property>
@@ -915,17 +633,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-  background-color: rgb(204, 204, 255);
-  border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
           </property>
           <property name="text">
            <string>.</string>
@@ -947,17 +654,6 @@ QPushButton:pressed {
             <italic>false</italic>
             <bold>false</bold>
            </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
- 	background-color: rgb(255, 204, 204);
-  	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
           </property>
           <property name="text">
            <string>%</string>
@@ -1049,17 +745,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
-          </property>
           <property name="text">
            <string>cos</string>
           </property>
@@ -1072,16 +757,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-   border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
           </property>
           <property name="text">
            <string>1</string>
@@ -1104,17 +779,6 @@ QPushButton:pressed {
             <bold>false</bold>
            </font>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
- 	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
-          </property>
           <property name="text">
            <string>sqrt</string>
           </property>
@@ -1128,17 +792,6 @@ QPushButton:pressed {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(204, 204, 255);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
-          </property>
           <property name="text">
            <string>ln</string>
           </property>
@@ -1151,16 +804,6 @@ QPushButton:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-   border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}</string>
           </property>
           <property name="text">
            <string>)</string>
@@ -1180,17 +823,6 @@ QPushButton:pressed {
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(252, 241, 194);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
-            </property>
             <property name="text">
              <string>&lt;</string>
             </property>
@@ -1203,17 +835,6 @@ QPushButton:pressed {
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(252, 241, 194);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
             </property>
             <property name="text">
              <string>^</string>
@@ -1235,17 +856,6 @@ QPushButton:pressed {
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(252, 241, 194);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
-            </property>
             <property name="text">
              <string>&gt;</string>
             </property>
@@ -1258,17 +868,6 @@ QPushButton:pressed {
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	font: 11pt &quot;Tahoma&quot;;
-	background-color: rgb(252, 241, 194);
-	border: 1px solid gray;
-}
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #BEBEBE, stop: 1 #D7D7D7);
-}</string>
             </property>
             <property name="text">
              <string>v</string>
