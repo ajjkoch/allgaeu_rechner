@@ -248,7 +248,7 @@ void apply(QWidget *window)
             border: 2px solid #6b431f; border-top: 2px solid #f5d99e;
             border-bottom: 3px solid #39200e; border-radius: 11px;
             padding: 2px 8px;
-        }        QWidget#alpineHeader, QWidget#alpineFooter { border: 2px solid #70451f; border-radius: 7px; }
+        }
     )");
     // Keep the filter owned by the window and paint every calculator key.
     auto *paintFilter = new AlpineButtonPaintFilter(window);
@@ -265,7 +265,7 @@ void apply(QWidget *window)
         if (name == "pushButton_edx")
             button->setText("1/x");
         button->setFont(QFont("Tahoma", 11));
-        button->setMinimumHeight(30);
+        // Do not impose a minimum height: the Designer grid controls the key geometry.
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
         button->setAutoDefault(false);
