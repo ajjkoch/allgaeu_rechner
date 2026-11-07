@@ -50,15 +50,15 @@
       <item>
        <widget class="QLabel" name="alpineHeader">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
           <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
+          <verstretch>1</verstretch>
          </sizepolicy>
         </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>78</height>
+          <height>100</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -96,7 +96,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>52</height>
+          <height>53</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -121,13 +121,13 @@
        <number>7</number>
       </property>
       <property name="topMargin">
-       <number>80</number>
+       <number>102</number>
       </property>
       <property name="rightMargin">
        <number>7</number>
       </property>
       <property name="bottomMargin">
-       <number>45</number>
+       <number>29</number>
       </property>
       <item>
        <spacer name="topOverlaySpace">
@@ -770,7 +770,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>38</height>
+            <height>23</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -1180,12 +1180,12 @@
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>0</width>
-          <height>0</height>
+          <height>21</height>
          </size>
         </property>
        </spacer>
