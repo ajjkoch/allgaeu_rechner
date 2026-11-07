@@ -160,33 +160,6 @@ void paintAlpineButton(QPushButton *button)
         } else {
             painter.drawText(r.adjusted(3, 2, -3, -2), Qt::AlignCenter, button->text());
         }
-    } else if (name=="pushButton_erase_left") {
-        // Shift the complete backspace symbol (outline and cross) 3 px left.
-        painter.save();
-        painter.translate(-3.0, 0.0);
-        // Center the backspace glyph and keep at least 3 px clear space to
-        // every button edge, independent of the actual key dimensions.
-        const QRectF bounds = QRectF(r).adjusted(4, 4, -4, -6);
-        const qreal cx = bounds.center().x() - 2.0;
-        const qreal cy = bounds.center().y();
-        const qreal halfH = bounds.height() * 0.42;
-        const qreal left = bounds.left() + bounds.width() * 0.12;
-        const qreal right = bounds.right() - bounds.width() * 0.08;
-        const qreal notch = bounds.left() + bounds.width() * 0.42;
-        QPainterPath key;
-        key.moveTo(left, cy);
-        key.lineTo(notch, cy-halfH);
-        key.lineTo(right, cy-halfH);
-        key.lineTo(right, cy+halfH);
-        key.lineTo(notch, cy+halfH);
-        key.closeSubpath();
-        painter.setPen(QPen(Qt::black,3.0,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
-        painter.drawPath(key);
-        painter.setPen(QPen(Qt::black,2.4,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
-        const qreal cross = qMin(bounds.width(), bounds.height()) * 0.16;
-        painter.drawLine(QPointF(cx+cross,cy-cross),QPointF(cx-cross,cy+cross));
-        painter.drawLine(QPointF(cx-cross,cy-cross),QPointF(cx+cross,cy+cross));
-        painter.restore();
     } else {
         painter.drawText(r.adjusted(3,2,-3,-3),Qt::AlignCenter,button->text());
     }
