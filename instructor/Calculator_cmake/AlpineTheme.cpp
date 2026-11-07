@@ -13,6 +13,8 @@
 
 namespace AlpineTheme {
 
+void paintAlpineButton(QPushButton *button);
+
 class AlpineButtonPaintFilter final : public QObject
 {
 public:
