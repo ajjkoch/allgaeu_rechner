@@ -165,8 +165,8 @@
         <property name="horizontalSpacing">
          <number>5</number>
         </property>
-        <property name="verticalSpacing">
-         <number>2</number>
+        <property name="spacing">
+         <number>5</number>
         </property>
         <item row="7" column="1">
          <widget class="QPushButton" name="pushButton_bracket_left">
