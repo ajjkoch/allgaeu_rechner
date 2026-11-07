@@ -203,7 +203,7 @@ void apply(QWidget *window)
         {"pushButton_inv", "INV"}, {"pushButton_mul", "×"},
         {"pushButton_bracket_right_end", "->)"},
         {"pushButton_bracket_left_start", "(<-"},
-        {"pushButton_erase_left", ""}, {"pushButton_cursor_left", "←"},
+        {"pushButton_cursor_left", "←"},
         {"pushButton_cursor_right", "→"}, {"pushButton_history_back", "↑"},
         {"pushButton_history_forward", "↓"}
     };
