@@ -383,6 +383,9 @@ QPushButton:pressed {
               <bold>false</bold>
              </font>
             </property>
+            <property name="cursor">
+             <cursorShape>WaitCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
 	font: 11pt &quot;Helvetica&quot;;
@@ -406,6 +409,13 @@ QPushButton:pressed {
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Helvetica</family>
+              <pointsize>11</pointsize>
+              <bold>true</bold>
+             </font>
             </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
@@ -970,13 +980,13 @@ QPushButton:pressed {
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>12</height>
+              <height>0</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>12</height>
+              <height>16777215</height>
              </size>
             </property>
             <property name="text">
@@ -1000,7 +1010,7 @@ QPushButton:pressed {
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>12</height>
+                <height>0</height>
                </size>
               </property>
               <property name="focusPolicy">
