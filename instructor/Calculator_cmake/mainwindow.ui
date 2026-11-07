@@ -810,17 +810,9 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <layout class="QHBoxLayout" name="bracketStartEndCellLayout">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <item>
-           <layout class="QHBoxLayout" name="bracketStartEndLayout">
+         <layout class="QHBoxLayout" name="bracketStartEndLayout">
             <property name="spacing">
              <number>0</number>
-            </property>
-            <property name="sizeConstraint">
-             <enum>QLayout::SetDefaultConstraint</enum>
             </property>
             <item>
              <widget class="QPushButton" name="pushButton_bracket_left_start">
@@ -861,8 +853,6 @@
              </widget>
             </item>
            </layout>
-          </item>
-         </layout>
         </item>
         <item row="2" column="2">
          <widget class="QPushButton" name="pushButton_history_back">
