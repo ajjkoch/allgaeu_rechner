@@ -183,7 +183,7 @@ void apply(QWidget *window)
         {"pushButton_4", "digit"}, {"pushButton_5", "digit"},
         {"pushButton_6", "digit"}, {"pushButton_7", "digit"},
         {"pushButton_8", "digit"}, {"pushButton_9", "digit"},
-        {"pushButton_pi", "constant"}, {"pushButton_sqrt", "operator"},
+        {"pushButton_pi", "digit"}, {"pushButton_sqrt", "operator"},
         {"pushButton_changeDegreesMode", "constant"},
         {"pushButton_sin", "function"}, {"pushButton_cos", "function"},
         {"pushButton_tan", "function"}, {"pushButton_log", "function"},
