@@ -810,7 +810,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <layout class="QHBoxLayout" name="bracketStartEndLayout">
+         <layout class="QGridLayout" name="bracketStartEndLayout">
           <property name="spacing">
            <number>0</number>
           </property>
@@ -829,7 +829,7 @@
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item>
+          <item row="0" column="0">
            <widget class="QPushButton" name="pushButton_bracket_left_start">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
@@ -851,7 +851,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item row="0" column="1">
            <widget class="QPushButton" name="pushButton_bracket_right_end">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
