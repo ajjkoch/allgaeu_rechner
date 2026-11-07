@@ -65,7 +65,7 @@
       <property name="styleSheet"><string notr="true">QWidget#foregroundLayer { background: transparent; }</string></property>
       <layout class="QVBoxLayout" name="foregroundLayout">
        <property name="spacing"><number>0</number></property>
-       <property name="leftMargin"><number>7</number></property><property name="topMargin"><number>7</number></property><property name="rightMargin"><number>7</number></property><property name="bottomMargin"><number>7</number></property>
+       <property name="leftMargin"><number>7</number></property><property name="topMargin"><number>56</number></property><property name="rightMargin"><number>7</number></property><property name="bottomMargin"><number>36</number></property>
        <item>
         <spacer name="topOverlaySpace">
          <property name="orientation"><enum>Qt::Vertical</enum></property>
