@@ -276,9 +276,7 @@ void apply(QWidget *window)
         if (name == "pushButton_edx")
             button->setText("1/x");
         button->setFont(QFont("Tahoma", 11));
-        // Keep the vertical size policy from Qt Designer. Only cap the
-        // button height; do not force all rows to a fixed-size packing.
-        button->setMaximumHeight(28);
+        // Geometry and size policy are owned by mainwindow.ui / Qt Designer.
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
         button->setAutoDefault(false);
