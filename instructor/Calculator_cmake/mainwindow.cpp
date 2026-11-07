@@ -435,6 +435,7 @@ void paintAlpineButton(QPushButton *button)
 void applyAlpineTheme(QWidget *window)
 {
     const QMap<QString, QString> roles = {
+        {"pushButton_e", "constant"}, {"pushButton_fact", "function"},
         {"pushButton_0", "digit"}, {"pushButton_1", "digit"},
         {"pushButton_2", "digit"}, {"pushButton_3", "digit"},
         {"pushButton_4", "digit"}, {"pushButton_5", "digit"},
@@ -480,6 +481,7 @@ void applyAlpineTheme(QWidget *window)
         {"pushButton_x2", "Potenz x hoch y; mit INV: x-te Wurzel aus y"},
         {"pushButton_edx", "Kehrwert 1/x berechnen"},
         {"pushButton_inv", "Umkehrfunktionen aktivieren"},
+        {"pushButton_e", "Eulersche Zahl e einfügen"},
         {"pushButton_changeDegreesMode", "Winkelmaß zwischen Grad und Radiant wechseln"},
         {"pushButton_bracket_right_end", "Schließende Klammer am Ende des Ausdrucks einfügen"},
         {"pushButton_bracket_left_start", "Öffnende Klammer am Anfang des gesamten Ausdrucks einfügen"},
@@ -554,73 +556,6 @@ MainWindow::MainWindow(QWidget *parent)
     , m_hpos(0)
 {
     ui->setupUi(this);
-
-    // Split the existing pi key vertically and place Euler's constant below it.
-    auto *piButton = ui->pushButton_pi;
-    auto *constantStack = new QWidget(piButton->parentWidget());
-    constantStack->setObjectName("constantButtonStack");
-    auto *constantLayout = new QVBoxLayout(constantStack);
-    constantLayout->setContentsMargins(0, 0, 0, 0);
-    constantLayout->setSpacing(1);
-    ui->gridLayout->removeWidget(piButton);
-    piButton->setParent(constantStack);
-    constantLayout->addWidget(piButton);
-    auto *eButton = new QPushButton(QString::fromUtf8("e"), constantStack);
-    eButton->setObjectName("pushButton_e");
-    eButton->setFont(piButton->font());
-    eButton->setStyleSheet(piButton->styleSheet());
-    eButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
-    eButton->setFocusPolicy(Qt::NoFocus);
-    constantLayout->addWidget(eButton);
-    ui->gridLayout->addWidget(constantStack, 1, 0);
-
-    // Split the modulo key vertically and place factorial below it.
-    auto *modButton = ui->pushButton_mod;
-    auto *modStack = new QWidget(modButton->parentWidget());
-    modStack->setObjectName("modButtonStack");
-    auto *modLayout = new QVBoxLayout(modStack);
-    modLayout->setContentsMargins(0, 0, 0, 0);
-    modLayout->setSpacing(1);
-    ui->gridLayout->removeWidget(modButton);
-    modButton->setParent(modStack);
-    modLayout->addWidget(modButton);
-    auto *factorialButton = new QPushButton("fak", modStack);
-    factorialButton->setObjectName("pushButton_fact");
-    factorialButton->setFont(modButton->font());
-    factorialButton->setStyleSheet(modButton->styleSheet());
-    factorialButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
-    factorialButton->setFocusPolicy(Qt::NoFocus);
-    factorialButton->setToolTip("Fakultät n! berechnen");
-    modLayout->addWidget(factorialButton);
-    ui->gridLayout->addWidget(modStack, 10, 0);
-
-    // Keep the angle-mode key above a compact two-key parenthesis stack.
-    auto *angleButton = ui->pushButton_changeDegreesMode;
-    auto *angleStack = new QWidget(angleButton->parentWidget());
-    angleStack->setObjectName("angleButtonStack");
-    auto *angleLayout = new QVBoxLayout(angleStack);
-    angleLayout->setContentsMargins(0, 0, 0, 0);
-    angleLayout->setSpacing(1);
-    ui->gridLayout->removeWidget(angleButton);
-    angleButton->setParent(angleStack);
-    angleLayout->addWidget(angleButton);
-
-    auto *startOpenButton = new QPushButton("(<-", angleStack);
-    startOpenButton->setObjectName("pushButton_bracket_left_start");
-    startOpenButton->setFont(angleButton->font());
-    startOpenButton->setStyleSheet(angleButton->styleSheet());
-    startOpenButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
-    startOpenButton->setFocusPolicy(Qt::NoFocus);
-    angleLayout->addWidget(startOpenButton);
-
-    auto *rightEndButton = new QPushButton("->)", angleStack);
-    rightEndButton->setObjectName("pushButton_bracket_right_end");
-    rightEndButton->setFont(angleButton->font());
-    rightEndButton->setStyleSheet(angleButton->styleSheet());
-    rightEndButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
-    rightEndButton->setFocusPolicy(Qt::NoFocus);
-    angleLayout->addWidget(rightEndButton);
-    ui->gridLayout->addWidget(angleStack, 1, 1);
 
     applyAlpineTheme(this);
     auto *background = new AlpineBackground(ui->centralwidget);
@@ -723,10 +658,10 @@ MainWindow::MainWindow(QWidget *parent)
         {"pushButton_history_forward", Action::HistoryForward}
     };
 
-    eButton->setProperty("calculatorActionId", static_cast<int>(Action::Euler));
-    connect(eButton, &QPushButton::clicked, this, [this, eButton]() {
+    ui->pushButton_e->setProperty("calculatorActionId", static_cast<int>(Action::Euler));
+    connect(ui->pushButton_e, &QPushButton::clicked, this, [this]() {
         dispatchAction(static_cast<CalculatorAction>(
-            eButton->property("calculatorActionId").toInt()));
+            ui->pushButton_e->property("calculatorActionId").toInt()));
     });
 
     for (auto it = actions.cbegin(); it != actions.cend(); ++it) {
