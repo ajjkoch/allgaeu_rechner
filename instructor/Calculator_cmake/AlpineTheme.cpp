@@ -32,79 +32,7 @@ protected:
     }
 };
 
-QIcon makeFunctionIcon(const QString &function)
-{
-    const QSize size(36, 24);
-    QPixmap pixmap(size);
-    pixmap.fill(Qt::transparent);
 
-    QPainter painter(&pixmap);
-    painter.setRenderHint(QPainter::Antialiasing);
-    const QRectF plot(2.0, 2.0, 32.0, 20.0);
-
-    QPen axisPen(QColor("#8b9988"), 0.8);
-    painter.setPen(axisPen);
-    painter.drawLine(QPointF(plot.left(), plot.center().y()),
-                     QPointF(plot.right(), plot.center().y()));
-    painter.drawLine(QPointF(plot.center().x(), plot.top()),
-                     QPointF(plot.center().x(), plot.bottom()));
-
-    QPen curvePen(QColor("#365b43"), 1.8, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-    painter.setPen(curvePen);
-    painter.setBrush(Qt::NoBrush);
-
-    auto mapPoint = [&plot](qreal x, qreal y) {
-        return QPointF(plot.left() + (x + 1.0) * plot.width() / 2.0,
-                       plot.center().y() - y * plot.height() / 2.0);
-    };
-
-    if (function == "tan") {
-        // Three clipped branches; dashed lines mark the vertical asymptotes.
-        const qreal xMin = -2.2;
-        const qreal xMax = 2.2;
-        const qreal gap = 0.09;
-        const qreal asymptote = 1.5707963267948966;
-        const qreal yLimit = 3.2;
-        const qreal ranges[3][2] = {
-            {xMin, -asymptote - gap},
-            {-asymptote + gap, asymptote - gap},
-            {asymptote + gap, xMax}
-        };
-
-        for (const auto &range : ranges) {
-            QPainterPath path;
-            for (int i = 0; i <= 80; ++i) {
-                const qreal x = range[0] + (range[1] - range[0]) * i / 80.0;
-                const qreal y = qBound(-yLimit, std::tan(x), yLimit) / yLimit;
-                const QPointF point = mapPoint(x / xMax, y);
-                if (i == 0) path.moveTo(point);
-                else path.lineTo(point);
-            }
-            painter.drawPath(path);
-        }
-
-        QPen asymptotePen(QColor("#a28d68"), 0.9, Qt::DashLine);
-        painter.setPen(asymptotePen);
-        for (qreal x : {-asymptote, asymptote}) {
-            const qreal normalizedX = x / xMax;
-            painter.drawLine(mapPoint(normalizedX, -1.0),
-                             mapPoint(normalizedX, 1.0));
-        }
-    } else {
-        QPainterPath path;
-        for (int i = 0; i <= 100; ++i) {
-            const qreal x = -M_PI;
-            const qreal angle = x + (2.0 * M_PI * i / 100.0);
-            const qreal y = function == "sin" ? std::sin(angle) : std::cos(angle);
-            const QPointF point = mapPoint(angle / M_PI, y * 0.82);
-            if (i == 0) path.moveTo(point);
-            else path.lineTo(point);
-        }
-        painter.drawPath(path);
-    }
-
-    return QIcon(pixmap);
-}
 
 void paintAlpineButton(QPushButton *button)
 {
@@ -340,15 +268,7 @@ void apply(QWidget *window)
             border-bottom: 3px solid #39200e; border-radius: 11px;
             padding: 2px 8px;
         }        QWidget#alpineHeader, QWidget#alpineFooter { border: 2px solid #70451f; border-radius: 7px; }
-    )");
-
-
-    const QMap<QString, QString> functionPlots = {
-        {"pushButton_sin", "sin"}, {"pushButton_cos", "cos"},
-        {"pushButton_tan", "tan"}
-    };
-
-    const auto buttons = window->findChildren<QPushButton *>();
+    )");const auto buttons = window->findChildren<QPushButton *>();
     for (QPushButton *button : buttons) {
         const QString name = button->objectName();
         if (labels.contains(name))
@@ -357,10 +277,6 @@ void apply(QWidget *window)
             button->setProperty("role", roles.value(name));
         if (hints.contains(name))
             button->setToolTip(hints.value(name));
-        if (functionPlots.contains(name)) {
-            button->setIcon(makeFunctionIcon(functionPlots.value(name)));
-            button->setIconSize(QSize(36, 24));
-        }
         if (name == "pushButton_edx")
             button->setText("1/x");
         button->setFont(QFont("Tahoma", 11));
