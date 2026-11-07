@@ -233,6 +233,7 @@ QPushButton:pressed {
        </widget>
       </item>
       <item row="1" column="0">
+<layout class="QVBoxLayout" name="constantButtonLayout"><property name="spacing"><number>1</number></property><item>
        <widget class="QPushButton" name="pushButton_pi">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
@@ -263,7 +264,8 @@ QPushButton:pressed {
          <string>π</string>
         </property>
        </widget>
-      </item>
+      </item><item><widget class="QPushButton" name="pushButton_e"><property name="text"><string>e</string></property><property name="sizePolicy"><sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding"><horstretch>0</horstretch><verstretch>0</verstretch></sizepolicy></property><property name="focusPolicy"><enum>Qt::NoFocus</enum></property></widget></item></layout>
+</item>
       <item row="12" column="1">
        <widget class="QPushButton" name="pushButton_5">
         <property name="sizePolicy">
@@ -526,6 +528,7 @@ QPushButton:pressed {
        </widget>
       </item>
       <item row="10" column="0">
+<layout class="QVBoxLayout" name="modButtonLayout"><property name="spacing"><number>1</number></property><item>
        <widget class="QPushButton" name="pushButton_mod">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
@@ -548,7 +551,8 @@ QPushButton:pressed {
          <string>mod</string>
         </property>
        </widget>
-      </item>
+      </item><item><widget class="QPushButton" name="pushButton_fact"><property name="text"><string>fak</string></property><property name="sizePolicy"><sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding"><horstretch>0</horstretch><verstretch>0</verstretch></sizepolicy></property><property name="focusPolicy"><enum>Qt::NoFocus</enum></property></widget></item></layout>
+</item>
       <item row="5" column="3">
        <widget class="QPushButton" name="pushButton_erase_left">
         <property name="sizePolicy">
@@ -778,6 +782,7 @@ QPushButton:pressed {
        </widget>
       </item>
       <item row="1" column="1">
+<layout class="QVBoxLayout" name="angleAndBracketsLayout"><property name="spacing"><number>1</number></property><item>
        <widget class="QPushButton" name="pushButton_changeDegreesMode">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
@@ -800,7 +805,8 @@ QPushButton:pressed {
          <string>grad</string>
         </property>
        </widget>
-      </item>
+      </item><item><widget class="QPushButton" name="pushButton_bracket_left_start"><property name="text"><string>(&lt;-</string></property><property name="sizePolicy"><sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding"><horstretch>0</horstretch><verstretch>0</verstretch></sizepolicy></property><property name="focusPolicy"><enum>Qt::NoFocus</enum></property></widget></item><item><widget class="QPushButton" name="pushButton_bracket_right_end"><property name="text"><string>-&gt;)</string></property><property name="sizePolicy"><sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding"><horstretch>0</horstretch><verstretch>0</verstretch></sizepolicy></property><property name="focusPolicy"><enum>Qt::NoFocus</enum></property></widget></item></layout>
+</item>
       <item row="7" column="1">
        <widget class="QPushButton" name="pushButton_cos">
         <property name="sizePolicy">
