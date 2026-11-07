@@ -25,46 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     AlpineTheme::apply(this);
-    ui->verticalLayout->setSpacing(0);
-    ui->verticalLayout->setContentsMargins(7, 7, 7, 7);
-
-    // Keep the outer keys clear of the wooden side rails.
-    ui->gridLayout->setContentsMargins(5, 0, 5, 0);
-    ui->gridLayout->setHorizontalSpacing(5);
-    ui->gridLayout->setVerticalSpacing(5);
-
-    // Every occupied grid row uses the tallest control in that row as its
-    // minimum height, so neighboring keys line up exactly.
-    for (int row = 0; row < ui->gridLayout->rowCount(); ++row) {
-        int tallest = 0;
-        for (int column = 0; column < ui->gridLayout->columnCount(); ++column) {
-            if (QLayoutItem *item = ui->gridLayout->itemAtPosition(row, column)) {
-                if (QWidget *widget = item->widget())
-                    tallest = qMax(tallest, widget->sizeHint().height());
-            }
-        }
-        if (tallest == 0)
-            continue;
-        for (int column = 0; column < ui->gridLayout->columnCount(); ++column) {
-            if (QLayoutItem *item = ui->gridLayout->itemAtPosition(row, column)) {
-                if (QWidget *widget = item->widget()) {
-                    widget->setMinimumHeight(tallest);
-                    widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-                }
-            }
-        }
-    }
-    // Let the grid distribute the available height naturally. A fixed maximum
-    // here capped every key at 30 px on common phone sizes and clipped its artwork.
-    // Use one stable display font. Resizing individual controls must never
-    // change the expression font or cause visible vertical bouncing.
-    QFont expressionFont("Georgia", 18, QFont::Bold);
-    ui->textEdit->setFont(expressionFont);
-    ui->textEdit->setMinimumHeight(38);
-    ui->textEdit->setMaximumHeight(42);
-
     ui->textEdit->installEventFilter(this);
-    ui->centralwidget->installEventFilter(this);
 
     // Keep the internal expression synchronized when the user edits the display directly.
     connect(ui->textEdit, &QTextEdit::textChanged, this, [this]() {
