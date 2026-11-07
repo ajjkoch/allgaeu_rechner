@@ -134,12 +134,18 @@ void paintAlpineButton(QPushButton *button)
             const qreal cx = r.center().x();
             const qreal cy = r.center().y();
             QPainterPath radical;
-            radical.moveTo(cx - 19, cy + 2);
-            radical.lineTo(cx - 12, cy + 8);
-            radical.lineTo(cx - 4, cy - 9);
-            radical.lineTo(cx + 19, cy - 9);
+            // Keep the radical, including its vinculum, within 26 px height.
+            constexpr qreal radicalScale = 0.72;
+            painter.save();
+            painter.translate(cx, cy);
+            painter.scale(radicalScale, radicalScale);
+            radical.moveTo(-19, 2);
+            radical.lineTo(-12, 8);
+            radical.lineTo(-4, -9);
+            radical.lineTo(19, -9);
             painter.setPen(QPen(ink, 3.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter.drawPath(radical);
+            painter.restore();
             QFont radicandFont("Tahoma", 11, QFont::Bold);
             painter.setFont(radicandFont);
             painter.drawText(QRectF(cx-1, cy-8, 17, 18), Qt::AlignCenter, "x");
