@@ -789,7 +789,7 @@
         <item row="2" column="0">
          <widget class="QPushButton" name="pushButton_e">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+           <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -872,7 +872,7 @@
         <item row="2" column="2">
          <widget class="QPushButton" name="pushButton_history_back">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+           <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -885,7 +885,7 @@
         <item row="2" column="3">
          <widget class="QPushButton" name="pushButton_history_forward">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+           <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
