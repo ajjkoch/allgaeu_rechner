@@ -28,6 +28,11 @@
     </sizepolicy>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing"><number>0</number></property>
+    <property name="leftMargin"><number>7</number></property>
+    <property name="topMargin"><number>7</number></property>
+    <property name="rightMargin"><number>7</number></property>
+    <property name="bottomMargin"><number>7</number></property>
         <item><widget class="QLabel" name="alpineHeader"><property name="minimumSize"><size><width>0</width><height>72</height></size></property><property name="maximumSize"><size><width>16777215</width><height>88</height></size></property><property name="styleSheet"><string notr="true">QLabel { border-image: url(:/alpine/header.jpg) 0 0 0 0 stretch stretch; }</string></property></widget></item>
 <item>
      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="0,0,0,0">
@@ -477,12 +482,7 @@ QPushButton:pressed {
           <height>42</height>
          </size>
         </property>
-        <property name="font">
-         <font>
-          <family>Tahoma</family>
-          <pointsize>24</pointsize>
-         </font>
-        </property>
+        <property name="font"><font><family>Georgia</family><pointsize>18</pointsize><weight>75</weight><bold>true</bold></font></property>
         <property name="mouseTracking">
          <bool>true</bool>
         </property>
