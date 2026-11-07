@@ -789,7 +789,7 @@
         <item row="2" column="0">
          <widget class="QPushButton" name="pushButton_e">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -811,66 +811,68 @@
         </item>
         <item row="2" column="1">
          <layout class="QHBoxLayout" name="bracketStartEndLayout">
-            <property name="spacing">
-             <number>0</number>
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="sizeConstraint">
+           <enum>QLayout::SetMinimumSize</enum>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="pushButton_bracket_left_start">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <property name="leftMargin">
-             <number>0</number>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
             </property>
-            <property name="topMargin">
-             <number>0</number>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
-            <property name="rightMargin">
-             <number>0</number>
+            <property name="text">
+             <string>(&lt;-</string>
             </property>
-            <property name="bottomMargin">
-             <number>0</number>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_bracket_right_end">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-
-            <item>
-             <widget class="QPushButton" name="pushButton_bracket_left_start">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string>(&lt;-</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_bracket_right_end">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string>-&gt;)</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="text">
+             <string>-&gt;)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item row="2" column="2">
          <widget class="QPushButton" name="pushButton_history_back">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -883,7 +885,7 @@
         <item row="2" column="3">
          <widget class="QPushButton" name="pushButton_history_forward">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
