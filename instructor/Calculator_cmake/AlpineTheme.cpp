@@ -265,7 +265,8 @@ void apply(QWidget *window)
         if (name == "pushButton_edx")
             button->setText("1/x");
         button->setFont(QFont("Tahoma", 11));
-        // Do not impose a minimum height: the Designer grid controls the key geometry.
+        // Cap the key height; the layout may still make a button smaller.
+        button->setMaximumHeight(33);
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
         button->setAutoDefault(false);
