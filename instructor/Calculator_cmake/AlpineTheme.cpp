@@ -135,7 +135,7 @@ void paintAlpineButton(QPushButton *button)
             const qreal cy = r.center().y();
             QPainterPath radical;
             // Keep the radical, including its vinculum, within 26 px height.
-            constexpr qreal radicalScale = 0.72;
+            constexpr qreal radicalScale = 0.61; // approx. 22 px including the vinculum
             painter.save();
             painter.translate(cx, cy);
             painter.scale(radicalScale, radicalScale);
@@ -146,7 +146,7 @@ void paintAlpineButton(QPushButton *button)
             painter.setPen(QPen(ink, 3.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter.drawPath(radical);
             painter.restore();
-            QFont radicandFont("Tahoma", 11, QFont::Bold);
+            QFont radicandFont("Tahoma", 10, QFont::Bold);
             painter.setFont(radicandFont);
             painter.drawText(QRectF(cx-1, cy-8, 17, 18), Qt::AlignCenter, "x");
         } else if (name=="pushButton_pi") {
@@ -155,17 +155,22 @@ void paintAlpineButton(QPushButton *button)
             if (button->property("inverseRoot").toBool()) {
                 const qreal cx = r.center().x();
                 const qreal cy = r.center().y();
-                QFont indexFont("Tahoma", 11, QFont::Bold);
+                constexpr qreal inverseRadicalScale = 0.61; // approx. 22 px
+                QFont indexFont("Tahoma", 10, QFont::Bold);
                 painter.setFont(indexFont);
                 painter.drawText(QRectF(cx-23, cy-16, 15, 15), Qt::AlignCenter, "x");
                 QPainterPath radical;
-                radical.moveTo(cx-10, cy+1);
-                radical.lineTo(cx-5, cy+7);
-                radical.lineTo(cx+1, cy-8);
-                radical.lineTo(cx+22, cy-8);
+                painter.save();
+                painter.translate(cx, cy);
+                painter.scale(inverseRadicalScale, inverseRadicalScale);
+                radical.moveTo(-10, 1);
+                radical.lineTo(-5, 7);
+                radical.lineTo(1, -8);
+                radical.lineTo(22, -8);
                 painter.setPen(QPen(ink, 2.7, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
                 painter.drawPath(radical);
-                QFont radicandFont("Tahoma", 11, QFont::Bold);
+                painter.restore();
+                QFont radicandFont("Tahoma", 10, QFont::Bold);
                 painter.setFont(radicandFont);
                 painter.drawText(QRectF(cx+1, cy-7, 19, 19), Qt::AlignCenter, "y");
             } else {
@@ -276,7 +281,7 @@ void apply(QWidget *window)
         QSizePolicy policy = button->sizePolicy();
         policy.setVerticalPolicy(QSizePolicy::Fixed);
         button->setSizePolicy(policy);
-        button->setMaximumHeight(33);
+        button->setMaximumHeight(28);
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
         button->setAutoDefault(false);
