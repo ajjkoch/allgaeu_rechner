@@ -377,7 +377,7 @@ QPushButton:pressed {
             </property>
             <property name="font">
              <font>
-              <family>Helvetica</family>
+              <family>Tahoma</family>
               <pointsize>11</pointsize>
               <italic>false</italic>
               <bold>false</bold>
@@ -388,7 +388,7 @@ QPushButton:pressed {
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	font: 11pt &quot;Helvetica&quot;;
+	font: 11pt &quot;Tahoma&quot;;
 	background-color: rgb(204, 204, 255);
 	border: 1px solid gray;
 }
@@ -412,7 +412,7 @@ QPushButton:pressed {
             </property>
             <property name="font">
              <font>
-              <family>Helvetica</family>
+              <family>Tahoma</family>
               <pointsize>11</pointsize>
               <bold>true</bold>
              </font>
@@ -1182,7 +1182,7 @@ QPushButton:pressed {
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	font: 16pt &quot;Tahoma&quot;;
+	font: 11pt &quot;Tahoma&quot;;
 	background-color: rgb(252, 241, 194);
 	border: 1px solid gray;
 }
@@ -1206,7 +1206,7 @@ QPushButton:pressed {
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	font: 16pt &quot;Tahoma&quot;;
+	font: 11pt &quot;Tahoma&quot;;
 	background-color: rgb(252, 241, 194);
 	border: 1px solid gray;
 }
@@ -1237,7 +1237,7 @@ QPushButton:pressed {
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	font: 16pt &quot;Tahoma&quot;;
+	font: 11pt &quot;Tahoma&quot;;
 	background-color: rgb(252, 241, 194);
 	border: 1px solid gray;
 }
@@ -1261,7 +1261,7 @@ QPushButton:pressed {
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	font: 16pt &quot;Tahoma&quot;;
+	font: 11pt &quot;Tahoma&quot;;
 	background-color: rgb(252, 241, 194);
 	border: 1px solid gray;
 }
