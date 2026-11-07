@@ -7,6 +7,7 @@ on:
       - refactor_design
       - refactor_dreiteilung
       - extend_calculator
+      - use_ui_file
     paths:
       - "common/Util.h"
       - "instructor/Calculator_cmake/**"

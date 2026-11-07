@@ -18,6 +18,8 @@ private slots:
     void allArithmeticOperatorButtons();
     void cursorEditingAndBackspace();
     void endParenthesisButtonAppendsAtExpressionEnd();
+    void startParenthesisButtonInsertsAtExpressionStart();
+    void piButtonUsesDigitWoodStyle();
     void directDisplayEditing();
     void errorRecovery();
     void historyNavigation();
@@ -26,6 +28,8 @@ private slots:
     void percentageOperation();
     void trigonometricFunctions();
     void squareRootAndPower();
+    void inverseSquareUsesSquareRootKey();
+    void factorialButton();
     void inversePowerUsesNthRoot();
     void tangentInDegrees();
     void radiansMode();
@@ -119,6 +123,36 @@ void CalculatorGuiTests::endParenthesisButtonAppendsAtExpressionEnd()
     QTest::mouseClick(rightEnd, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("(12+3)"));
     QCOMPARE(display->textCursor().position(), display->toPlainText().size());
+}
+
+void CalculatorGuiTests::startParenthesisButtonInsertsAtExpressionStart()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *startOpen = window.findChild<QPushButton *>("pushButton_bracket_left_start");
+    QVERIFY(display);
+    QVERIFY(startOpen);
+
+    display->setPlainText("12+3");
+    QTextCursor cursor = display->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    display->setTextCursor(cursor);
+
+    QTest::mouseClick(startOpen, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("(12+3"));
+    QCOMPARE(display->textCursor().position(), 1);
+}
+
+void CalculatorGuiTests::piButtonUsesDigitWoodStyle()
+{
+    MainWindow window;
+    window.show();
+
+    auto *pi = window.findChild<QPushButton *>("pushButton_pi");
+    QVERIFY(pi);
+    QCOMPARE(pi->property("role").toString(), QString("digit"));
 }
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -1594,6 +1628,58 @@ void CalculatorGuiTests::allArithmeticOperatorButtons()
         QTest::mouseClick(equals, Qt::LeftButton);
         QCOMPARE(display->toPlainText(), QString::fromLatin1(test.expected));
     }
+}
+
+void CalculatorGuiTests::factorialButton()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *five = window.findChild<QPushButton *>("pushButton_5");
+    auto *factorial = window.findChild<QPushButton *>("pushButton_fact");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(five);
+    QVERIFY(factorial);
+    QVERIFY(equals);
+
+    QTest::mouseClick(five, Qt::LeftButton);
+    QTest::mouseClick(factorial, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("5!"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("120"));
+}
+
+void CalculatorGuiTests::inverseSquareUsesSquareRootKey()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
+    auto *squareRoot = window.findChild<QPushButton *>("pushButton_sqrt");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(inverse);
+    QVERIFY(squareRoot);
+    QVERIFY(equals);
+
+    display->setPlainText("5");
+    QTextCursor inputCursor = display->textCursor();
+    inputCursor.movePosition(QTextCursor::End);
+    display->setTextCursor(inputCursor);
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QVERIFY(squareRoot->property("inverseSquare").toBool());
+    QTest::mouseClick(squareRoot, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("5^2"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("25"));
+
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QVERIFY(!squareRoot->property("inverseSquare").toBool());
 }
 
 QTEST_MAIN(CalculatorGuiTests)

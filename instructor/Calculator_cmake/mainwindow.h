@@ -26,11 +26,11 @@ public:
         Digit5, Digit6, Digit7, Digit8, Digit9,
         Add, Subtract, Multiply, Divide,
         Equals, Clear, Backspace, ToggleSign, Decimal,
-        OpenParenthesis, CloseParenthesis, EndCloseParenthesis,
+        OpenParenthesis, CloseParenthesis, EndCloseParenthesis, StartOpenParenthesis,
         SquareRoot, Power, Sine, Cosine, Tangent,
         Log10, NaturalLog, Inverse, Modulo, Reciprocal,
         Percent, Pi, Euler, ToggleAngleMode,
-        CursorLeft, CursorRight, HistoryBack, HistoryForward
+        CursorLeft, CursorRight, HistoryBack, HistoryForward, Factorial
     };
 
     /** @brief Creates the calculator window, initializes its state and connects UI signals. */
@@ -56,7 +56,7 @@ private:
     void dispatchAction(CalculatorAction action);
     void setRightAlignedText(QTextEdit *textEdit, const QString &text);
     /** @brief Inserts text at the current cursor and synchronizes the expression state.
-     * @param textEdit Target text editor.
+     * @param textEdit Target text edit.
      * @param text Text to insert.
      */
     void insertRightAlignedText(QTextEdit *textEdit, const QString &text);
