@@ -818,7 +818,8 @@
                             <property name="spacing">
                              <number>1</number>
                             </property>
-                            <layout class="QHBoxLayout" name="bracketStartEndLayout">
+                            <item>
+<layout class="QHBoxLayout" name="bracketStartEndLayout">
                               <property name="spacing">
                                <number>1</number>
                               </property>
@@ -861,6 +862,7 @@
                                </widget>
                               </item>
                              </layout>
+</item>
                            </layout>
         </item>
         <item row="2" column="2">
