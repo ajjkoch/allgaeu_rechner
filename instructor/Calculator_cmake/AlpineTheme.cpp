@@ -339,9 +339,7 @@ void apply(QWidget *window)
             border: 2px solid #6b431f; border-top: 2px solid #f5d99e;
             border-bottom: 3px solid #39200e; border-radius: 11px;
             padding: 2px 8px;
-        }
-        QPushButton { background: transparent; border: none; padding: 1px; }
-        QWidget#alpineHeader, QWidget#alpineFooter { border: 2px solid #70451f; border-radius: 7px; }
+        }        QWidget#alpineHeader, QWidget#alpineFooter { border: 2px solid #70451f; border-radius: 7px; }
     )");
 
 
@@ -365,8 +363,8 @@ void apply(QWidget *window)
         }
         if (name == "pushButton_edx")
             button->setText("1/x");
+        button->setFont(QFont("Tahoma", 11));
         button->setMinimumHeight(30);
-        button->installEventFilter(new AlpineButtonPaintFilter(button));
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
         button->setAutoDefault(false);
