@@ -20,6 +20,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet"><string notr="true">QWidget#centralwidget { border-image: url(:/alpine/mid.jpg) 0 0 0 0 stretch stretch; }</string></property>
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
@@ -27,7 +28,8 @@
     </sizepolicy>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
+        <item><widget class="QLabel" name="alpineHeader"><property name="minimumSize"><size><width>0</width><height>72</height></size></property><property name="maximumSize"><size><width>16777215</width><height>88</height></size></property><property name="styleSheet"><string notr="true">QLabel { border-image: url(:/alpine/header.jpg) 0 0 0 0 stretch stretch; }</string></property></widget></item>
+<item>
      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" columnstretch="0,0,0,0">
       <property name="sizeConstraint">
        <enum>QLayout::SetNoConstraint</enum>
@@ -551,7 +553,8 @@ QPushButton:pressed {
          <string>mod</string>
         </property>
        </widget>
-      </item><item><widget class="QPushButton" name="pushButton_fact"><property name="text"><string>fak</string></property><property name="sizePolicy"><sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding"><horstretch>0</horstretch><verstretch>0</verstretch></sizepolicy></property><property name="focusPolicy"><enum>Qt::NoFocus</enum></property></widget></item></layout>
+      </item><item><widget class="QPushButton" name="pushButton_fact"><property name="text"><string>fak</string></property><property name="sizePolicy"><sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding"><horstretch>0</horstretch><verstretch>0</verstretch></sizepolicy></property><property name="focusPolicy"><enum>Qt::NoFocus</enum></property></widget></item>    <item><widget class="QLabel" name="alpineFooter"><property name="minimumSize"><size><width>0</width><height>38</height></size></property><property name="maximumSize"><size><width>16777215</width><height>54</height></size></property><property name="styleSheet"><string notr="true">QLabel { border-image: url(:/alpine/footer.jpg) 0 0 0 0 stretch stretch; }</string></property></widget></item>
+</layout>
 </item>
       <item row="5" column="3">
        <widget class="QPushButton" name="pushButton_erase_left">
