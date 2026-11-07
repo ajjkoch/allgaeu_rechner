@@ -171,7 +171,7 @@ void paintAlpineButton(QPushButton *button)
     Q_UNUSED(alpineFontId);
     // Use one consistent type size for all engraved text labels. The
     // button-specific drawing branches below continue to handle custom symbols.
-    QFont f("Bree Serif", 11, QFont::Bold);
+    QFont f("Tahoma", 11, QFont::Bold);
     f.setPointSizeF(f.pointSizeF() * contentScale);
     f.setItalic(function || name=="pushButton_changeDegreesMode");
     // Keep function labels crisp: no offset lettering or drop shadow.
@@ -204,7 +204,7 @@ void paintAlpineButton(QPushButton *button)
             radical.lineTo(cx + 19, cy - 9);
             painter.setPen(QPen(ink, 3.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter.drawPath(radical);
-            QFont radicandFont("Georgia", qMax(10, qRound(11 * contentScale)), QFont::Bold);
+            QFont radicandFont("Tahoma", 11, QFont::Bold);
             painter.setFont(radicandFont);
             painter.drawText(QRectF(cx-1, cy-8, 17, 18), Qt::AlignCenter, "x");
         } else if (name=="pushButton_pi") {
@@ -213,7 +213,7 @@ void paintAlpineButton(QPushButton *button)
             if (button->property("inverseRoot").toBool()) {
                 const qreal cx = r.center().x();
                 const qreal cy = r.center().y();
-                QFont indexFont("Georgia", qMax(9, qRound(9 * contentScale)), QFont::Bold);
+                QFont indexFont("Tahoma", 11, QFont::Bold);
                 painter.setFont(indexFont);
                 painter.drawText(QRectF(cx-23, cy-16, 15, 15), Qt::AlignCenter, "x");
                 QPainterPath radical;
@@ -223,7 +223,7 @@ void paintAlpineButton(QPushButton *button)
                 radical.lineTo(cx+22, cy-8);
                 painter.setPen(QPen(ink, 2.7, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
                 painter.drawPath(radical);
-                QFont radicandFont("Georgia", qMax(11, qRound(12 * contentScale)), QFont::Bold);
+                QFont radicandFont("Tahoma", 11, QFont::Bold);
                 painter.setFont(radicandFont);
                 painter.drawText(QRectF(cx+1, cy-7, 19, 19), Qt::AlignCenter, "y");
             } else {
