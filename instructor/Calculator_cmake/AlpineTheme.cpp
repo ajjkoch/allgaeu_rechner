@@ -58,11 +58,19 @@ void paintAlpineButton(QPushButton *button)
         painter.fillRect(r, QColor("#c58b50"));
     }
 
-    // Retain the existing key categories as subtle stains over the same wood.
+    // Distinguish key groups through restrained stains on the same wood texture.
+    // Digits keep the natural wood; operators are sage green, functions olive,
+    // constants warm honey, and navigation/control keys a muted blue-grey.
     QColor tint(0, 0, 0, 0);
-    if (role == "function" || role == "operator")
-        tint = QColor(132, 145, 65, 78);
-    else if (role == "utility" || role == "constant")
+    if (role == "operator")
+        tint = QColor(91, 128, 62, 112);
+    else if (role == "function")
+        tint = QColor(143, 145, 69, 88);
+    else if (role == "constant")
+        tint = QColor(246, 190, 105, 92);
+    else if (role == "control")
+        tint = QColor(92, 119, 133, 105);
+    else if (role == "utility")
         tint = QColor(246, 207, 145, 65);
     if (button->objectName() == "pushButton_clear")
         tint = QColor(174, 65, 43, 125);
@@ -174,7 +182,7 @@ void apply(QWidget *window)
         {"pushButton_4", "digit"}, {"pushButton_5", "digit"},
         {"pushButton_6", "digit"}, {"pushButton_7", "digit"},
         {"pushButton_8", "digit"}, {"pushButton_9", "digit"},
-        {"pushButton_pi", "digit"}, {"pushButton_sqrt", "operator"},
+        {"pushButton_pi", "constant"}, {"pushButton_sqrt", "operator"},
         {"pushButton_changeDegreesMode", "constant"},
         {"pushButton_sin", "function"}, {"pushButton_cos", "function"},
         {"pushButton_tan", "function"}, {"pushButton_log", "function"},
@@ -190,9 +198,9 @@ void apply(QWidget *window)
         {"pushButton_bracket_left", "utility"}, {"pushButton_bracket_right", "utility"},
         {"pushButton_bracket_right_end", "utility"},
         {"pushButton_bracket_left_start", "utility"},
-        {"pushButton_decimal", "utility"}, {"pushButton_cursor_left", "utility"},
-        {"pushButton_cursor_right", "utility"}, {"pushButton_history_back", "utility"},
-        {"pushButton_history_forward", "utility"}
+        {"pushButton_decimal", "utility"}, {"pushButton_cursor_left", "control"},
+        {"pushButton_cursor_right", "control"}, {"pushButton_history_back", "control"},
+        {"pushButton_history_forward", "control"}
     };
 
     // Each key gets a concise, engraved-looking symbol where that improves recognition.
@@ -241,8 +249,12 @@ void apply(QWidget *window)
             border-bottom: 3px solid #39200e; border-radius: 11px;
             padding: 2px 8px;
         }        QWidget#alpineHeader, QWidget#alpineFooter { border: 2px solid #70451f; border-radius: 7px; }
-    )");const auto buttons = window->findChildren<QPushButton *>();
+    )");
+    // Keep the filter owned by the window and paint every calculator key.
+    auto *paintFilter = new AlpineButtonPaintFilter(window);
+    const auto buttons = window->findChildren<QPushButton *>();
     for (QPushButton *button : buttons) {
+        button->installEventFilter(paintFilter);
         const QString name = button->objectName();
         if (labels.contains(name))
             button->setText(labels.value(name));
