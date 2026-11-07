@@ -276,11 +276,8 @@ void apply(QWidget *window)
         if (name == "pushButton_edx")
             button->setText("1/x");
         button->setFont(QFont("Tahoma", 11));
-        // Use the Designer grid for placement; fixed vertical policy prevents
-        // MinimumExpanding keys from stretching into neighbouring rows.
-        QSizePolicy policy = button->sizePolicy();
-        policy.setVerticalPolicy(QSizePolicy::Fixed);
-        button->setSizePolicy(policy);
+        // Keep the vertical size policy from Qt Designer. Only cap the
+        // button height; do not force all rows to a fixed-size packing.
         button->setMaximumHeight(28);
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
