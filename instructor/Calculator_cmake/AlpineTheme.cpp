@@ -106,7 +106,7 @@ void paintAlpineButton(QPushButton *button)
     const qreal contentScale = qBound(0.72, button->height() / 36.0, 1.0);
     static const int alpineFontId = QFontDatabase::addApplicationFont(":/alpine/BreeSerif-Regular.ttf");
     Q_UNUSED(alpineFontId);
-    QFont f("Bree Serif", 18, QFont::Bold);
+    QFont f("Bree Serif", 18, QFont::Black);
     f.setPointSizeF(f.pointSizeF() * contentScale);
     painter.setPen(ink);
     painter.setFont(f);
@@ -136,7 +136,7 @@ void paintAlpineButton(QPushButton *button)
             painter.setPen(QPen(ink, 3.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter.drawPath(radical);
             painter.restore();
-            QFont radicandFont("Bree Serif", 14, QFont::Bold);
+            QFont radicandFont("Bree Serif", 14, QFont::Black);
             painter.setFont(radicandFont);
             painter.drawText(QRectF(cx-1, cy-8, 17, 18), Qt::AlignCenter, "x");
         } else if (name=="pushButton_pi") {
@@ -146,7 +146,7 @@ void paintAlpineButton(QPushButton *button)
                 const qreal cx = r.center().x();
                 const qreal cy = r.center().y();
                 constexpr qreal inverseRadicalScale = 0.61; // approx. 22 px
-                QFont indexFont("Bree Serif", 14, QFont::Bold);
+                QFont indexFont("Bree Serif", 14, QFont::Black);
                 painter.setFont(indexFont);
                 painter.drawText(QRectF(cx-23, cy-16, 15, 15), Qt::AlignCenter, "x");
                 QPainterPath radical;
@@ -160,7 +160,7 @@ void paintAlpineButton(QPushButton *button)
                 painter.setPen(QPen(ink, 2.7, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
                 painter.drawPath(radical);
                 painter.restore();
-                QFont radicandFont("Bree Serif", 14, QFont::Bold);
+                QFont radicandFont("Bree Serif", 14, QFont::Black);
                 painter.setFont(radicandFont);
                 painter.drawText(QRectF(cx+1, cy-7, 19, 19), Qt::AlignCenter, "y");
             } else {
@@ -251,7 +251,7 @@ void apply(QWidget *window)
             padding: 2px 8px;
             font-family: "Bree Serif";
             font-size: 20pt;
-            font-weight: bold;
+            font-weight: 900;
         }
     )");
     // Keep the filter owned by the window and paint every calculator key.
@@ -268,7 +268,7 @@ void apply(QWidget *window)
             button->setToolTip(hints.value(name));
         if (name == "pushButton_edx")
             button->setText("1/x");
-        button->setFont(QFont("Bree Serif", 18, QFont::Bold));
+        button->setFont(QFont("Bree Serif", 18, QFont::Black));
         // Geometry and size policy are owned by mainwindow.ui / Qt Designer.
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
