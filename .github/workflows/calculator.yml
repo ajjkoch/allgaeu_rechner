@@ -10,6 +10,7 @@ on:
       - refactor_dreiteilung
       - extend_calculator
       - use_ui_file
+      - donation
     tags:
       - "v*"
     paths:
