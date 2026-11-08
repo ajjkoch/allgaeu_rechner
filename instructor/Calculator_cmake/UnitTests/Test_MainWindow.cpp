@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026 Koch, Achim Johannes Josef.
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <QtTest>
 
 #include <cmath>
