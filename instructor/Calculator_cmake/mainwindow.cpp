@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026 Koch, Achim Johannes Josef.
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "AlpineTheme.h"
@@ -23,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_hpos(0)
 {
     ui->setupUi(this);
+    setWindowTitle(QStringLiteral("AllgäuRechner — © 2026 Koch, Achim Johannes Josef"));
 
     AlpineTheme::apply(this);
     ui->textEdit->installEventFilter(this);
