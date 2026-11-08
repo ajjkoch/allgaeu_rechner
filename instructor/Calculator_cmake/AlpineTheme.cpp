@@ -101,12 +101,12 @@ void paintAlpineButton(QPushButton *button)
     const bool function = role=="function" || trig;
     const QColor ink = name=="pushButton_equals" ? QColor("#fff3cf") :
                        name=="pushButton_clear" ? QColor("#431b12") : QColor("#291307");
-    // One consistent, bold Bree Serif face and size for every button label.
-    // Scale only with available button height, never by button category.
-    const qreal contentScale = qBound(0.72, button->height() / 36.0, 1.0);
+    // Keep button labels large and consistent; only apply a small reduction
+    // when a button is unusually short.
+    const qreal contentScale = qBound(0.90, button->height() / 32.0, 1.0);
     static const int alpineFontId = QFontDatabase::addApplicationFont(":/alpine/BreeSerif-Regular.ttf");
     Q_UNUSED(alpineFontId);
-    QFont f("Bree Serif", 18, QFont::Black);
+    QFont f("Bree Serif", 21, QFont::Black);
     f.setPointSizeF(f.pointSizeF() * contentScale);
     painter.setPen(ink);
     painter.setFont(f);
