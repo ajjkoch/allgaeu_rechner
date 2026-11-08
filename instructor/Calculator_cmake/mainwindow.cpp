@@ -59,9 +59,15 @@ MainWindow::MainWindow(QWidget *parent)
         QMessageBox dialog(this);
         dialog.setIcon(QMessageBox::Information);
         dialog.setWindowTitle(tr("AllgäuRechner unterstützen"));
-        dialog.setText(tr("Der AllgäuRechner bleibt kostenlos und werbefrei.\\n\\n"
-                          "Wenn dir das Projekt gefällt, kannst du seine Weiterentwicklung "
-                          "freiwillig unterstützen. Du entscheidest selbst über den Betrag."));
+        dialog.setText(tr("Der AllgäuRechner bleibt kostenlos und werbefrei.\n\n"
+                          "Seine Weiterentwicklung erfordert jedoch viel Zeit und finanzielle "
+                          "Mittel – zum Beispiel für Entwicklungs-Hardware und KI-Werkzeuge.\n\n"
+                          "Deine freiwillige Unterstützung hilft mir, diese Arbeit und die "
+                          "Weiterentwicklung überhaupt erst möglich zu machen, statt meine "
+                          "Zeit vollständig für eine andere Erwerbstätigkeit aufbringen zu müssen.\n\n"
+                          "Wenn dir der AllgäuRechner gefällt und du seine Zukunft unterstützen "
+                          "möchtest, freue ich mich über einen Beitrag. Jeder Beitrag zählt. "
+                          "Vielen Dank!"));
         auto *donate = dialog.addButton(tr("Mit PayPal unterstützen"), QMessageBox::AcceptRole);
         dialog.addButton(tr("Abbrechen"), QMessageBox::RejectRole);
         dialog.exec();
