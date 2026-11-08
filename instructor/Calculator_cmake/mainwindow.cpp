@@ -43,14 +43,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto *donationButton = new QToolButton(ui->alpineHeader);
     donationButton->setObjectName(QStringLiteral("donationButton"));
-    donationButton->setText(QStringLiteral("✿"));
+    donationButton->setText(tr("Unterstützen"));
     donationButton->setToolTip(tr("AllgäuRechner unterstützen"));
     donationButton->setAccessibleName(tr("AllgäuRechner unterstützen"));
-    donationButton->setFixedSize(38, 38);
+    donationButton->setFixedSize(112, 34);
     donationButton->setCursor(Qt::PointingHandCursor);
     donationButton->setStyleSheet(QStringLiteral(
         "QToolButton { background: rgba(246, 240, 217, 225); color: #51351f;"
-        " border: 1px solid #6b431f; border-radius: 19px; font-size: 23px;"
+        " border: 1px solid #6b431f; border-radius: 9px; font-size: 14px;"
         " font-weight: bold; }"
         "QToolButton:pressed { background: rgba(218, 198, 158, 245); }"));
     headerLayout->addWidget(donationButton);
