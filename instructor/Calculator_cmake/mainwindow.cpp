@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026 Koch, Achim Johannes Josef.
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QPushButton>
@@ -547,6 +552,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_hpos(0)
 {
     ui->setupUi(this);
+    setWindowTitle(QStringLiteral("AllgäuRechner — © 2026 Koch, Achim Johannes Josef"));
 
     // Split the existing pi key vertically and place Euler's constant below it.
     auto *piButton = ui->pushButton_pi;
