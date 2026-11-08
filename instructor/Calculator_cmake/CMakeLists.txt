@@ -1,6 +1,13 @@
+## Copyright (c) 2026 Koch, Achim Johannes Josef — MIT License
+
 cmake_minimum_required(VERSION 3.16)
 
-project(Calculator VERSION 1.0.0 DESCRIPTION "Qt Calculator" LANGUAGES CXX)
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../../VERSION" CALCULATOR_VERSION LIMIT_COUNT 1)
+if(NOT CALCULATOR_VERSION MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+$")
+    message(FATAL_ERROR "VERSION must contain MAJOR.MINOR.PATCH")
+endif()
+
+project(Calculator VERSION ${CALCULATOR_VERSION} DESCRIPTION "Qt Calculator" LANGUAGES CXX)
 
 remove_definitions(CONSOLE_TEST)
 
