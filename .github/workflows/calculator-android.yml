@@ -8,7 +8,6 @@ on:
       - refactor_dreiteilung
       - extend_calculator
       - use_ui_file
-      - use_ui_file
     tags:
       - "v*"
     paths:
@@ -18,7 +17,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   android-arm64:
