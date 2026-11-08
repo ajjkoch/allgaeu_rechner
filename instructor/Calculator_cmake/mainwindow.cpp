@@ -16,7 +16,6 @@
 #include <QMessageBox>
 #include <QUrl>
 #include <QTimer>
-#include <QAbstractButton>
 
 
 
@@ -58,49 +57,40 @@ MainWindow::MainWindow(QWidget *parent)
     headerLayout->addWidget(donationButton);
 
     connect(donationButton, &QToolButton::clicked, this, [this]() {
-        // Use a non-modal message box so Android can close it before launching
-        // the external PayPal browser activity.
-        auto *dialog = new QMessageBox(this);
-        dialog->setAttribute(Qt::WA_DeleteOnClose);
-        dialog->setIcon(QMessageBox::Information);
-        dialog->setWindowTitle(tr("AllgäuRechner unterstützen"));
-        dialog->setText(tr("Der AllgäuRechner bleibt kostenlos und werbefrei.\n\n"
-                           "Seine Weiterentwicklung erfordert jedoch viel Zeit und finanzielle "
-                           "Mittel – zum Beispiel für Entwicklungs-Hardware und KI-Werkzeuge.\n\n"
-                           "Deine freiwillige Unterstützung hilft mir, diese Arbeit und die "
-                           "Weiterentwicklung überhaupt erst möglich zu machen, statt meine "
-                           "Zeit vollständig für eine andere Erwerbstätigkeit aufbringen zu müssen.\n\n"
-                           "Wenn dir der AllgäuRechner gefällt und du seine Zukunft unterstützen "
-                           "möchtest, freue ich mich über einen Beitrag. Jeder Beitrag zählt. "
-                           "Vielen Dank!"));
-        auto *donate = dialog->addButton(tr("Mit PayPal unterstützen"), QMessageBox::AcceptRole);
-        dialog->addButton(tr("Abbrechen"), QMessageBox::RejectRole);
-
+        // Keep the dialog modal so its buttons remain reliably interactive on Android.
+        QMessageBox dialog(this);
+        dialog.setIcon(QMessageBox::Information);
+        dialog.setWindowTitle(tr("AllgäuRechner unterstützen"));
+        dialog.setText(tr("Der AllgäuRechner bleibt kostenlos und werbefrei.\n\n"
+                          "Seine Weiterentwicklung erfordert jedoch viel Zeit und finanzielle "
+                          "Mittel – zum Beispiel für Entwicklungs-Hardware und KI-Werkzeuge.\n\n"
+                          "Deine freiwillige Unterstützung hilft mir, diese Arbeit und die "
+                          "Weiterentwicklung überhaupt erst möglich zu machen, statt meine "
+                          "Zeit vollständig für eine andere Erwerbstätigkeit aufbringen zu müssen.\n\n"
+                          "Wenn dir der AllgäuRechner gefällt und du seine Zukunft unterstützen "
+                          "möchtest, freue ich mich über einen Beitrag. Jeder Beitrag zählt. "
+                          "Vielen Dank!"));
+        auto *donate = dialog.addButton(tr("Mit PayPal unterstützen"), QMessageBox::AcceptRole);
+        dialog.addButton(tr("Abbrechen"), QMessageBox::RejectRole);
         const QUrl paypalUrl(QStringLiteral(
             "https://www.paypal.com/cgi-bin/webscr?cmd=_donations"
             "&business=ajjkoch%40hotmail.de"
             "&item_name=Allg%C3%A4uRechner"
             "&currency_code=EUR&lc=DE"));
 
-        connect(dialog, &QMessageBox::buttonClicked, this,
-                [this, dialog, donate, paypalUrl](QAbstractButton *button) {
-            const bool openPayPal = button == donate;
-            dialog->close();
+        dialog.exec();
 
-            if (openPayPal) {
-                // Start the external activity only after the dialog has closed.
-                QTimer::singleShot(0, this, [this, paypalUrl]() {
-                    if (!QDesktopServices::openUrl(paypalUrl)) {
-                        QMessageBox::warning(this,
-                            tr("PayPal kann nicht geöffnet werden"),
-                            tr("Der PayPal-Link konnte nicht geöffnet werden. "
-                               "Bitte prüfe, ob ein Browser installiert ist."));
-                    }
-                });
-            }
-        });
-
-        dialog->open();
+        // Do not start the external Android activity until exec() has returned.
+        if (dialog.clickedButton() == donate) {
+            QTimer::singleShot(0, this, [this, paypalUrl]() {
+                if (!QDesktopServices::openUrl(paypalUrl)) {
+                    QMessageBox::warning(this,
+                        tr("PayPal kann nicht geöffnet werden"),
+                        tr("Der PayPal-Link konnte nicht geöffnet werden. "
+                           "Bitte prüfe, ob ein Browser installiert ist."));
+                }
+            });
+        }
     });
 
     AlpineTheme::apply(this);
