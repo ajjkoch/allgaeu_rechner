@@ -87,6 +87,24 @@ jobs:
             -DANDROID_ABI=arm64-v8a \
             -DANDROID_PLATFORM=android-23
 
+      - name: Set Gradle download timeout
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -d '' WRAPPER_FILES < <(find "$QT_ROOT_DIR" build/android-arm64 -type f -name gradle-wrapper.properties -print0)
+          if ((${#WRAPPER_FILES[@]} == 0)); then
+            echo "No Gradle wrapper properties found before APK build; Qt may generate them during the build."
+          else
+            for file in "${WRAPPER_FILES[@]}"; do
+              if grep -q '^networkTimeout=' "$file"; then
+                sed -i 's/^networkTimeout=.*/networkTimeout=17000/' "$file"
+              else
+                printf '\\nnetworkTimeout=17000\\n' >> "$file"
+              fi
+              echo "Set Gradle wrapper timeout to 17000 ms in $file"
+            done
+          fi
+
       - name: Build APK
         run: cmake --build build/android-arm64 --target apk --parallel
 
