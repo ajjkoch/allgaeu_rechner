@@ -321,12 +321,9 @@ void MainWindow::equals_pressed()
         m_history.append(m_strExpression);
 
         double result = calc.evaluate(m_strExpression.toStdString());
-        if (std::floor(result) == result) {
-            m_strExpression = QString::number(result, 'f', 0); // Display as integer
-        }
-        else {
-            m_strExpression = QString::number(result); // Display with full precision
-        }
+        // Switch to scientific notation for very large or very small values.
+        // This keeps results such as 50! readable in the calculator display.
+        m_strExpression = QString::number(result, 'g', 15);
 
         m_history.append(m_strExpression);
         m_hpos = m_history.size()-1;
