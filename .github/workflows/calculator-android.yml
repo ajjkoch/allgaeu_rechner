@@ -109,6 +109,10 @@ jobs:
         env:
           APK_SOURCE: ${{ steps.apk.outputs.source }}
           APK_OUTPUT: ${{ steps.apk.outputs.path }}
+          ANDROID_SIGNING_KEYSTORE_BASE64: ${{ secrets.ANDROID_SIGNING_KEYSTORE_BASE64 }}
+          ANDROID_SIGNING_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_SIGNING_KEYSTORE_PASSWORD }}
+          ANDROID_SIGNING_KEY_ALIAS: ${{ secrets.ANDROID_SIGNING_KEY_ALIAS }}
+          ANDROID_SIGNING_KEY_PASSWORD: ${{ secrets.ANDROID_SIGNING_KEY_PASSWORD }}
         run: |
           set -euo pipefail
 
@@ -116,27 +120,45 @@ jobs:
           ZIPALIGN="$BUILD_TOOLS/zipalign"
           APKSIGNER="$BUILD_TOOLS/apksigner"
 
-          if [ ! -x "$ZIPALIGN" ] || [ ! -x "$APKSIGNER" ]; then
+          if [[ ! -x "$ZIPALIGN" || ! -x "$APKSIGNER" ]]; then
             echo "Android zipalign/apksigner tools not found in $BUILD_TOOLS" >&2
             exit 1
           fi
 
-          keytool -genkeypair -noprompt \
-            -keystore "$RUNNER_TEMP/calculator-debug.keystore" \
-            -storetype PKCS12 \
-            -storepass android \
-            -alias androiddebugkey \
-            -keypass android \
-            -keyalg RSA -keysize 2048 -validity 10000 \
-            -dname "CN=Android Debug,O=Android,C=US"
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            # Releases must use the same persistent signing key across versions.
+            : "${ANDROID_SIGNING_KEYSTORE_BASE64:?Missing repository secret ANDROID_SIGNING_KEYSTORE_BASE64}"
+            : "${ANDROID_SIGNING_KEYSTORE_PASSWORD:?Missing repository secret ANDROID_SIGNING_KEYSTORE_PASSWORD}"
+            : "${ANDROID_SIGNING_KEY_ALIAS:?Missing repository secret ANDROID_SIGNING_KEY_ALIAS}"
+            : "${ANDROID_SIGNING_KEY_PASSWORD:?Missing repository secret ANDROID_SIGNING_KEY_PASSWORD}"
+            KEYSTORE="$RUNNER_TEMP/allgaeu-release.keystore"
+            printf '%s' "$ANDROID_SIGNING_KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE"
+            STORE_PASSWORD="$ANDROID_SIGNING_KEYSTORE_PASSWORD"
+            KEY_ALIAS="$ANDROID_SIGNING_KEY_ALIAS"
+            KEY_PASSWORD="$ANDROID_SIGNING_KEY_PASSWORD"
+          else
+            # Branch builds use a temporary debug key and are not release-signed.
+            KEYSTORE="$RUNNER_TEMP/calculator-debug.keystore"
+            keytool -genkeypair -noprompt \
+              -keystore "$KEYSTORE" \
+              -storetype PKCS12 \
+              -storepass android \
+              -alias androiddebugkey \
+              -keypass android \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -dname "CN=Android Debug,O=Android,C=US"
+            STORE_PASSWORD=android
+            KEY_ALIAS=androiddebugkey
+            KEY_PASSWORD=android
+          fi
 
           "$ZIPALIGN" -f -p 4 "$APK_SOURCE" "$RUNNER_TEMP/calculator-aligned.apk"
           "$APKSIGNER" sign \
-            --ks "$RUNNER_TEMP/calculator-debug.keystore" \
+            --ks "$KEYSTORE" \
             --ks-type PKCS12 \
-            --ks-key-alias androiddebugkey \
-            --ks-pass pass:android \
-            --key-pass pass:android \
+            --ks-key-alias "$KEY_ALIAS" \
+            --ks-pass "pass:$STORE_PASSWORD" \
+            --key-pass "pass:$KEY_PASSWORD" \
             --out "$APK_OUTPUT" \
             "$RUNNER_TEMP/calculator-aligned.apk"
 
