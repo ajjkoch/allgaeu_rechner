@@ -44,10 +44,6 @@ GitHub Actions workflows are located in `.github/workflows/`:
 
 - `calculator-android.yml` – Android ARM64 APK build
 
-## License
-
-See the repository license information.
-
 ## Version and Releases
 
 The current application version is maintained in `VERSION`. Releases are created
@@ -62,3 +58,16 @@ Copyright © 2026 **Koch, Achim Johannes Josef**.
 AllgäuRechner is distributed under the [MIT License](LICENSE). See
 [COPYRIGHT.md](COPYRIGHT.md) for the project copyright notice. Third-party
 components and bundled assets remain subject to their respective licenses.
+
+### Android release signing
+
+Before creating a version tag, configure these GitHub Actions repository secrets
+with a persistent Android release keystore:
+
+- `ANDROID_SIGNING_KEYSTORE_BASE64` – Base64-encoded PKCS#12 keystore
+- `ANDROID_SIGNING_KEYSTORE_PASSWORD` – keystore password
+- `ANDROID_SIGNING_KEY_ALIAS` – key alias
+- `ANDROID_SIGNING_KEY_PASSWORD` – key password
+
+Tagged releases fail safely if these secrets are missing. Ordinary branch builds
+continue to use a temporary debug key.
