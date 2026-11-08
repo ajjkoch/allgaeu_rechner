@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Calculator VERSION 1.0.0.0 DESCRIPTION "Qt Calculator" LANGUAGES CXX)
+project(Calculator VERSION 1.0.0 DESCRIPTION "Qt Calculator" LANGUAGES CXX)
 
 remove_definitions(CONSOLE_TEST)
 
