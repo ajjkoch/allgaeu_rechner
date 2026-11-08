@@ -10,6 +10,11 @@
 #include <QTextBlockFormat>
 #include <QSignalBlocker>
 #include <QKeyEvent>
+#include <QToolButton>
+#include <QHBoxLayout>
+#include <QDesktopServices>
+#include <QMessageBox>
+#include <QUrl>
 
 
 
@@ -29,6 +34,47 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle(QStringLiteral("AllgäuRechner — © 2026 Koch, Achim Johannes Josef"));
+
+    // A discreet flower button in the existing alpine header opens voluntary support.
+    auto *headerLayout = new QHBoxLayout(ui->alpineHeader);
+    headerLayout->setContentsMargins(0, 7, 8, 0);
+    headerLayout->setSpacing(0);
+    headerLayout->setAlignment(Qt::AlignRight | Qt::AlignTop);
+
+    auto *donationButton = new QToolButton(ui->alpineHeader);
+    donationButton->setObjectName(QStringLiteral("donationButton"));
+    donationButton->setText(QStringLiteral("✿"));
+    donationButton->setToolTip(tr("AllgäuRechner unterstützen"));
+    donationButton->setAccessibleName(tr("AllgäuRechner unterstützen"));
+    donationButton->setFixedSize(38, 38);
+    donationButton->setCursor(Qt::PointingHandCursor);
+    donationButton->setStyleSheet(QStringLiteral(
+        "QToolButton { background: rgba(246, 240, 217, 225); color: #51351f;"
+        " border: 1px solid #6b431f; border-radius: 19px; font-size: 23px;"
+        " font-weight: bold; }"
+        "QToolButton:pressed { background: rgba(218, 198, 158, 245); }"));
+    headerLayout->addWidget(donationButton);
+
+    connect(donationButton, &QToolButton::clicked, this, [this]() {
+        QMessageBox dialog(this);
+        dialog.setIcon(QMessageBox::Information);
+        dialog.setWindowTitle(tr("AllgäuRechner unterstützen"));
+        dialog.setText(tr("Der AllgäuRechner bleibt kostenlos und werbefrei.\\n\\n"
+                          "Wenn dir das Projekt gefällt, kannst du seine Weiterentwicklung "
+                          "freiwillig unterstützen. Du entscheidest selbst über den Betrag."));
+        auto *donate = dialog.addButton(tr("Mit PayPal unterstützen"), QMessageBox::AcceptRole);
+        dialog.addButton(tr("Abbrechen"), QMessageBox::RejectRole);
+        dialog.exec();
+
+        if (dialog.clickedButton() == donate) {
+            const QUrl paypalUrl(QStringLiteral(
+                "https://www.paypal.com/cgi-bin/webscr?cmd=_donations"
+                "&business=ajjkoch%40hotmail.de"
+                "&item_name=Allg%C3%A4uRechner"
+                "&currency_code=EUR&lc=DE"));
+            QDesktopServices::openUrl(paypalUrl);
+        }
+    });
 
     AlpineTheme::apply(this);
     ui->textEdit->installEventFilter(this);
