@@ -14,7 +14,6 @@
 #include <QHBoxLayout>
 #include <QDesktopServices>
 #include <QMessageBox>
-#include <QAbstractButton>
 #include <QUrl>
 #include <QTimer>
 
@@ -72,22 +71,17 @@ MainWindow::MainWindow(QWidget *parent)
                           "möchtest, freue ich mich über einen Beitrag. Jeder Beitrag zählt. "
                           "Vielen Dank!"));
         auto *donate = dialog.addButton(tr("Mit PayPal unterstützen"), QMessageBox::AcceptRole);
-        auto *cancel = dialog.addButton(tr("Abbrechen"), QMessageBox::RejectRole);
-
-        // Explicitly wire both actions: Cancel must close the dialog immediately
-        // and must never trigger the external PayPal activity.
-        connect(cancel, &QAbstractButton::clicked, &dialog, &QDialog::reject);
-        connect(donate, &QAbstractButton::clicked, &dialog, &QDialog::accept);
+        dialog.addButton(tr("Abbrechen"), QMessageBox::RejectRole);
         const QUrl paypalUrl(QStringLiteral(
             "https://www.paypal.com/cgi-bin/webscr?cmd=_donations"
             "&business=ajjkoch%40hotmail.de"
             "&item_name=Allg%C3%A4uRechner"
             "&currency_code=EUR&lc=DE"));
 
-        const int result = dialog.exec();
+        dialog.exec();
 
-        // Only the explicitly accepted PayPal action starts the browser.
-        if (result == QDialog::Accepted) {
+        // QMessageBox closes itself for either button; only PayPal starts the browser.
+        if (dialog.clickedButton() == donate) {
             QTimer::singleShot(0, this, [this, paypalUrl]() {
                 if (!QDesktopServices::openUrl(paypalUrl)) {
                     QMessageBox::warning(this,
