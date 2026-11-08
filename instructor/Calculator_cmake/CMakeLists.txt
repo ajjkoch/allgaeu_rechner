@@ -60,13 +60,17 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 )
 
 if(ANDROID)
+    # Android requires a monotonically increasing integer version code.
+    math(EXPR CALCULATOR_VERSION_CODE
+        "${PROJECT_VERSION_MAJOR} * 10000 + ${PROJECT_VERSION_MINOR} * 100 + ${PROJECT_VERSION_PATCH}")
+
     set_target_properties(${PROJECT_NAME} PROPERTIES
         QT_ANDROID_PACKAGE_NAME "de.ajjkoch.calculator"
         QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android"
         QT_ANDROID_MIN_SDK_VERSION 23
         QT_ANDROID_TARGET_SDK_VERSION 35
         QT_ANDROID_VERSION_NAME "${PROJECT_VERSION}"
-        QT_ANDROID_VERSION_CODE 3
+        QT_ANDROID_VERSION_CODE ${CALCULATOR_VERSION_CODE}
     )
 endif()
 
