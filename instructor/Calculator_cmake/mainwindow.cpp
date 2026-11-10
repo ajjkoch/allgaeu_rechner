@@ -569,37 +569,36 @@ QString MainWindow::formatResult(double result) const
 /** @brief Opens and persists the decimal precision setting. */
 void MainWindow::decimalPlaces_pressed()
 {
-    // Use an explicit dialog instead of QInputDialog's convenience wrapper.
-    // Its controls belong to the dialog and receive input independently from
-    // the calculator's keypad and its custom button-paint event filters.
-    QDialog dialog(this);
-    dialog.setWindowTitle(tr("Nachkommastellen"));
-    dialog.setWindowModality(Qt::ApplicationModal);
-    dialog.setModal(true);
+    // Android does not reliably support nested event loops from QDialog::exec().
+    // Open asynchronously so touch events continue through the normal Qt loop.
+    auto *dialog = new QDialog(this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->setWindowTitle(tr("Nachkommastellen"));
+    dialog->setWindowModality(Qt::ApplicationModal);
 
-    auto *layout = new QVBoxLayout(&dialog);
-    auto *label = new QLabel(tr("Anzahl der Nachkommastellen (0–15):"), &dialog);
-    auto *spinBox = new QSpinBox(&dialog);
+    auto *layout = new QVBoxLayout(dialog);
+    auto *label = new QLabel(tr("Anzahl der Nachkommastellen (0–15):"), dialog);
+    auto *spinBox = new QSpinBox(dialog);
     spinBox->setRange(0, 15);
     spinBox->setValue(m_decimalPlaces);
     spinBox->setFocusPolicy(Qt::StrongFocus);
     spinBox->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
 
     auto *buttons = new QDialogButtonBox(
-        QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog);
+        QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
     buttons->setFocusPolicy(Qt::StrongFocus);
     layout->addWidget(label);
     layout->addWidget(spinBox);
     layout->addWidget(buttons);
 
-    connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
-    connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+    connect(buttons, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
+    connect(buttons, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
+    connect(dialog, &QDialog::accepted, this, [this, spinBox]() {
+        m_decimalPlaces = spinBox->value();
+        QSettings settings("AllgaeuRechner", "Calculator");
+        settings.setValue("decimalPlaces", m_decimalPlaces);
+    });
 
+    dialog->open();
     spinBox->setFocus(Qt::OtherFocusReason);
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-
-    m_decimalPlaces = spinBox->value();
-    QSettings settings("AllgaeuRechner", "Calculator");
-    settings.setValue("decimalPlaces", m_decimalPlaces);
 }
