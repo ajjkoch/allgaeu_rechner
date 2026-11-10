@@ -12,8 +12,10 @@
 #include <QKeyEvent>
 #include <QToolButton>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QFrame>
+#include <QLabel>
 #include <QDesktopServices>
-#include <QMessageBox>
 #include <QUrl>
 #include <QTimer>
 
@@ -57,40 +59,70 @@ MainWindow::MainWindow(QWidget *parent)
     headerLayout->addWidget(donationButton);
 
     connect(donationButton, &QToolButton::clicked, this, [this]() {
-        // Keep the dialog modal so its buttons remain reliably interactive on Android.
-        QMessageBox dialog(this);
-        dialog.setIcon(QMessageBox::Information);
-        dialog.setWindowTitle(tr("AllgäuRechner unterstützen"));
-        dialog.setText(tr("Der AllgäuRechner bleibt kostenlos und werbefrei.\n\n"
-                          "Seine Weiterentwicklung erfordert jedoch viel Zeit und finanzielle "
-                          "Mittel – zum Beispiel für Entwicklungs-Hardware und KI-Werkzeuge.\n\n"
-                          "Deine freiwillige Unterstützung hilft mir, diese Arbeit und die "
-                          "Weiterentwicklung überhaupt erst möglich zu machen, statt meine "
-                          "Zeit vollständig für eine andere Erwerbstätigkeit aufbringen zu müssen.\n\n"
-                          "Wenn dir der AllgäuRechner gefällt und du seine Zukunft unterstützen "
-                          "möchtest, freue ich mich über einen Beitrag. Jeder Beitrag zählt. "
-                          "Vielen Dank!"));
-        auto *donate = dialog.addButton(tr("Mit PayPal unterstützen"), QMessageBox::AcceptRole);
-        dialog.addButton(tr("Abbrechen"), QMessageBox::RejectRole);
-        const QUrl paypalUrl(QStringLiteral(
-            "https://www.paypal.com/cgi-bin/webscr?cmd=_donations"
-            "&business=ajjkoch%40hotmail.de"
-            "&item_name=Allg%C3%A4uRechner"
-            "&currency_code=EUR&lc=DE"));
+        // A real overlay above the complete calculator area, following the
+        // working precision-overlay implementation in use_ui_file.
+        if (!m_donationOverlay) {
+            m_donationOverlay = new QWidget(ui->centralwidget);
+            m_donationOverlay->setObjectName(QStringLiteral("donationOverlay"));
+            m_donationOverlay->setStyleSheet(QStringLiteral(
+                "QWidget#donationOverlay { background: rgba(20, 12, 6, 170); }"));
 
-        dialog.exec();
+            auto *overlayLayout = new QVBoxLayout(m_donationOverlay);
+            overlayLayout->setContentsMargins(16, 16, 16, 16);
+            overlayLayout->addStretch();
 
-        // QMessageBox closes itself for either button; only PayPal starts the browser.
-        if (dialog.clickedButton() == donate) {
-            QTimer::singleShot(0, this, [this, paypalUrl]() {
-                if (!QDesktopServices::openUrl(paypalUrl)) {
-                    QMessageBox::warning(this,
-                        tr("PayPal kann nicht geöffnet werden"),
-                        tr("Der PayPal-Link konnte nicht geöffnet werden. "
-                           "Bitte prüfe, ob ein Browser installiert ist."));
-                }
+            auto *panel = new QFrame(m_donationOverlay);
+            panel->setObjectName(QStringLiteral("donationPanel"));
+            panel->setMaximumWidth(360);
+            panel->setStyleSheet(QStringLiteral(
+                "QFrame#donationPanel { background: #f6f0d9; border: 2px solid #6b431f; border-radius: 10px; }"
+                "QFrame#donationPanel QLabel { color: #28190c; border: none; font-size: 15px; }"
+                "QFrame#donationPanel QPushButton { color: #28190c; background: #e3c99e; border: 1px solid #6b431f; border-radius: 5px; padding: 10px 6px; font-size: 14px; font-weight: bold; }"));
+
+            auto *panelLayout = new QVBoxLayout(panel);
+            panelLayout->setSpacing(14);
+
+            auto *message = new QLabel(
+                tr("Der AllgäuRechner bleibt kostenlos und werbefrei.\n\n"
+                   "Seine Weiterentwicklung erfordert jedoch viel Zeit und finanzielle "
+                   "Mittel – zum Beispiel für Entwicklungs-Hardware und KI-Werkzeuge.\n\n"
+                   "Deine freiwillige Unterstützung hilft mir, diese Arbeit und die "
+                   "Weiterentwicklung überhaupt erst möglich zu machen, statt meine "
+                   "Zeit vollständig für eine andere Erwerbstätigkeit aufbringen zu müssen.\n\n"
+                   "Wenn dir der AllgäuRechner gefällt und du seine Zukunft unterstützen "
+                   "möchtest, freue ich mich über einen Beitrag. Jeder Beitrag zählt. "
+                   "Vielen Dank!"), panel);
+            message->setWordWrap(true);
+            panelLayout->addWidget(message);
+
+            auto *buttonLayout = new QHBoxLayout();
+            auto *cancelButton = new QPushButton(tr("Abbrechen"), panel);
+            auto *donateButton = new QPushButton(tr("Mit PayPal unterstützen"), panel);
+            buttonLayout->addWidget(cancelButton);
+            buttonLayout->addWidget(donateButton);
+            panelLayout->addLayout(buttonLayout);
+
+            overlayLayout->addWidget(panel, 0, Qt::AlignHCenter);
+            overlayLayout->addStretch();
+
+            connect(cancelButton, &QPushButton::clicked,
+                    m_donationOverlay, &QWidget::hide);
+            connect(donateButton, &QPushButton::clicked, this, [this]() {
+                m_donationOverlay->hide();
+                const QUrl paypalUrl(QStringLiteral(
+                    "https://www.paypal.com/cgi-bin/webscr?cmd=_donations"
+                    "&business=ajjkoch%40hotmail.de"
+                    "&item_name=Allg%C3%A4uRechner"
+                    "&currency_code=EUR&lc=DE"));
+                QTimer::singleShot(0, this, [paypalUrl]() {
+                    QDesktopServices::openUrl(paypalUrl);
+                });
             });
         }
+
+        m_donationOverlay->setGeometry(ui->centralwidget->rect());
+        m_donationOverlay->raise();
+        m_donationOverlay->show();
     });
 
     AlpineTheme::apply(this);
