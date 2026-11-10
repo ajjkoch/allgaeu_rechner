@@ -43,7 +43,7 @@ void paintAlpineButton(QPushButton *button)
 {
     QPainter painter(button);
     painter.setRenderHint(QPainter::Antialiasing);
-    const QRectF r = button->rect().adjusted(1.5, 1.5, -1.5, -2.5);
+    const QRectF r = QRectF(button->rect()).adjusted(1.5, 1.5, -1.5, -2.5);
     const QString role = button->property("role").toString();
     const bool pressed = button->isDown();
 
