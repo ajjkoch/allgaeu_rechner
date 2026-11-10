@@ -6,9 +6,6 @@ on:
   push:
     branches:
       - main
-      - refactor_design
-      - refactor_dreiteilung
-      - extend_calculator
       - use_ui_file
     tags:
       - "v*"
