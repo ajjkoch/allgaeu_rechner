@@ -313,6 +313,9 @@ private:
                         throw std::domain_error("Modulo by zero");
                     }
                     left = checked(std::fmod(left, right));
+                } else if (consumeWord("nCr")) {
+                    const double k = parseUnary();
+                    left = checked(binomialCoefficient(left, k));
                 } else if (consumeWord("root")) {
                     // "y root x" means the x-th root of y.
                     const double index = parseUnary();
@@ -534,6 +537,44 @@ private:
             }
 
             throw std::invalid_argument("Unknown function: " + name);
+        }
+
+        /** @brief Calculates the binomial coefficient n choose k.
+         * @throws std::domain_error unless n and k are non-negative integers with k <= n.
+         * @throws std::length_error when the calculation would require too many iterations.
+         * @throws std::overflow_error when the result exceeds the supported numeric range.
+         */
+        static double binomialCoefficient(double n, double k)
+        {
+            if (n < 0.0 || k < 0.0 ||
+                std::floor(n) != n || std::floor(k) != k) {
+                throw std::domain_error("nCr requires non-negative integers");
+            }
+            if (k > n) {
+                throw std::domain_error("nCr requires k <= n");
+            }
+
+            // Above 2^53-1, double can no longer represent every integer exactly.
+            constexpr double maxExactInteger = 9007199254740991.0;
+            if (n > maxExactInteger) {
+                throw std::overflow_error("nCr argument is out of range");
+            }
+
+            // Use symmetry and the multiplicative formula instead of factorials:
+            // this avoids overflowing intermediate factorials for valid results.
+            const double iterations = k < n - k ? k : n - k;
+            if (iterations > 100000.0) {
+                throw std::length_error("nCr calculation exceeds supported limit");
+            }
+
+            double result = 1.0;
+            const int count = static_cast<int>(iterations);
+            for (int i = 1; i <= count; ++i) {
+                result *= (n - iterations + static_cast<double>(i)) /
+                          static_cast<double>(i);
+                result = checked(result);
+            }
+            return result;
         }
 
         /** @brief Validates an inverse-trigonometric argument in the interval [-1, 1].

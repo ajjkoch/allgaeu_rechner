@@ -35,6 +35,7 @@ private slots:
     void squareRootAndPower();
     void inverseSquareUsesSquareRootKey();
     void factorialButton();
+    void binomialCoefficientButton();
     void inversePowerUsesNthRoot();
     void tangentInDegrees();
     void radiansMode();
@@ -1685,6 +1686,34 @@ void CalculatorGuiTests::inverseSquareUsesSquareRootKey()
 
     QTest::mouseClick(inverse, Qt::LeftButton);
     QVERIFY(!squareRoot->property("inverseSquare").toBool());
+}
+
+void CalculatorGuiTests::binomialCoefficientButton()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *five = window.findChild<QPushButton *>("pushButton_5");
+    auto *two = window.findChild<QPushButton *>("pushButton_2");
+    auto *choose = window.findChild<QPushButton *>("pushButton_placeholder3_3");
+    auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+
+    QVERIFY(display);
+    QVERIFY(five);
+    QVERIFY(two);
+    QVERIFY(choose);
+    QVERIFY(equals);
+    QVERIFY(choose->isEnabled());
+    QCOMPARE(choose->text(), QString::fromUtf8("n über k"));
+
+    QTest::mouseClick(five, Qt::LeftButton);
+    QTest::mouseClick(choose, Qt::LeftButton);
+    QTest::mouseClick(two, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("5 nCr 2"));
+
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("10"));
 }
 
 QTEST_MAIN(CalculatorGuiTests)
