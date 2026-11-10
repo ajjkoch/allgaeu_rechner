@@ -109,11 +109,7 @@ MainWindow::MainWindow(QWidget *parent)
                     m_donationOverlay, &QWidget::hide);
             connect(donateButton, &QPushButton::clicked, this, [this]() {
                 m_donationOverlay->hide();
-                const QUrl paypalUrl(QStringLiteral(
-                    "https://www.paypal.com/cgi-bin/webscr?cmd=_donations"
-                    "&business=ajjkoch%40hotmail.de"
-                    "&item_name=Allg%C3%A4uRechner"
-                    "&currency_code=EUR&lc=DE"));
+                const QUrl paypalUrl(QStringLiteral("https://www.paypal.me/AchimKoch430"));
                 QTimer::singleShot(0, this, [paypalUrl]() {
                     QDesktopServices::openUrl(paypalUrl);
                 });
