@@ -10,6 +10,10 @@
 #include <QTextBlockFormat>
 #include <QSignalBlocker>
 #include <QKeyEvent>
+#include <QToolButton>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QTimer>
 #include <QFrame>
 #include <QLineEdit>
 #include <QIntValidator>
@@ -41,6 +45,87 @@ MainWindow::MainWindow(QWidget *parent)
     QSettings settings("AllgaeuRechner", "Calculator");
     m_decimalPlaces = qBound(0, settings.value("decimalPlaces", 6).toInt(), 15);
     setWindowTitle(QStringLiteral("AllgäuRechner — © 2026 Koch, Achim Johannes Josef"));
+
+    // Discreet support button in the existing alpine header.
+    auto *headerLayout = new QHBoxLayout(ui->alpineHeader);
+    headerLayout->setContentsMargins(0, 7, 8, 0);
+    headerLayout->setSpacing(0);
+    headerLayout->setAlignment(Qt::AlignRight | Qt::AlignTop);
+
+    auto *donationButton = new QToolButton(ui->alpineHeader);
+    donationButton->setObjectName(QStringLiteral("donationButton"));
+    donationButton->setText(tr("Unterstützen"));
+    donationButton->setToolTip(tr("AllgäuRechner unterstützen"));
+    donationButton->setAccessibleName(tr("AllgäuRechner unterstützen"));
+    donationButton->setFixedSize(112, 34);
+    donationButton->setCursor(Qt::PointingHandCursor);
+    donationButton->setStyleSheet(QStringLiteral(
+        "QToolButton { background: rgba(246, 240, 217, 225); color: #51351f;"
+        " border: 1px solid #6b431f; border-radius: 9px; font-size: 14px;"
+        " font-weight: bold; }"
+        "QToolButton:pressed { background: rgba(218, 198, 158, 245); }"));
+    headerLayout->addWidget(donationButton);
+
+    connect(donationButton, &QToolButton::clicked, this, [this]() {
+        if (!m_donationOverlay) {
+            m_donationOverlay = new QWidget(ui->centralwidget);
+            m_donationOverlay->setObjectName(QStringLiteral("donationOverlay"));
+            m_donationOverlay->setStyleSheet(QStringLiteral(
+                "QWidget#donationOverlay { background: rgba(20, 12, 6, 170); }"));
+
+            auto *overlayLayout = new QVBoxLayout(m_donationOverlay);
+            overlayLayout->setContentsMargins(16, 16, 16, 16);
+            overlayLayout->addStretch();
+
+            auto *panel = new QFrame(m_donationOverlay);
+            panel->setObjectName(QStringLiteral("donationPanel"));
+            panel->setMaximumWidth(360);
+            panel->setStyleSheet(QStringLiteral(
+                "QFrame#donationPanel { background: #f6f0d9; border: 2px solid #6b431f; border-radius: 10px; }"
+                "QFrame#donationPanel QLabel { color: #28190c; border: none; font-size: 15px; }"
+                "QFrame#donationPanel QPushButton { color: #28190c; background: #e3c99e; border: 1px solid #6b431f; border-radius: 5px; padding: 10px 6px; font-size: 14px; font-weight: bold; }"));
+
+            auto *panelLayout = new QVBoxLayout(panel);
+            panelLayout->setSpacing(14);
+
+            auto *message = new QLabel(
+                tr("Der AllgäuRechner bleibt kostenlos und werbefrei.\n\n"
+                   "Seine Weiterentwicklung erfordert jedoch viel Zeit und finanzielle "
+                   "Mittel – zum Beispiel für Entwicklungs-Hardware und KI-Werkzeuge.\n\n"
+                   "Deine freiwillige Unterstützung hilft mir, diese Arbeit und die "
+                   "Weiterentwicklung überhaupt erst möglich zu machen, statt meine "
+                   "Zeit vollständig für eine andere Erwerbstätigkeit aufbringen zu müssen.\n\n"
+                   "Wenn dir der AllgäuRechner gefällt und du seine Zukunft unterstützen "
+                   "möchtest, freue ich mich über einen Beitrag. Jeder Beitrag zählt. "
+                   "Vielen Dank!"), panel);
+            message->setWordWrap(true);
+            panelLayout->addWidget(message);
+
+            auto *buttonLayout = new QHBoxLayout();
+            auto *cancelButton = new QPushButton(tr("Abbrechen"), panel);
+            auto *donateButton = new QPushButton(tr("Mit PayPal unterstützen"), panel);
+            buttonLayout->addWidget(cancelButton);
+            buttonLayout->addWidget(donateButton);
+            panelLayout->addLayout(buttonLayout);
+
+            overlayLayout->addWidget(panel, 0, Qt::AlignHCenter);
+            overlayLayout->addStretch();
+
+            connect(cancelButton, &QPushButton::clicked,
+                    m_donationOverlay, &QWidget::hide);
+            connect(donateButton, &QPushButton::clicked, this, [this]() {
+                m_donationOverlay->hide();
+                const QUrl paypalUrl(QStringLiteral("https://www.paypal.me/AchimKoch430"));
+                QTimer::singleShot(0, this, [paypalUrl]() {
+                    QDesktopServices::openUrl(paypalUrl);
+                });
+            });
+        }
+
+        m_donationOverlay->setGeometry(ui->centralwidget->rect());
+        m_donationOverlay->raise();
+        m_donationOverlay->show();
+    });
 
     AlpineTheme::apply(this);
     ui->textEdit->installEventFilter(this);
@@ -184,6 +269,9 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == ui->centralwidget && event->type() == QEvent::Resize && m_precisionOverlay) {
         m_precisionOverlay->setGeometry(ui->centralwidget->rect());
+    }
+    if (watched == ui->centralwidget && event->type() == QEvent::Resize && m_donationOverlay) {
+        m_donationOverlay->setGeometry(ui->centralwidget->rect());
     }
     if (watched == ui->textEdit && event->type() == QEvent::KeyPress) {
         auto *keyEvent = static_cast<QKeyEvent *>(event);
