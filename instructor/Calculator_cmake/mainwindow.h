@@ -58,6 +58,7 @@ private:
     int m_decimalPlaces;
     QWidget *m_precisionOverlay = nullptr;
     QLineEdit *m_precisionInput = nullptr;
+    QWidget *m_donationOverlay = nullptr;
     QString formatResult(double result) const;
     QVector<QString> m_history;
     /** @brief Replaces the editor contents and right-aligns the text.
