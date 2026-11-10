@@ -1148,7 +1148,7 @@
         <item row="6" column="3">
          <widget class="QPushButton" name="pushButton_placeholder3_3">
           <property name="enabled">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -1163,7 +1163,7 @@
            </size>
           </property>
           <property name="text">
-           <string>i</string>
+           <string/>
           </property>
           <property name="default">
            <bool>false</bool>
@@ -1192,7 +1192,7 @@
         <item row="2" column="1">
          <widget class="QPushButton" name="pushButton_placeholder3_4">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -1207,7 +1207,7 @@
            </size>
           </property>
           <property name="text">
-           <string/>
+           <string>fix</string>
           </property>
           <property name="checkable">
            <bool>false</bool>
