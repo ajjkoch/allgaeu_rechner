@@ -21,6 +21,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QSettings>
+#include <QGraphicsOpacityEffect>
 #include <cmath>
 
 
@@ -59,6 +60,9 @@ MainWindow::MainWindow(QWidget *parent)
     donationButton->setAccessibleName(tr("AllgäuRechner unterstützen"));
     donationButton->setFixedSize(112, 34);
     donationButton->setCursor(Qt::PointingHandCursor);
+    auto *donationOpacity = new QGraphicsOpacityEffect(donationButton);
+    donationOpacity->setOpacity(0.4); // 60 % transparent
+    donationButton->setGraphicsEffect(donationOpacity);
     donationButton->setStyleSheet(QStringLiteral(
         "QToolButton { background: rgba(246, 240, 217, 225); color: #51351f;"
         " border: 1px solid #6b431f; border-radius: 9px; font-size: 14px;"
@@ -201,8 +205,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto *binomialButton = ui->pushButton_placeholder3_3;
     binomialButton->setEnabled(true);
-    binomialButton->setText(QStringLiteral("n über k"));
-    binomialButton->setToolTip(tr("Binomialkoeffizient n über k einfügen"));
+    binomialButton->setText(QStringLiteral("C(n, k)"));
+    binomialButton->setToolTip(tr("Binomialkoeffizient C(n, k) einfügen"));
     binomialButton->setFocusPolicy(Qt::NoFocus);
 
     setRightAlignedText(ui->textEdit, m_strExpression);

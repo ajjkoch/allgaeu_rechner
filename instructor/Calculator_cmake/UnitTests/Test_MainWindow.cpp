@@ -24,7 +24,7 @@ private slots:
     void cursorEditingAndBackspace();
     void endParenthesisButtonAppendsAtExpressionEnd();
     void startParenthesisButtonInsertsAtExpressionStart();
-    void piButtonUsesDigitWoodStyle();
+    void piButtonUsesConstantWoodStyle();
     void directDisplayEditing();
     void errorRecovery();
     void historyNavigation();
@@ -151,14 +151,14 @@ void CalculatorGuiTests::startParenthesisButtonInsertsAtExpressionStart()
     QCOMPARE(display->textCursor().position(), 1);
 }
 
-void CalculatorGuiTests::piButtonUsesDigitWoodStyle()
+void CalculatorGuiTests::piButtonUsesConstantWoodStyle()
 {
     MainWindow window;
     window.show();
 
     auto *pi = window.findChild<QPushButton *>("pushButton_pi");
     QVERIFY(pi);
-    QCOMPARE(pi->property("role").toString(), QString("digit"));
+    QCOMPARE(pi->property("role").toString(), QString("constant"));
 }
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -1705,7 +1705,7 @@ void CalculatorGuiTests::binomialCoefficientButton()
     QVERIFY(choose);
     QVERIFY(equals);
     QVERIFY(choose->isEnabled());
-    QCOMPARE(choose->text(), QString::fromUtf8("n über k"));
+    QCOMPARE(choose->text(), QString("C(n, k)"));
 
     QTest::mouseClick(five, Qt::LeftButton);
     QTest::mouseClick(choose, Qt::LeftButton);
