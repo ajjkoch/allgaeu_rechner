@@ -10,6 +10,9 @@
 #include <QTextBlockFormat>
 #include <QSignalBlocker>
 #include <QKeyEvent>
+#include <QInputDialog>
+#include <QSettings>
+#include <cmath>
 
 
 
@@ -26,8 +29,11 @@ MainWindow::MainWindow(QWidget *parent)
     , m_isError(false)
     , m_isInverted(false)
     , m_hpos(0)
+    , m_decimalPlaces(6)
 {
     ui->setupUi(this);
+    QSettings settings("AllgaeuRechner", "Calculator");
+    m_decimalPlaces = qBound(0, settings.value("decimalPlaces", 6).toInt(), 15);
     setWindowTitle(QStringLiteral("AllgäuRechner — © 2026 Koch, Achim Johannes Josef"));
 
     AlpineTheme::apply(this);
@@ -92,6 +98,13 @@ MainWindow::MainWindow(QWidget *parent)
             dispatchAction(action);
         });
     }
+
+    auto *precisionButton = ui->pushButton_placeholder3_3;
+    precisionButton->setEnabled(true);
+    precisionButton->setText("i");
+    precisionButton->setToolTip("Nachkommastellen einstellen");
+    precisionButton->setFocusPolicy(Qt::NoFocus);
+    connect(precisionButton, &QPushButton::clicked, this, &MainWindow::decimalPlaces_pressed);
 
     setRightAlignedText(ui->textEdit, m_strExpression);
 }
@@ -329,7 +342,7 @@ void MainWindow::equals_pressed()
         double result = calc.evaluate(m_strExpression.toStdString());
         // Switch to scientific notation for very large or very small values.
         // This keeps results such as 50! readable in the calculator display.
-        m_strExpression = QString::number(result, 'g', 15);
+        m_strExpression = formatResult(result);
 
         m_history.append(m_strExpression);
         m_hpos = m_history.size()-1;
@@ -444,12 +457,7 @@ void MainWindow::edx_pressed()
         const std::string argument = ui->textEdit->toPlainText().toStdString();
         const std::string expression = "edx(" + argument + ")";
         double result = calc.evaluate(expression);
-        if (std::floor(result) == result) {
-            m_strExpression = QString::number(result, 'f', 0); // Display as integer
-        }
-        else {
-            m_strExpression = QString::number(result); // Display with full precision
-        }
+        m_strExpression = formatResult(result);
         m_isError = false;
     } catch (const std::exception& e) {
         m_strExpression = e.what();
@@ -532,3 +540,25 @@ void MainWindow::setRightAlignedText(QTextEdit *textEdit, const QString &text) {
 }
 
 
+
+/** @brief Formats results using the selected decimal precision. */
+QString MainWindow::formatResult(double result) const
+{
+    if (std::isfinite(result) && std::abs(result) >= 1.0e15)
+        return QString::number(result, 'e', m_decimalPlaces);
+    return QString::number(result, 'f', m_decimalPlaces);
+}
+
+/** @brief Opens and persists the decimal precision setting. */
+void MainWindow::decimalPlaces_pressed()
+{
+    bool accepted = false;
+    const int places = QInputDialog::getInt(this, tr("Nachkommastellen"),
+                                            tr("Anzahl der Nachkommastellen (0–15):"),
+                                            m_decimalPlaces, 0, 15, 1, &accepted);
+    if (!accepted)
+        return;
+    m_decimalPlaces = places;
+    QSettings settings("AllgaeuRechner", "Calculator");
+    settings.setValue("decimalPlaces", m_decimalPlaces);
+}
