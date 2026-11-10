@@ -10,7 +10,11 @@
 #include <QTextBlockFormat>
 #include <QSignalBlocker>
 #include <QKeyEvent>
-#include <QInputDialog>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QSpinBox>
+#include <QVBoxLayout>
 #include <QSettings>
 #include <cmath>
 
@@ -99,10 +103,11 @@ MainWindow::MainWindow(QWidget *parent)
         });
     }
 
-    auto *precisionButton = ui->pushButton_placeholder3_3;
+    // The intended free key is in the second keypad row.
+    auto *precisionButton = ui->pushButton_placeholder3_4;
     precisionButton->setEnabled(true);
-    precisionButton->setText("i");
-    precisionButton->setToolTip("Nachkommastellen einstellen");
+    precisionButton->setText("fix");
+    precisionButton->setToolTip("Anzahl der Nachkommastellen einstellen");
     precisionButton->setFocusPolicy(Qt::NoFocus);
     connect(precisionButton, &QPushButton::clicked, this, &MainWindow::decimalPlaces_pressed);
 
@@ -564,13 +569,37 @@ QString MainWindow::formatResult(double result) const
 /** @brief Opens and persists the decimal precision setting. */
 void MainWindow::decimalPlaces_pressed()
 {
-    bool accepted = false;
-    const int places = QInputDialog::getInt(this, tr("Nachkommastellen"),
-                                            tr("Anzahl der Nachkommastellen (0–15):"),
-                                            m_decimalPlaces, 0, 15, 1, &accepted);
-    if (!accepted)
+    // Use an explicit dialog instead of QInputDialog's convenience wrapper.
+    // Its controls belong to the dialog and receive input independently from
+    // the calculator's keypad and its custom button-paint event filters.
+    QDialog dialog(this);
+    dialog.setWindowTitle(tr("Nachkommastellen"));
+    dialog.setWindowModality(Qt::ApplicationModal);
+    dialog.setModal(true);
+
+    auto *layout = new QVBoxLayout(&dialog);
+    auto *label = new QLabel(tr("Anzahl der Nachkommastellen (0–15):"), &dialog);
+    auto *spinBox = new QSpinBox(&dialog);
+    spinBox->setRange(0, 15);
+    spinBox->setValue(m_decimalPlaces);
+    spinBox->setFocusPolicy(Qt::StrongFocus);
+    spinBox->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
+
+    auto *buttons = new QDialogButtonBox(
+        QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog);
+    buttons->setFocusPolicy(Qt::StrongFocus);
+    layout->addWidget(label);
+    layout->addWidget(spinBox);
+    layout->addWidget(buttons);
+
+    connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+    connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+
+    spinBox->setFocus(Qt::OtherFocusReason);
+    if (dialog.exec() != QDialog::Accepted)
         return;
-    m_decimalPlaces = places;
+
+    m_decimalPlaces = spinBox->value();
     QSettings settings("AllgaeuRechner", "Calculator");
     settings.setValue("decimalPlaces", m_decimalPlaces);
 }
