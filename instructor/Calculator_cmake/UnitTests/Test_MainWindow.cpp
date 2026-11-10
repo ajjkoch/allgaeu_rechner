@@ -24,7 +24,7 @@ private slots:
     void cursorEditingAndBackspace();
     void endParenthesisButtonAppendsAtExpressionEnd();
     void startParenthesisButtonInsertsAtExpressionStart();
-    void piButtonUsesDigitWoodStyle();
+    void piButtonUsesConstantWoodStyle();
     void directDisplayEditing();
     void errorRecovery();
     void historyNavigation();
@@ -158,7 +158,7 @@ void CalculatorGuiTests::piButtonUsesDigitWoodStyle()
 
     auto *pi = window.findChild<QPushButton *>("pushButton_pi");
     QVERIFY(pi);
-    QCOMPARE(pi->property("role").toString(), QString("digit"));
+    QCOMPARE(pi->property("role").toString(), QString("constant"));
 }
 
 void CalculatorGuiTests::digitButtonsAndAddition()

@@ -216,7 +216,7 @@
         <property name="spacing">
          <number>5</number>
         </property>
-        <item row="7" column="1">
+        <item row="3" column="2">
          <widget class="QPushButton" name="pushButton_bracket_left">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -273,7 +273,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
+        <item row="1" column="0">
          <widget class="QPushButton" name="pushButton_history_back">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -298,7 +298,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="3">
+        <item row="3" column="1">
          <widget class="QPushButton" name="pushButton_erase_left">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -415,7 +415,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
+        <item row="3" column="0">
          <widget class="QPushButton" name="pushButton_clear">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -434,7 +434,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="3">
+        <item row="1" column="1">
          <widget class="QPushButton" name="pushButton_history_forward">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -655,7 +655,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+        <item row="5" column="3">
          <widget class="QPushButton" name="pushButton_x2">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -693,7 +693,7 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="3">
+        <item row="6" column="1">
          <widget class="QPushButton" name="pushButton_percent">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -720,7 +720,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="5" column="2">
          <widget class="QPushButton" name="pushButton_sqrt">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -936,7 +936,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item row="2" column="0">
          <widget class="QPushButton" name="pushButton_bracket_left_start">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -970,7 +970,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="2" column="1">
          <widget class="QPushButton" name="pushButton_bracket_right_end">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -998,7 +998,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
+        <item row="2" column="2">
          <widget class="QPushButton" name="pushButton_changeDegreesMode">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -1029,7 +1029,7 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
+        <item row="7" column="1">
          <widget class="QPushButton" name="pushButton_e">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -1057,7 +1057,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="2">
+        <item row="6" column="3">
          <widget class="QPushButton" name="pushButton_fact">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -1079,7 +1079,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
+        <item row="6" column="2">
          <widget class="QPushButton" name="pushButton_mod">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -1098,7 +1098,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="7" column="0">
          <widget class="QPushButton" name="pushButton_pi">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -1126,7 +1126,7 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="2">
+        <item row="6" column="0">
          <widget class="QPushButton" name="pushButton_edx">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -1145,7 +1145,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="3">
+        <item row="7" column="2">
          <widget class="QPushButton" name="pushButton_placeholder3_3">
           <property name="enabled">
            <bool>false</bool>
@@ -1170,7 +1170,7 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="2">
+        <item row="3" column="3">
          <widget class="QPushButton" name="pushButton_bracket_right">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -1189,7 +1189,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="2" column="3">
          <widget class="QPushButton" name="pushButton_placeholder3_4">
           <property name="enabled">
            <bool>true</bool>

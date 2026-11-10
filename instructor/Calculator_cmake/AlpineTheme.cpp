@@ -182,32 +182,31 @@ void paintAlpineButton(QPushButton *button)
 void apply(QWidget *window)
 {
     const QMap<QString, QString> roles = {
-        {"pushButton_e", "constant"}, {"pushButton_fact", "function"},
-        {"pushButton_placeholder3_3", "function"},
+        {"pushButton_e", "constant"}, {"pushButton_pi", "constant"},
+        {"pushButton_fact", "function"}, {"pushButton_placeholder3_3", "function"},
         {"pushButton_0", "digit"}, {"pushButton_1", "digit"},
         {"pushButton_2", "digit"}, {"pushButton_3", "digit"},
         {"pushButton_4", "digit"}, {"pushButton_5", "digit"},
         {"pushButton_6", "digit"}, {"pushButton_7", "digit"},
         {"pushButton_8", "digit"}, {"pushButton_9", "digit"},
-        {"pushButton_pi", "digit"}, {"pushButton_sqrt", "operator"},
-        {"pushButton_changeDegreesMode", "constant"},
+        {"pushButton_sqrt", "function"}, {"pushButton_x2", "function"},
+        {"pushButton_changeDegreesMode", "control"},
         {"pushButton_sin", "function"}, {"pushButton_cos", "function"},
         {"pushButton_tan", "function"}, {"pushButton_log", "function"},
         {"pushButton_ln", "function"}, {"pushButton_edx", "function"},
-        {"pushButton_mod", "function"}, {"pushButton_fact", "function"},
-        {"pushButton_percent", "function"},
-        {"pushButton_inv", "function"}, {"pushButton_x2", "function"},
+        {"pushButton_mod", "function"}, {"pushButton_percent", "function"},
+        {"pushButton_inv", "function"},
         {"pushButton_plus", "operator"}, {"pushButton_minus", "operator"},
         {"pushButton_mul", "operator"}, {"pushButton_divided", "operator"},
         {"pushButton_equals", "operator"},
         {"pushButton_clear", "utility"}, {"pushButton_erase_left", "utility"},
-        {"pushButton_plusminus", "utility"},
+        {"pushButton_plusminus", "utility"}, {"pushButton_placeholder3_4", "utility"},
         {"pushButton_bracket_left", "utility"}, {"pushButton_bracket_right", "utility"},
-        {"pushButton_bracket_right_end", "utility"},
-        {"pushButton_bracket_left_start", "utility"},
-        {"pushButton_decimal", "utility"}, {"pushButton_cursor_left", "control"},
-        {"pushButton_cursor_right", "control"}, {"pushButton_history_back", "control"},
-        {"pushButton_history_forward", "control"}
+        {"pushButton_decimal", "utility"},
+        {"pushButton_bracket_right_end", "control"},
+        {"pushButton_bracket_left_start", "control"},
+        {"pushButton_cursor_left", "control"}, {"pushButton_cursor_right", "control"},
+        {"pushButton_history_back", "control"}, {"pushButton_history_forward", "control"}
     };
 
     // Each key gets a concise, engraved-looking symbol where that improves recognition.
@@ -243,7 +242,7 @@ void apply(QWidget *window)
         {"pushButton_percent", "Prozentfunktion"},
         {"pushButton_mod", "Modulo – Rest einer Division"},
         {"pushButton_fact", "Fakultät n! berechnen"},
-        {"pushButton_placeholder3_3", "Binomialkoeffizient n über k berechnen"},
+        {"pushButton_placeholder3_3", "Binomialkoeffizient C(n, k) berechnen"},
         {"pushButton_plusminus", "Vorzeichen wechseln"}
     };
 
