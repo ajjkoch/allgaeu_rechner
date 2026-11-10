@@ -10,10 +10,11 @@
 #include <QTextBlockFormat>
 #include <QSignalBlocker>
 #include <QKeyEvent>
-#include <QDialog>
-#include <QDialogButtonBox>
+#include <QFrame>
+#include <QLineEdit>
+#include <QIntValidator>
+#include <QHBoxLayout>
 #include <QLabel>
-#include <QSpinBox>
 #include <QVBoxLayout>
 #include <QSettings>
 #include <cmath>
@@ -36,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_decimalPlaces(6)
 {
     ui->setupUi(this);
+    ui->centralwidget->installEventFilter(this);
     QSettings settings("AllgaeuRechner", "Calculator");
     m_decimalPlaces = qBound(0, settings.value("decimalPlaces", 6).toInt(), 15);
     setWindowTitle(QStringLiteral("AllgäuRechner — © 2026 Koch, Achim Johannes Josef"));
@@ -180,6 +182,9 @@ void MainWindow::dispatchAction(CalculatorAction action)
 /** @brief Evaluates the expression when Return or keypad Enter is pressed in the display. */
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
+    if (watched == ui->centralwidget && event->type() == QEvent::Resize && m_precisionOverlay) {
+        m_precisionOverlay->setGeometry(ui->centralwidget->rect());
+    }
     if (watched == ui->textEdit && event->type() == QEvent::KeyPress) {
         auto *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
@@ -569,36 +574,59 @@ QString MainWindow::formatResult(double result) const
 /** @brief Opens and persists the decimal precision setting. */
 void MainWindow::decimalPlaces_pressed()
 {
-    // Android does not reliably support nested event loops from QDialog::exec().
-    // Open asynchronously so touch events continue through the normal Qt loop.
-    auto *dialog = new QDialog(this);
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
-    dialog->setWindowTitle(tr("Nachkommastellen"));
-    dialog->setWindowModality(Qt::ApplicationModal);
+    if (!m_precisionOverlay) {
+        m_precisionOverlay = new QWidget(ui->centralwidget);
+        m_precisionOverlay->setObjectName(QStringLiteral("precisionOverlay"));
+        m_precisionOverlay->setStyleSheet(
+            QStringLiteral("QWidget#precisionOverlay { background: rgba(20, 12, 6, 170); }"));
 
-    auto *layout = new QVBoxLayout(dialog);
-    auto *label = new QLabel(tr("Anzahl der Nachkommastellen (0–15):"), dialog);
-    auto *spinBox = new QSpinBox(dialog);
-    spinBox->setRange(0, 15);
-    spinBox->setValue(m_decimalPlaces);
-    spinBox->setFocusPolicy(Qt::StrongFocus);
-    spinBox->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
+        auto *overlayLayout = new QVBoxLayout(m_precisionOverlay);
+        overlayLayout->setContentsMargins(16, 16, 16, 16);
+        overlayLayout->addStretch();
 
-    auto *buttons = new QDialogButtonBox(
-        QDialogButtonBox::Ok | QDialogButtonBox::Cancel, dialog);
-    buttons->setFocusPolicy(Qt::StrongFocus);
-    layout->addWidget(label);
-    layout->addWidget(spinBox);
-    layout->addWidget(buttons);
+        auto *panel = new QFrame(m_precisionOverlay);
+        panel->setObjectName(QStringLiteral("precisionPanel"));
+        panel->setMaximumWidth(320);
+        panel->setStyleSheet(QStringLiteral(
+            "QFrame#precisionPanel { background: #f6f0d9; border: 2px solid #6b431f; border-radius: 10px; }"
+            "QFrame#precisionPanel QLabel { color: #28190c; border: none; font-size: 16px; }"
+            "QFrame#precisionPanel QLineEdit { color: #28190c; background: white; border: 1px solid #6b431f; padding: 8px; font-size: 18px; }"
+            "QFrame#precisionPanel QPushButton { color: #28190c; background: #e3c99e; border: 1px solid #6b431f; border-radius: 5px; padding: 10px 6px; font-size: 15px; }"));
 
-    connect(buttons, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
-    connect(buttons, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
-    connect(dialog, &QDialog::accepted, this, [this, spinBox]() {
-        m_decimalPlaces = spinBox->value();
-        QSettings settings("AllgaeuRechner", "Calculator");
-        settings.setValue("decimalPlaces", m_decimalPlaces);
-    });
+        auto *panelLayout = new QVBoxLayout(panel);
+        panelLayout->setSpacing(14);
+        panelLayout->addWidget(new QLabel(tr("Nachkommastellen (0–15)"), panel));
+        m_precisionInput = new QLineEdit(panel);
+        m_precisionInput->setValidator(new QIntValidator(0, 15, m_precisionInput));
+        m_precisionInput->setInputMethodHints(Qt::ImhDigitsOnly);
+        panelLayout->addWidget(m_precisionInput);
 
-    dialog->open();
-    spinBox->setFocus(Qt::OtherFocusReason);
+        auto *buttonLayout = new QHBoxLayout();
+        auto *cancelButton = new QPushButton(tr("Abbrechen"), panel);
+        auto *applyButton = new QPushButton(tr("Übernehmen"), panel);
+        buttonLayout->addWidget(cancelButton);
+        buttonLayout->addWidget(applyButton);
+        panelLayout->addLayout(buttonLayout);
+
+        overlayLayout->addWidget(panel, 0, Qt::AlignHCenter);
+        overlayLayout->addStretch();
+
+        connect(cancelButton, &QPushButton::clicked, m_precisionOverlay, &QWidget::hide);
+        connect(applyButton, &QPushButton::clicked, this, [this]() {
+            bool valid = false;
+            const int places = m_precisionInput->text().toInt(&valid);
+            if (!valid || places < 0 || places > 15)
+                return;
+            m_decimalPlaces = places;
+            QSettings settings("AllgaeuRechner", "Calculator");
+            settings.setValue("decimalPlaces", m_decimalPlaces);
+            m_precisionOverlay->hide();
+        });
+    }
+
+    m_precisionInput->setText(QString::number(m_decimalPlaces));
+    m_precisionOverlay->setGeometry(ui->centralwidget->rect());
+    m_precisionOverlay->raise();
+    m_precisionOverlay->show();
+    m_precisionInput->setFocus(Qt::OtherFocusReason);
 }
