@@ -14,6 +14,7 @@
 #include "../../common/Util.h"
 
 class QTextEdit;
+class QWidget;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -48,6 +49,7 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+    QWidget *m_donationOverlay = nullptr;
     QString m_strExpression;
     Calculator calc;
     bool m_isError;
