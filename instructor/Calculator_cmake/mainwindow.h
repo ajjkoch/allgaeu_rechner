@@ -14,6 +14,8 @@
 #include "../../common/Util.h"
 
 class QTextEdit;
+class QWidget;
+class QLineEdit;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -54,6 +56,8 @@ private:
     bool m_isInverted;
     int m_hpos;
     int m_decimalPlaces;
+    QWidget *m_precisionOverlay = nullptr;
+    QLineEdit *m_precisionInput = nullptr;
     QString formatResult(double result) const;
     QVector<QString> m_history;
     /** @brief Replaces the editor contents and right-aligns the text.
