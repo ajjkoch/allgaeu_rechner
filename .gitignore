@@ -1,0 +1,22 @@
+# Qt Creator: persönliche Projekteinstellungen (maschinen-/benutzerspezifisch)
+*.user
+*.user.*
+
+# Qt Creator / clangd
+.qtc_clangd/
+**/.qtc_clangd/
+
+# CMake- und Qt-Build-Ausgaben
+build/
+**/build/
+cmake-build-*/
+
+# CMake generierte Dateien
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+
+# macOS
+.DS_Store

@@ -43,6 +43,8 @@ set(PROJECT_SOURCES
     main.cpp
     mainwindow.h
     mainwindow.cpp
+    AlpineTheme.h
+    AlpineTheme.cpp
     mainwindow.ui
     alpine_resources.qrc
     ../../common/Util.h
@@ -87,6 +89,8 @@ if(NOT ANDROID)
     qt_add_executable(CalculatorGuiTests
         mainwindow.h
         mainwindow.cpp
+        AlpineTheme.h
+        AlpineTheme.cpp
         mainwindow.ui
         UnitTests/Test_MainWindow.cpp
     )
