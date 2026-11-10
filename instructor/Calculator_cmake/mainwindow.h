@@ -53,6 +53,8 @@ private:
     bool m_isError;
     bool m_isInverted;
     int m_hpos;
+    int m_decimalPlaces;
+    QString formatResult(double result) const;
     QVector<QString> m_history;
     /** @brief Replaces the editor contents and right-aligns the text.
      * @param textEdit Target text editor.
@@ -67,6 +69,7 @@ private:
     void insertRightAlignedText(QTextEdit *textEdit, const QString &text);
 
 private slots:
+    void decimalPlaces_pressed();
     /** @brief Toggles the trigonometric angle unit between degrees and radians. */
     void degreesMode_pressed();
     /** @brief Inserts the digit of the button that emitted the signal. */
