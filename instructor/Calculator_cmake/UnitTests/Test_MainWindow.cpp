@@ -151,7 +151,7 @@ void CalculatorGuiTests::startParenthesisButtonInsertsAtExpressionStart()
     QCOMPARE(display->textCursor().position(), 1);
 }
 
-void CalculatorGuiTests::piButtonUsesDigitWoodStyle()
+void CalculatorGuiTests::piButtonUsesConstantWoodStyle()
 {
     MainWindow window;
     window.show();
