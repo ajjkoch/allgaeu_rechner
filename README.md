@@ -14,6 +14,39 @@ A cross-platform calculator application built with C++ and Qt.
 
 - Unit tests for calculator logic and GUI interactions
 
+## Support the project
+
+AllgäuRechner is and will remain free of charge and free of advertising.
+
+Its continued development nevertheless requires time and financial resources – for
+development hardware, software, and AI tools used to build, maintain, and improve
+the application. Voluntary contributions help make this work possible and allow
+the developer to dedicate time to the project instead of having to devote that
+time entirely to other paid work.
+
+If you find AllgäuRechner useful and would like to support its future development,
+you can make a voluntary contribution via PayPal:
+
+**[Support AllgäuRechner via PayPal](https://www.paypal.me/AchimKoch430)**
+
+Every contribution helps. Thank you!
+
+### Projekt unterstützen
+
+Der AllgäuRechner bleibt kostenlos und werbefrei. Seine Weiterentwicklung
+erfordert jedoch Zeit und finanzielle Mittel – beispielsweise für
+Entwicklungs-Hardware, Software und KI-Werkzeuge.
+
+Freiwillige Beiträge helfen dabei, diese Arbeit überhaupt erst zu ermöglichen.
+Sie unterstützen mich dabei, Zeit in die Weiterentwicklung zu investieren,
+anstatt diese Zeit vollständig für eine andere Erwerbstätigkeit aufbringen zu
+müssen.
+
+Wenn dir der AllgäuRechner gefällt und du seine Zukunft unterstützen möchtest,
+freue ich mich über einen freiwilligen Beitrag. Jeder Beitrag zählt. Vielen Dank!
+
+**[AllgäuRechner über PayPal unterstützen](https://www.paypal.me/AchimKoch430)**
+
 ## Platforms
 
 - **Desktop:** Linux and other supported Qt platforms
