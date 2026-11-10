@@ -1705,7 +1705,7 @@ void CalculatorGuiTests::binomialCoefficientButton()
     QVERIFY(choose);
     QVERIFY(equals);
     QVERIFY(choose->isEnabled());
-    QCOMPARE(choose->text(), QString("C(n, k)"));
+    QCOMPARE(choose->text(), QString::fromUtf8("n über k"));
 
     QTest::mouseClick(five, Qt::LeftButton);
     QTest::mouseClick(choose, Qt::LeftButton);
