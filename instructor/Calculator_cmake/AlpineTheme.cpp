@@ -183,6 +183,7 @@ void apply(QWidget *window)
 {
     const QMap<QString, QString> roles = {
         {"pushButton_e", "constant"}, {"pushButton_fact", "function"},
+        {"pushButton_placeholder3_3", "function"},
         {"pushButton_0", "digit"}, {"pushButton_1", "digit"},
         {"pushButton_2", "digit"}, {"pushButton_3", "digit"},
         {"pushButton_4", "digit"}, {"pushButton_5", "digit"},
@@ -242,6 +243,7 @@ void apply(QWidget *window)
         {"pushButton_percent", "Prozentfunktion"},
         {"pushButton_mod", "Modulo – Rest einer Division"},
         {"pushButton_fact", "Fakultät n! berechnen"},
+        {"pushButton_placeholder3_3", "Binomialkoeffizient n über k berechnen"},
         {"pushButton_plusminus", "Vorzeichen wechseln"}
     };
 

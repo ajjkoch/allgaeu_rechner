@@ -31,6 +31,8 @@ private slots:
     void test_power();
     void test_power_edge_cases();
     void test_factorial_boundaries();
+    void test_binomial_coefficients();
+    void test_binomial_coefficient_errors();
     void test_log();
     void test_ln();
     void test_percent();
@@ -376,6 +378,30 @@ void CalculatorTests::test_power_edge_cases()
 
     QCOMPARE(m_calculator.evaluate("10^-400"), 0.0);
     QCOMPARE(m_calculator.evaluate("(-10)^-400"), 0.0);
+}
+
+void CalculatorTests::test_binomial_coefficients()
+{
+    QCOMPARE(m_calculator.evaluate("5 nCr 2"), 10.0);
+    QCOMPARE(m_calculator.evaluate("10 nCr 0"), 1.0);
+    QCOMPARE(m_calculator.evaluate("10 nCr 10"), 1.0);
+    QCOMPARE(m_calculator.evaluate("10 nCr 8"), 45.0);
+    QCOMPARE(m_calculator.evaluate("52 nCr 5"), 2598960.0);
+    QCOMPARE(m_calculator.evaluate("5 nCr (1+1)"), 10.0);
+    QCOMPARE(m_calculator.evaluate("5 nCr 2 * 3"), 30.0);
+    QCOMPARE(m_calculator.evaluate("0 nCr 0"), 1.0);
+    QVERIFY(std::isfinite(m_calculator.evaluate("1000 nCr 500")));
+}
+
+void CalculatorTests::test_binomial_coefficient_errors()
+{
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("-1 nCr 0"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("5 nCr -1"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("5.5 nCr 2"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("5 nCr 2.5"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("5 nCr 6"), std::domain_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("200003 nCr 100001"), std::length_error);
+    QVERIFY_EXCEPTION_THROWN(m_calculator.evaluate("2000 nCr 1000"), std::overflow_error);
 }
 
 void CalculatorTests::test_factorial_boundaries()

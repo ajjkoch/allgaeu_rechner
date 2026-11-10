@@ -160,6 +160,7 @@ MainWindow::MainWindow(QWidget *parent)
         {"pushButton_tan", Action::Tangent}, {"pushButton_log", Action::Log10},
         {"pushButton_ln", Action::NaturalLog}, {"pushButton_inv", Action::Inverse},
         {"pushButton_mod", Action::Modulo}, {"pushButton_fact", Action::Factorial},
+        {"pushButton_placeholder3_3", Action::BinomialCoefficient},
         {"pushButton_edx", Action::Reciprocal},
         {"pushButton_percent", Action::Percent}, {"pushButton_pi", Action::Pi},
         {"pushButton_changeDegreesMode", Action::ToggleAngleMode},
@@ -197,6 +198,12 @@ MainWindow::MainWindow(QWidget *parent)
     precisionButton->setToolTip("Anzahl der Nachkommastellen einstellen");
     precisionButton->setFocusPolicy(Qt::NoFocus);
     connect(precisionButton, &QPushButton::clicked, this, &MainWindow::decimalPlaces_pressed);
+
+    auto *binomialButton = ui->pushButton_placeholder3_3;
+    binomialButton->setEnabled(true);
+    binomialButton->setText(QStringLiteral("n über k"));
+    binomialButton->setToolTip(tr("Binomialkoeffizient n über k einfügen"));
+    binomialButton->setFocusPolicy(Qt::NoFocus);
 
     setRightAlignedText(ui->textEdit, m_strExpression);
 }
@@ -252,6 +259,9 @@ void MainWindow::dispatchAction(CalculatorAction action)
     case CalculatorAction::Inverse: inv_pressed(); break;
     case CalculatorAction::Modulo: mod_pressed(); break;
     case CalculatorAction::Factorial: insertRightAlignedText(ui->textEdit, "!"); break;
+    case CalculatorAction::BinomialCoefficient:
+        insertRightAlignedText(ui->textEdit, " nCr ");
+        break;
     case CalculatorAction::Reciprocal: edx_pressed(); break;
     case CalculatorAction::Percent: percent_pressed(); break;
     case CalculatorAction::Pi: pi_pressed(); break;
