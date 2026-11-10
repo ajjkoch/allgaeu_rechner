@@ -126,6 +126,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     AlpineTheme::apply(this);
+    ui->centralwidget->installEventFilter(this);
     ui->textEdit->installEventFilter(this);
 
     // Keep the internal expression synchronized when the user edits the display directly.
@@ -257,6 +258,9 @@ void MainWindow::dispatchAction(CalculatorAction action)
 /** @brief Evaluates the expression when Return or keypad Enter is pressed in the display. */
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
+    if (watched == ui->centralwidget && event->type() == QEvent::Resize && m_donationOverlay) {
+        m_donationOverlay->setGeometry(ui->centralwidget->rect());
+    }
     if (watched == ui->textEdit && event->type() == QEvent::KeyPress) {
         auto *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
