@@ -544,9 +544,21 @@ void MainWindow::setRightAlignedText(QTextEdit *textEdit, const QString &text) {
 /** @brief Formats results using the selected decimal precision. */
 QString MainWindow::formatResult(double result) const
 {
-    if (std::isfinite(result) && std::abs(result) >= 1.0e15)
-        return QString::number(result, 'e', m_decimalPlaces);
-    return QString::number(result, 'f', m_decimalPlaces);
+    QString formatted = (std::isfinite(result) && std::abs(result) >= 1.0e15)
+        ? QString::number(result, 'e', m_decimalPlaces)
+        : QString::number(result, 'f', m_decimalPlaces);
+
+    // Do not show unnecessary trailing zeros; the setting defines precision,
+    // not a requirement to fill every decimal place.
+    const qsizetype exponentPos = formatted.indexOf('e');
+    const qsizetype mantissaEnd = exponentPos >= 0 ? exponentPos : formatted.size();
+    qsizetype end = mantissaEnd;
+    while (end > 0 && formatted.at(end - 1) == '0')
+        --end;
+    if (end > 0 && formatted.at(end - 1) == '.')
+        --end;
+    formatted.remove(end, mantissaEnd - end);
+    return formatted;
 }
 
 /** @brief Opens and persists the decimal precision setting. */
