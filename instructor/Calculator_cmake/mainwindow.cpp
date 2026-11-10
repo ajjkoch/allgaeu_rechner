@@ -201,8 +201,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto *binomialButton = ui->pushButton_placeholder3_3;
     binomialButton->setEnabled(true);
-    binomialButton->setText(QStringLiteral("n über k"));
-    binomialButton->setToolTip(tr("Binomialkoeffizient n über k einfügen"));
+    binomialButton->setText(QStringLiteral("C(n, k)"));
+    binomialButton->setToolTip(tr("Binomialkoeffizient C(n, k) einfügen"));
     binomialButton->setFocusPolicy(Qt::NoFocus);
 
     setRightAlignedText(ui->textEdit, m_strExpression);
