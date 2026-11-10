@@ -14,6 +14,8 @@
 #include "../../common/Util.h"
 
 class QTextEdit;
+class QWidget;
+class QLineEdit;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -31,11 +33,11 @@ public:
         Digit5, Digit6, Digit7, Digit8, Digit9,
         Add, Subtract, Multiply, Divide,
         Equals, Clear, Backspace, ToggleSign, Decimal,
-        OpenParenthesis, CloseParenthesis, EndCloseParenthesis,
+        OpenParenthesis, CloseParenthesis, EndCloseParenthesis, StartOpenParenthesis,
         SquareRoot, Power, Sine, Cosine, Tangent,
         Log10, NaturalLog, Inverse, Modulo, Reciprocal,
         Percent, Pi, Euler, ToggleAngleMode,
-        CursorLeft, CursorRight, HistoryBack, HistoryForward
+        CursorLeft, CursorRight, HistoryBack, HistoryForward, Factorial
     };
 
     /** @brief Creates the calculator window, initializes its state and connects UI signals. */
@@ -53,6 +55,11 @@ private:
     bool m_isError;
     bool m_isInverted;
     int m_hpos;
+    int m_decimalPlaces;
+    QWidget *m_precisionOverlay = nullptr;
+    QLineEdit *m_precisionInput = nullptr;
+    QWidget *m_donationOverlay = nullptr;
+    QString formatResult(double result) const;
     QVector<QString> m_history;
     /** @brief Replaces the editor contents and right-aligns the text.
      * @param textEdit Target text editor.
@@ -61,12 +68,13 @@ private:
     void dispatchAction(CalculatorAction action);
     void setRightAlignedText(QTextEdit *textEdit, const QString &text);
     /** @brief Inserts text at the current cursor and synchronizes the expression state.
-     * @param textEdit Target text editor.
+     * @param textEdit Target text edit.
      * @param text Text to insert.
      */
     void insertRightAlignedText(QTextEdit *textEdit, const QString &text);
 
 private slots:
+    void decimalPlaces_pressed();
     /** @brief Toggles the trigonometric angle unit between degrees and radians. */
     void degreesMode_pressed();
     /** @brief Inserts the digit of the button that emitted the signal. */
