@@ -64,10 +64,13 @@ void paintAlpineButton(QPushButton *button)
     }
 
     // Distinguish key groups through restrained stains on the same wood texture.
-    // Digits keep the natural wood; operators are sage green, functions olive,
-    // constants warm honey, and navigation/control keys a muted blue-grey.
+    // Numeric keys receive a brighter warm glaze; their lettering remains black.
+    // Operators are sage green, functions olive, constants warm honey,
+    // and navigation/control keys a muted blue-grey.
     QColor tint(0, 0, 0, 0);
-    if (role == "operator")
+    if (role == "digit")
+        tint = QColor(255, 238, 207, 165);
+    else if (role == "operator")
         tint = QColor(91, 128, 62, 112);
     else if (role == "function")
         tint = QColor(143, 145, 69, 88);
@@ -105,7 +108,8 @@ void paintAlpineButton(QPushButton *button)
     const bool trig = name=="pushButton_sin" || name=="pushButton_cos" || name=="pushButton_tan";
     const bool function = role=="function" || trig;
     const QColor ink = name=="pushButton_equals" ? QColor("#fff3cf") :
-                       name=="pushButton_clear" ? QColor("#431b12") : QColor("#291307");
+                       name=="pushButton_clear" ? QColor("#431b12") :
+                       role=="digit" ? QColor("#000000") : QColor("#291307");
     // Keep button labels large and consistent; only apply a small reduction
     // when a button is unusually short.
     const qreal contentScale = qBound(0.90, button->height() / 32.0, 1.0);
