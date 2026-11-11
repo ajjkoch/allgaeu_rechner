@@ -72,6 +72,7 @@ jobs:
           arch: android_arm64_v8a
           dir: ${{ runner.temp }}/Qt
           cache: true
+          install-deps: false
 
       - name: Configure Android build
         run: |
