@@ -59,6 +59,11 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
     switch (m_woodStyle) {
     case LightWood: glaze = QColor(255, 239, 207, 175); break;
     case DarkWood:  glaze = QColor(67, 37, 19, 145); break;
+    case GreenWood: glaze = QColor(91, 128, 62, 112); break;
+    case RedWood:   glaze = QColor(174, 65, 43, 125); break;
+    case OliveWood: glaze = QColor(143, 145, 69, 88); break;
+    case BlueWood:  glaze = QColor(92, 119, 133, 105); break;
+    case HoneyWood: glaze = QColor(246, 190, 105, 92); break;
     case NaturalWood:
     default:        glaze = QColor(246, 207, 145, 55); break;
     }
