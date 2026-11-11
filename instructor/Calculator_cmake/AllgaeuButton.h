@@ -12,7 +12,7 @@ class AllgaeuButton : public QPushButton
     Q_PROPERTY(WoodStyle woodStyle READ woodStyle WRITE setWoodStyle NOTIFY woodStyleChanged)
 
 public:
-    enum WoodStyle { NaturalWood, LightWood, DarkWood };
+    enum WoodStyle { NaturalWood, LightWood, DarkWood, GreenWood, RedWood, OliveWood, BlueWood, HoneyWood };
     Q_ENUM(WoodStyle)
 
     explicit AllgaeuButton(QWidget *parent = nullptr);
