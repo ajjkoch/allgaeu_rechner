@@ -45,6 +45,8 @@ set(PROJECT_SOURCES
     mainwindow.cpp
     AlpineTheme.h
     AlpineTheme.cpp
+    AllgaeuButton.h
+    AllgaeuButton.cpp
     mainwindow.ui
     alpine_resources.qrc
     ../../common/Util.h
@@ -83,6 +85,41 @@ install(TARGETS ${PROJECT_NAME}
 )
 
 qt_finalize_executable(${PROJECT_NAME})
+
+# Qt Designer custom-widget plugin (desktop only).
+# The widget itself is also compiled into the Android application above.
+if(NOT ANDROID)
+    find_package(Qt6 COMPONENTS UiPlugin QUIET)
+    if(TARGET Qt6::UiPlugin)
+        qt_add_plugin(AllgaeuButtonDesignerPlugin
+            CLASS_NAME AllgaeuButtonPlugin
+            AllgaeuButtonPlugin.h
+            AllgaeuButtonPlugin.cpp
+            AllgaeuButtonPlugin.json
+            AllgaeuButton.h
+            AllgaeuButton.cpp
+            alpine_resources.qrc
+        )
+        target_include_directories(AllgaeuButtonDesignerPlugin
+            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+        target_link_libraries(AllgaeuButtonDesignerPlugin PRIVATE
+            Qt6::Core
+            Qt6::Widgets
+            Qt6::UiPlugin
+        )
+        set_target_properties(AllgaeuButtonDesignerPlugin PROPERTIES
+            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/designer"
+            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/designer"
+        )
+        install(TARGETS AllgaeuButtonDesignerPlugin
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/qt6/plugins/designer
+            RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}/qt6/plugins/designer
+        )
+    else()
+        message(STATUS "Qt6 UiPlugin not found: Designer plugin target is disabled")
+    endif()
+endif()
 
 # GUI interaction tests use Qt Test and are intentionally desktop-only.
 if(NOT ANDROID)
