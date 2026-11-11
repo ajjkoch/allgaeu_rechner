@@ -10,6 +10,8 @@
 AllgaeuButton::AllgaeuButton(QWidget *parent)
     : QPushButton(parent)
 {
+    static const int fontId = QFontDatabase::addApplicationFont(QStringLiteral(":/alpine/BreeSerif-Regular.ttf"));
+    Q_UNUSED(fontId);
     setAttribute(Qt::WA_Hover, true);
     setMinimumSize(32, 30);
     setFont(QFont("Bree Serif", 21, QFont::Black));
