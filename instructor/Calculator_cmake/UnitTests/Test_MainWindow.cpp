@@ -720,7 +720,8 @@ void CalculatorGuiTests::inverseTangentInDegrees()
     QVERIFY(equals);
 
     QTest::mouseClick(inverse, Qt::LeftButton);
-    QCOMPARE(tan->text(), QString("atan"));
+    QVERIFY(qobject_cast<AllgaeuButton *>(tan)->alternateState());
+    QCOMPARE(qobject_cast<AllgaeuButton *>(tan)->alternateText(), QString("atan"));
     QTest::mouseClick(tan, Qt::LeftButton);
     QTest::mouseClick(one, Qt::LeftButton);
     QTest::mouseClick(right, Qt::LeftButton);
@@ -875,7 +876,8 @@ void CalculatorGuiTests::inversePercentageMode()
     QVERIFY(clear);
 
     QTest::mouseClick(inverse, Qt::LeftButton);
-    QCOMPARE(percent->text(), QString("1/%"));
+    QVERIFY(qobject_cast<AllgaeuButton *>(percent)->alternateState());
+    QCOMPARE(qobject_cast<AllgaeuButton *>(percent)->alternateText(), QString("1/%"));
     QTest::mouseClick(two, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);
@@ -888,6 +890,7 @@ void CalculatorGuiTests::inversePercentageMode()
 
     QTest::mouseClick(clear, Qt::LeftButton);
     QTest::mouseClick(inverse, Qt::LeftButton);
+    QVERIFY(!qobject_cast<AllgaeuButton *>(percent)->alternateState());
     QCOMPARE(percent->text(), QString("%"));
     QTest::mouseClick(two, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);
