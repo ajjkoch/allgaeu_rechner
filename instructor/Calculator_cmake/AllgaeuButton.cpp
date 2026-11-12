@@ -121,11 +121,6 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
         painter.fillRect(face, QColor(30, 18, 9, 65));
     painter.restore();
 
-    painter.setPen(QPen(QColor("#3b2416"), 1.8));
-    painter.setBrush(Qt::NoBrush);
-    painter.drawRoundedRect(face, 10, 10);
-    painter.setPen(QPen(QColor("#56351f"), 1.0));
-    painter.drawRoundedRect(face.adjusted(2, 2, -2, -3), 8, 8);
 
     // Let Qt's style engine render the label. Text, font, palette and icon
     // come from the QPushButton properties configured in mainwindow.ui.
