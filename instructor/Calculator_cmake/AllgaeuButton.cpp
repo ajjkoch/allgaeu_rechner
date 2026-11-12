@@ -6,10 +6,22 @@
 #include <QPixmap>
 #include <QFontDatabase>
 #include <QStyleOptionButton>
+#include <QResource>
+
+namespace {
+void ensureAlpineResources()
+{
+    // The Designer plugin is a separate module. Explicitly initialize its
+    // compiled-in .qrc before any QPixmap/QFontDatabase resource lookup.
+    if (!QResource(QStringLiteral(":/alpine/mid.jpg")).isValid())
+        Q_INIT_RESOURCE(alpine_resources);
+}
+} // namespace
 
 AllgaeuButton::AllgaeuButton(QWidget *parent)
     : QPushButton(parent)
 {
+    ensureAlpineResources();
     static const int fontId = QFontDatabase::addApplicationFont(QStringLiteral(":/alpine/BreeSerif-Regular.ttf"));
     Q_UNUSED(fontId);
     setAttribute(Qt::WA_Hover, true);
