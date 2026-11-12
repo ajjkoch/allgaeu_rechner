@@ -118,7 +118,7 @@ void paintAlpineButton(QPushButton *button)
     const qreal contentScale = qBound(0.90, button->height() / 32.0, 1.0);
     static const int alpineFontId = QFontDatabase::addApplicationFont(":/alpine/BreeSerif-Regular.ttf");
     Q_UNUSED(alpineFontId);
-    QFont f("Bree Serif", 21, QFont::Black);
+    QFont f("Bree Serif", 18, QFont::Bold);
     f.setPointSizeF(f.pointSizeF() * contentScale);
     painter.setPen(ink);
     painter.setFont(f);
@@ -148,7 +148,7 @@ void paintAlpineButton(QPushButton *button)
             painter.setPen(QPen(ink, 3.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter.drawPath(radical);
             painter.restore();
-            QFont radicandFont("Bree Serif", 14, QFont::Black);
+            QFont radicandFont("Bree Serif", 14, QFont::Bold);
             painter.setFont(radicandFont);
             painter.drawText(QRectF(cx-1, cy-8, 17, 18), Qt::AlignCenter, "x");
         } else if (name=="pushButton_pi") {
@@ -158,7 +158,7 @@ void paintAlpineButton(QPushButton *button)
                 const qreal cx = r.center().x();
                 const qreal cy = r.center().y();
                 constexpr qreal inverseRadicalScale = 0.61; // approx. 22 px
-                QFont indexFont("Bree Serif", 14, QFont::Black);
+                QFont indexFont("Bree Serif", 14, QFont::Bold);
                 painter.setFont(indexFont);
                 painter.drawText(QRectF(cx-23, cy-16, 15, 15), Qt::AlignCenter, "x");
                 QPainterPath radical;
