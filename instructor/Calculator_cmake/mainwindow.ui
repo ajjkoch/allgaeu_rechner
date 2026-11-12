@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>296</width>
-    <height>558</height>
+    <width>377</width>
+    <height>719</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -110,6 +110,14 @@
           <height>-1</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <family>Optima</family>
+          <pointsize>16</pointsize>
+          <bold>true</bold>
+          <kerning>true</kerning>
+         </font>
+        </property>
         <property name="autoFillBackground">
          <bool>false</bool>
         </property>
@@ -155,6 +163,14 @@
           <width>16777212</width>
           <height>108</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Optima</family>
+          <pointsize>16</pointsize>
+          <bold>true</bold>
+          <kerning>true</kerning>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">QLabel { border-image: url(:/alpine/footer.jpg) 0 0 0 0 stretch stretch; }</string>
@@ -230,11 +246,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>(</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::BlueWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -252,11 +285,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>0</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -274,14 +324,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>sin</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
           </property>
           <property name="alternateText">
            <string>asin</string>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -299,11 +366,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>^</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::BlueWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -321,11 +405,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>&lt;-</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::RedWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -343,14 +444,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="layoutDirection">
            <enum>Qt::LeftToRight</enum>
           </property>
           <property name="text">
            <string>7</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -368,11 +486,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>-</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::GreenWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -390,11 +525,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>.</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -412,11 +564,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>2</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -434,14 +603,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>tan</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
           </property>
           <property name="alternateText">
            <string>atan</string>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -459,11 +645,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>C</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::RedWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -481,11 +684,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>v</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::BlueWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -503,11 +723,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>8</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -525,11 +762,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>1</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -547,11 +801,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>+</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::GreenWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -569,11 +840,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>&lt;</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::BlueWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -591,11 +879,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>log</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -613,11 +918,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>=</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::GreenWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -635,14 +957,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>cos</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
           </property>
           <property name="alternateText">
            <string>acos</string>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -660,11 +999,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>6</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -682,11 +1038,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>ln</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -704,11 +1077,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>inv</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::DarkWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -726,14 +1116,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>y^x</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
           </property>
           <property name="alternateText">
            <string>x√y</string>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -751,11 +1158,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>/</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::GreenWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -773,14 +1197,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>%</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
           </property>
           <property name="alternateText">
            <string>1/%</string>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -798,14 +1239,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>sqrt</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
           </property>
           <property name="alternateText">
            <string>x²</string>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -823,11 +1281,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>5</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -845,11 +1320,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>&gt;</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::BlueWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -867,11 +1362,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>x</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::GreenWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -897,8 +1409,8 @@
           </property>
           <property name="font">
            <font>
-            <family>Bree Serif</family>
-            <pointsize>20</pointsize>
+            <family>Optima</family>
+            <pointsize>18</pointsize>
             <bold>true</bold>
            </font>
           </property>
@@ -913,6 +1425,9 @@
           </property>
           <property name="inputMethodHints">
            <set>Qt::ImhNone</set>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
           </property>
           <property name="verticalScrollBarPolicy">
            <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -939,11 +1454,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>9</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -961,11 +1493,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>+/-</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -983,11 +1532,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>4</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1005,11 +1571,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>3</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1033,14 +1616,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
            <string>(&lt;-</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::BlueWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1058,14 +1658,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
            <string>-&gt;)</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::BlueWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1089,11 +1706,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>grad</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::BlueWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1111,14 +1745,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
            <string>e</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1136,14 +1787,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
            <string>fak</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1161,11 +1829,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>mod</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1183,14 +1868,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="cursor">
            <cursorShape>WaitCursor</cursorShape>
           </property>
           <property name="text">
            <string>π</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::LightWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1208,11 +1910,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>1/x</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1233,14 +1952,31 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>C(n, k)</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
           </property>
           <property name="default">
            <bool>false</bool>
           </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1258,11 +1994,28 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>)</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::BlueWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -1283,6 +2036,14 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Optima</family>
+            <pointsize>16</pointsize>
+            <bold>true</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
           <property name="text">
            <string>fix</string>
           </property>
@@ -1296,10 +2057,13 @@
            <bool>false</bool>
           </property>
           <property name="flat">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="woodStyle">
            <enum>AllgaeuButton::BlueWood</enum>
+          </property>
+          <property name="alternateState">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
