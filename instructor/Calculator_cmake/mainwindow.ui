@@ -859,6 +859,13 @@
         </item>
         <item row="0" column="0" colspan="4">
          <widget class="QTextEdit" name="textEdit">
+         <property name="font">
+          <font>
+           <family>Bree Serif</family>
+           <pointsize>20</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
