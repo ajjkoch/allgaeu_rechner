@@ -78,13 +78,6 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
     painter.setPen(QPen(QColor("#56351f"), 1.0));
     painter.drawRoundedRect(face.adjusted(2, 2, -2, -3), 8, 8);
 
-    const QColor ink = m_woodStyle == DarkWood ? QColor("#fff3cf") : QColor("#201208");
-    painter.setPen(ink);
-    QFont buttonFont = font();
-    if (buttonFont.family().isEmpty())
-        buttonFont = QFont("Bree Serif", 21, QFont::Black);
-    painter.setFont(buttonFont);
-
     const QString name = objectName();
     const QColor ink = name == "pushButton_equals" ? QColor("#fff3cf")
                      : name == "pushButton_clear" ? QColor("#431b12")
