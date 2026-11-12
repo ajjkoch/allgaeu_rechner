@@ -112,10 +112,80 @@ if(NOT ANDROID)
             LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/designer"
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/designer"
         )
+
+        # Keep the regular CMake install rule for explicit installs/packages.
         install(TARGETS AllgaeuButtonDesignerPlugin
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/qt6/plugins/designer
             RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}/qt6/plugins/designer
         )
+
+        # Also deploy the freshly built plugin to the active Qt installation
+        # after each build, so Qt Designer can load it without a manual install.
+        # Override this cache path when Designer uses a custom plugin directory.
+        set(ALLGAEU_QT_DESIGNER_PLUGIN_DIR "" CACHE PATH
+            "Qt Designer plugin directory (defaults to QT_INSTALL_PLUGINS/designer)")
+
+        if(NOT ALLGAEU_QT_DESIGNER_PLUGIN_DIR)
+            find_program(QT_PATHS_EXECUTABLE
+                NAMES qtpaths6 qtpaths
+                HINTS "${QT_HOST_PATH}/bin" "${Qt6_DIR}/../../../bin"
+            )
+            if(QT_PATHS_EXECUTABLE)
+                execute_process(
+                    COMMAND "${QT_PATHS_EXECUTABLE}" --query QT_INSTALL_PLUGINS
+                    RESULT_VARIABLE QT_PATHS_RESULT
+                    OUTPUT_VARIABLE QT_INSTALL_PLUGINS_DIR
+                    OUTPUT_STRIP_TRAILING_WHITESPACE
+                    ERROR_QUIET
+                )
+                if(QT_PATHS_RESULT EQUAL 0 AND QT_INSTALL_PLUGINS_DIR)
+                    set(ALLGAEU_QT_DESIGNER_PLUGIN_DIR
+                        "${QT_INSTALL_PLUGINS_DIR}/designer")
+                endif()
+            endif()
+        endif()
+
+        # Qt Creator may use a different Qt/Designer installation than the
+        # standalone Designer. Configure its plugin directory explicitly when
+        # the embedded Designer does not use the Qt installation above.
+        set(ALLGAEU_QT_CREATOR_PLUGIN_DIR "" CACHE PATH
+            "Additional Qt Creator Designer plugin directory (optional)")
+
+        set(ALLGAEU_DESIGNER_PLUGIN_DIRS)
+        if(ALLGAEU_QT_DESIGNER_PLUGIN_DIR)
+            list(APPEND ALLGAEU_DESIGNER_PLUGIN_DIRS
+                "${ALLGAEU_QT_DESIGNER_PLUGIN_DIR}")
+        else()
+            message(WARNING
+                "Could not determine standalone Qt Designer plugin directory. "
+                "Set ALLGAEU_QT_DESIGNER_PLUGIN_DIR to deploy it.")
+        endif()
+
+        if(ALLGAEU_QT_CREATOR_PLUGIN_DIR)
+            list(APPEND ALLGAEU_DESIGNER_PLUGIN_DIRS
+                "${ALLGAEU_QT_CREATOR_PLUGIN_DIR}")
+        endif()
+
+        if(ALLGAEU_DESIGNER_PLUGIN_DIRS)
+            list(REMOVE_DUPLICATES ALLGAEU_DESIGNER_PLUGIN_DIRS)
+            set(ALLGAEU_DESIGNER_DEPLOY_COMMANDS)
+            foreach(PLUGIN_DIR IN LISTS ALLGAEU_DESIGNER_PLUGIN_DIRS)
+                message(STATUS
+                    "AllgaeuButton Designer plugin will be deployed to: ${PLUGIN_DIR}")
+                list(APPEND ALLGAEU_DESIGNER_DEPLOY_COMMANDS
+                    COMMAND "${CMAKE_COMMAND}" -E make_directory "${PLUGIN_DIR}"
+                    COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+                        "$<TARGET_FILE:AllgaeuButtonDesignerPlugin>"
+                        "${PLUGIN_DIR}/$<TARGET_FILE_NAME:AllgaeuButtonDesignerPlugin>"
+                )
+            endforeach()
+
+            add_custom_command(TARGET AllgaeuButtonDesignerPlugin POST_BUILD
+                ${ALLGAEU_DESIGNER_DEPLOY_COMMANDS}
+                COMMENT "Deploying AllgaeuButtonDesignerPlugin to configured Designer directories"
+                VERBATIM
+            )
+        endif()
     else()
         message(STATUS "Qt6 UiPlugin not found: Designer plugin target is disabled")
     endif()
@@ -131,6 +201,7 @@ if(NOT ANDROID)
         AllgaeuButton.h
         AllgaeuButton.cpp
         mainwindow.ui
+        alpine_resources.qrc
         UnitTests/Test_MainWindow.cpp
     )
 

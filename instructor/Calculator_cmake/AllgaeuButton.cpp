@@ -6,15 +6,25 @@
 #include <QPixmap>
 #include <QFontDatabase>
 #include <QStyleOptionButton>
+#include <QResource>
+
+static void ensureAlpineResources()
+{
+    // The Designer plugin is a separate module. Explicitly initialize its
+    // compiled-in .qrc before any QPixmap/QFontDatabase resource lookup.
+    if (!QResource(QStringLiteral(":/alpine/mid.jpg")).isValid())
+        Q_INIT_RESOURCE(alpine_resources);
+}
 
 AllgaeuButton::AllgaeuButton(QWidget *parent)
     : QPushButton(parent)
 {
+    ensureAlpineResources();
     static const int fontId = QFontDatabase::addApplicationFont(QStringLiteral(":/alpine/BreeSerif-Regular.ttf"));
     Q_UNUSED(fontId);
     setAttribute(Qt::WA_Hover, true);
     setMinimumSize(32, 30);
-    setFont(QFont("Bree Serif", 21, QFont::Black));
+    setFont(QFont("Bree Serif", 18, QFont::Bold));
 }
 
 AllgaeuButton::WoodStyle AllgaeuButton::woodStyle() const
@@ -29,6 +39,48 @@ void AllgaeuButton::setWoodStyle(WoodStyle style)
     m_woodStyle = style;
     update();
     emit woodStyleChanged(style);
+}
+
+QString AllgaeuButton::alternateText() const
+{
+    return m_alternateText;
+}
+
+void AllgaeuButton::setAlternateText(const QString &text)
+{
+    if (m_alternateText == text)
+        return;
+    m_alternateText = text;
+    update();
+    emit alternateTextChanged(text);
+}
+
+QIcon AllgaeuButton::alternateIcon() const
+{
+    return m_alternateIcon;
+}
+
+void AllgaeuButton::setAlternateIcon(const QIcon &icon)
+{
+    if (m_alternateIcon.cacheKey() == icon.cacheKey())
+        return;
+    m_alternateIcon = icon;
+    update();
+    emit alternateIconChanged(icon);
+}
+
+bool AllgaeuButton::alternateState() const
+{
+    return m_alternateState;
+}
+
+void AllgaeuButton::setAlternateState(bool enabled)
+{
+    if (m_alternateState == enabled)
+        return;
+    m_alternateState = enabled;
+    update();
+    emit alternateStateChanged(enabled);
 }
 
 void AllgaeuButton::paintEvent(QPaintEvent *event)
@@ -84,20 +136,24 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
                      : m_woodStyle == DarkWood ? QColor("#fff3cf")
                      : QColor("#201208");
     painter.setPen(ink);
-    painter.setFont(QFont("Bree Serif", 21, QFont::Black));
+    painter.setFont(font());
 
     QRect content = face.toRect().adjusted(7, 3, -7, -3);
-    if (!icon().isNull()) {
+    const QIcon displayedIcon = m_alternateState && !m_alternateIcon.isNull()
+        ? m_alternateIcon : icon();
+    const QString displayedText = m_alternateState && !m_alternateText.isEmpty()
+        ? m_alternateText : text();
+    if (!displayedIcon.isNull()) {
         const QSize actualIconSize = iconSize().isValid() ? iconSize() : QSize(24, 24);
         const QSize fitted = actualIconSize.boundedTo(content.size());
         const QRect iconRect(content.center().x() - fitted.width() / 2,
                              content.center().y() - fitted.height() / 2,
                              fitted.width(), fitted.height());
-        icon().paint(&painter, iconRect, Qt::AlignCenter,
+        displayedIcon.paint(&painter, iconRect, Qt::AlignCenter,
                      isEnabled() ? QIcon::Normal : QIcon::Disabled,
                      isDown() ? QIcon::On : QIcon::Off);
-    } else if (name == "pushButton_sqrt" && property("inverseSquare").toBool()) {
-        painter.drawText(content, Qt::AlignCenter, QStringLiteral("x²"));
+    } else if (name == "pushButton_sqrt" && m_alternateState) {
+        painter.drawText(content, Qt::AlignCenter, displayedText);
     } else if (name == "pushButton_sqrt") {
         const qreal cx = face.center().x();
         const qreal cy = face.center().y();
@@ -114,12 +170,12 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
         painter.drawPath(radical);
         painter.restore();
         painter.setPen(ink);
-        painter.setFont(QFont("Bree Serif", 14, QFont::Black));
+        painter.setFont(QFont("Bree Serif", 14, QFont::Bold));
         painter.drawText(QRectF(cx - 1, cy - 8, 17, 18), Qt::AlignCenter, QStringLiteral("x"));
-    } else if (name == "pushButton_x2" && property("inverseRoot").toBool()) {
+    } else if (name == "pushButton_x2" && m_alternateState) {
         const qreal cx = face.center().x();
         const qreal cy = face.center().y();
-        painter.setFont(QFont("Bree Serif", 14, QFont::Black));
+        painter.setFont(QFont("Bree Serif", 14, QFont::Bold));
         painter.drawText(QRectF(cx - 23, cy - 16, 15, 15), Qt::AlignCenter, QStringLiteral("x"));
         QPainterPath radical;
         constexpr qreal scale = 0.61;
@@ -137,6 +193,6 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
         painter.setFont(QFont("Bree Serif", 14, QFont::Black));
         painter.drawText(QRectF(cx + 1, cy - 7, 19, 19), Qt::AlignCenter, QStringLiteral("y"));
     } else {
-        painter.drawText(content, Qt::AlignCenter | Qt::TextWordWrap, text());
+        painter.drawText(content, Qt::AlignCenter | Qt::TextWordWrap, displayedText);
     }
 }

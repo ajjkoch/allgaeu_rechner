@@ -118,7 +118,7 @@ void paintAlpineButton(QPushButton *button)
     const qreal contentScale = qBound(0.90, button->height() / 32.0, 1.0);
     static const int alpineFontId = QFontDatabase::addApplicationFont(":/alpine/BreeSerif-Regular.ttf");
     Q_UNUSED(alpineFontId);
-    QFont f("Bree Serif", 21, QFont::Black);
+    QFont f("Bree Serif", 18, QFont::Bold);
     f.setPointSizeF(f.pointSizeF() * contentScale);
     painter.setPen(ink);
     painter.setFont(f);
@@ -148,7 +148,7 @@ void paintAlpineButton(QPushButton *button)
             painter.setPen(QPen(ink, 3.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter.drawPath(radical);
             painter.restore();
-            QFont radicandFont("Bree Serif", 14, QFont::Black);
+            QFont radicandFont("Bree Serif", 14, QFont::Bold);
             painter.setFont(radicandFont);
             painter.drawText(QRectF(cx-1, cy-8, 17, 18), Qt::AlignCenter, "x");
         } else if (name=="pushButton_pi") {
@@ -158,7 +158,7 @@ void paintAlpineButton(QPushButton *button)
                 const qreal cx = r.center().x();
                 const qreal cy = r.center().y();
                 constexpr qreal inverseRadicalScale = 0.61; // approx. 22 px
-                QFont indexFont("Bree Serif", 14, QFont::Black);
+                QFont indexFont("Bree Serif", 14, QFont::Bold);
                 painter.setFont(indexFont);
                 painter.drawText(QRectF(cx-23, cy-16, 15, 15), Qt::AlignCenter, "x");
                 QPainterPath radical;
@@ -188,6 +188,8 @@ void paintAlpineButton(QPushButton *button)
 
 void apply(QWidget *window)
 {
+    // Semantic roles remain runtime metadata for tests and accessibility logic.
+    // They must never be used here to overwrite Designer-owned appearance.
     const QMap<QString, QString> roles = {
         {"pushButton_e", "constant"}, {"pushButton_pi", "constant"},
         {"pushButton_fact", "function"}, {"pushButton_placeholder3_3", "function"},
@@ -216,19 +218,6 @@ void apply(QWidget *window)
         {"pushButton_history_back", "control"}, {"pushButton_history_forward", "control"}
     };
 
-    // Each key gets a concise, engraved-looking symbol where that improves recognition.
-    // Object names and calculatorActionId remain the only source of action semantics.
-    const QMap<QString, QString> labels = {
-        {"pushButton_plusminus", "±"}, {"pushButton_sqrt", "√"},
-        {"pushButton_x2", "xʸ"}, {"pushButton_edx", "1/x"},
-        {"pushButton_inv", "INV"}, {"pushButton_mul", "×"},
-        {"pushButton_bracket_right_end", "->)"},
-        {"pushButton_bracket_left_start", "(<-"},
-        {"pushButton_cursor_left", "←"},
-        {"pushButton_cursor_right", "→"}, {"pushButton_history_back", "↑"},
-        {"pushButton_history_forward", "↓"}
-    };
-
     const QMap<QString, QString> hints = {
         {"pushButton_pi", "Konstante π einfügen"},
         {"pushButton_sqrt", "Quadratwurzel √x berechnen; mit INV: Quadrat x² berechnen"},
@@ -253,47 +242,16 @@ void apply(QWidget *window)
         {"pushButton_plusminus", "Vorzeichen wechseln"}
     };
 
-    window->setStyleSheet(R"(
-        QMainWindow, QWidget#centralwidget {
-            background: transparent;
-        }
-        QTextEdit#textEdit {
-            background-color: #f6f0d9; color: #28190c;
-            border: 2px solid #6b431f; border-top: 2px solid #f5d99e;
-            border-bottom: 3px solid #39200e; border-radius: 11px;
-            padding: 2px 8px;
-            font-family: "Bree Serif";
-            font-size: 20pt;
-            font-weight: 900;
-        }
-    )");
-    // Keep the filter owned by the window and paint every calculator key.
-    auto *paintFilter = new AlpineButtonPaintFilter(window);
+    // Visual properties (wood style, text, font, colors and geometry) belong
+    // exclusively to mainwindow.ui. This function only supplies non-visual hints
+    // and interaction affordances without changing the Designer configuration.
     const auto buttons = window->findChildren<QPushButton *>();
     for (QPushButton *button : buttons) {
-        button->installEventFilter(paintFilter);
         const QString name = button->objectName();
-        if (labels.contains(name))
-            button->setText(labels.value(name));
         if (roles.contains(name))
             button->setProperty("role", roles.value(name));
-        if (auto *allgaeuButton = qobject_cast<AllgaeuButton *>(button)) {
-            const QString role = roles.value(name, "utility");
-            AllgaeuButton::WoodStyle style = AllgaeuButton::NaturalWood;
-            if (role == "digit") style = AllgaeuButton::LightWood;
-            else if (role == "operator") style = AllgaeuButton::GreenWood;
-            else if (role == "function") style = AllgaeuButton::OliveWood;
-            else if (role == "constant") style = AllgaeuButton::HoneyWood;
-            else if (role == "control") style = AllgaeuButton::BlueWood;
-            if (name == "pushButton_clear") style = AllgaeuButton::RedWood;
-            allgaeuButton->setWoodStyle(style);
-        }
         if (hints.contains(name))
             button->setToolTip(hints.value(name));
-        if (name == "pushButton_edx")
-            button->setText("1/x");
-        button->setFont(QFont("Bree Serif", 18, QFont::Black));
-        // Geometry and size policy are owned by mainwindow.ui / Qt Designer.
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
         button->setAutoDefault(false);
