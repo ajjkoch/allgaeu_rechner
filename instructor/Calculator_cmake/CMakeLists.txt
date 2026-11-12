@@ -128,6 +128,8 @@ if(NOT ANDROID)
         mainwindow.cpp
         AlpineTheme.h
         AlpineTheme.cpp
+        AllgaeuButton.h
+        AllgaeuButton.cpp
         mainwindow.ui
         UnitTests/Test_MainWindow.cpp
     )
