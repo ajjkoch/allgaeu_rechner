@@ -277,17 +277,8 @@ void apply(QWidget *window)
             button->setText(labels.value(name));
         if (roles.contains(name))
             button->setProperty("role", roles.value(name));
-        if (auto *allgaeuButton = qobject_cast<AllgaeuButton *>(button)) {
-            const QString role = roles.value(name, "utility");
-            AllgaeuButton::WoodStyle style = AllgaeuButton::NaturalWood;
-            if (role == "digit") style = AllgaeuButton::LightWood;
-            else if (role == "operator") style = AllgaeuButton::GreenWood;
-            else if (role == "function") style = AllgaeuButton::OliveWood;
-            else if (role == "constant") style = AllgaeuButton::HoneyWood;
-            else if (role == "control") style = AllgaeuButton::BlueWood;
-            if (name == "pushButton_clear") style = AllgaeuButton::RedWood;
-            allgaeuButton->setWoodStyle(style);
-        }
+        // AllgaeuButton appearance (especially woodStyle) is configured in
+        // mainwindow.ui. Do not derive or assign visual styles from role here.
         if (hints.contains(name))
             button->setToolTip(hints.value(name));
         if (name == "pushButton_edx")
