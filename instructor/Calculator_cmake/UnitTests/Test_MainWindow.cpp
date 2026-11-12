@@ -13,6 +13,7 @@
 #include <QTextEdit>
 
 #include "mainwindow.h"
+#include "AllgaeuButton.h"
 
 class CalculatorGuiTests : public QObject
 {
