@@ -264,7 +264,7 @@ void apply(QWidget *window)
             padding: 2px 8px;
             font-family: "Bree Serif";
             font-size: 20pt;
-            font-weight: 900;
+            font-weight: 700;
         }
     )");
     // Keep the filter owned by the window and paint every calculator key.
@@ -292,7 +292,8 @@ void apply(QWidget *window)
             button->setToolTip(hints.value(name));
         if (name == "pushButton_edx")
             button->setText("1/x");
-        button->setFont(QFont("Bree Serif", 18, QFont::Black));
+        if (!qobject_cast<AllgaeuButton *>(button))
+            button->setFont(QFont("Bree Serif", 18, QFont::Bold));
         // Geometry and size policy are owned by mainwindow.ui / Qt Designer.
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
