@@ -217,7 +217,10 @@
          <number>5</number>
         </property>
         <item row="7" column="1">
-         <widget class="QPushButton" name="pushButton_bracket_left">
+         <widget class="AllgaeuButton" name="pushButton_bracket_left">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::NaturalWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -236,7 +239,10 @@
          </widget>
         </item>
         <item row="11" column="1">
-         <widget class="QPushButton" name="pushButton_0">
+         <widget class="AllgaeuButton" name="pushButton_0">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::LightWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -255,7 +261,10 @@
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QPushButton" name="pushButton_sin">
+         <widget class="AllgaeuButton" name="pushButton_sin">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -274,7 +283,10 @@
          </widget>
         </item>
         <item row="2" column="2">
-         <widget class="QPushButton" name="pushButton_history_back">
+         <widget class="AllgaeuButton" name="pushButton_history_back">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::BlueWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -299,7 +311,10 @@
          </widget>
         </item>
         <item row="3" column="3">
-         <widget class="QPushButton" name="pushButton_erase_left">
+         <widget class="AllgaeuButton" name="pushButton_erase_left">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::NaturalWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -318,7 +333,10 @@
          </widget>
         </item>
         <item row="8" column="0">
-         <widget class="QPushButton" name="pushButton_7">
+         <widget class="AllgaeuButton" name="pushButton_7">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::LightWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -340,7 +358,10 @@
          </widget>
         </item>
         <item row="9" column="3">
-         <widget class="QPushButton" name="pushButton_minus">
+         <widget class="AllgaeuButton" name="pushButton_minus">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::GreenWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -359,7 +380,10 @@
          </widget>
         </item>
         <item row="11" column="2">
-         <widget class="QPushButton" name="pushButton_decimal">
+         <widget class="AllgaeuButton" name="pushButton_decimal">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::NaturalWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -378,7 +402,10 @@
          </widget>
         </item>
         <item row="10" column="1">
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="AllgaeuButton" name="pushButton_2">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::LightWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -397,7 +424,10 @@
          </widget>
         </item>
         <item row="4" column="2">
-         <widget class="QPushButton" name="pushButton_tan">
+         <widget class="AllgaeuButton" name="pushButton_tan">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -416,7 +446,10 @@
          </widget>
         </item>
         <item row="3" column="2">
-         <widget class="QPushButton" name="pushButton_clear">
+         <widget class="AllgaeuButton" name="pushButton_clear">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::RedWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -435,7 +468,10 @@
          </widget>
         </item>
         <item row="2" column="3">
-         <widget class="QPushButton" name="pushButton_history_forward">
+         <widget class="AllgaeuButton" name="pushButton_history_forward">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::BlueWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -460,7 +496,10 @@
          </widget>
         </item>
         <item row="8" column="1">
-         <widget class="QPushButton" name="pushButton_8">
+         <widget class="AllgaeuButton" name="pushButton_8">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::LightWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -479,7 +518,10 @@
          </widget>
         </item>
         <item row="10" column="0">
-         <widget class="QPushButton" name="pushButton_1">
+         <widget class="AllgaeuButton" name="pushButton_1">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::LightWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -498,7 +540,10 @@
          </widget>
         </item>
         <item row="10" column="3">
-         <widget class="QPushButton" name="pushButton_plus">
+         <widget class="AllgaeuButton" name="pushButton_plus">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::GreenWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -517,7 +562,10 @@
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QPushButton" name="pushButton_cursor_left">
+         <widget class="AllgaeuButton" name="pushButton_cursor_left">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::BlueWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -542,7 +590,10 @@
          </widget>
         </item>
         <item row="5" column="0">
-         <widget class="QPushButton" name="pushButton_log">
+         <widget class="AllgaeuButton" name="pushButton_log">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -561,7 +612,10 @@
          </widget>
         </item>
         <item row="11" column="3">
-         <widget class="QPushButton" name="pushButton_equals">
+         <widget class="AllgaeuButton" name="pushButton_equals">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::GreenWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -580,7 +634,10 @@
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QPushButton" name="pushButton_cos">
+         <widget class="AllgaeuButton" name="pushButton_cos">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -599,7 +656,10 @@
          </widget>
         </item>
         <item row="9" column="2">
-         <widget class="QPushButton" name="pushButton_6">
+         <widget class="AllgaeuButton" name="pushButton_6">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::LightWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -618,7 +678,10 @@
          </widget>
         </item>
         <item row="5" column="1">
-         <widget class="QPushButton" name="pushButton_ln">
+         <widget class="AllgaeuButton" name="pushButton_ln">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -637,7 +700,10 @@
          </widget>
         </item>
         <item row="4" column="3">
-         <widget class="QPushButton" name="pushButton_inv">
+         <widget class="AllgaeuButton" name="pushButton_inv">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -656,7 +722,10 @@
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QPushButton" name="pushButton_x2">
+         <widget class="AllgaeuButton" name="pushButton_x2">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -675,7 +744,10 @@
          </widget>
         </item>
         <item row="7" column="3">
-         <widget class="QPushButton" name="pushButton_divided">
+         <widget class="AllgaeuButton" name="pushButton_divided">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::GreenWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -694,7 +766,10 @@
          </widget>
         </item>
         <item row="5" column="3">
-         <widget class="QPushButton" name="pushButton_percent">
+         <widget class="AllgaeuButton" name="pushButton_percent">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -721,7 +796,10 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QPushButton" name="pushButton_sqrt">
+         <widget class="AllgaeuButton" name="pushButton_sqrt">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -748,7 +826,10 @@
          </widget>
         </item>
         <item row="9" column="1">
-         <widget class="QPushButton" name="pushButton_5">
+         <widget class="AllgaeuButton" name="pushButton_5">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::LightWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -767,7 +848,10 @@
          </widget>
         </item>
         <item row="1" column="3">
-         <widget class="QPushButton" name="pushButton_cursor_right">
+         <widget class="AllgaeuButton" name="pushButton_cursor_right">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::BlueWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -792,7 +876,10 @@
          </widget>
         </item>
         <item row="8" column="3">
-         <widget class="QPushButton" name="pushButton_mul">
+         <widget class="AllgaeuButton" name="pushButton_mul">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::GreenWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -861,7 +948,10 @@
          </widget>
         </item>
         <item row="8" column="2">
-         <widget class="QPushButton" name="pushButton_9">
+         <widget class="AllgaeuButton" name="pushButton_9">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::LightWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -880,7 +970,10 @@
          </widget>
         </item>
         <item row="11" column="0">
-         <widget class="QPushButton" name="pushButton_plusminus">
+         <widget class="AllgaeuButton" name="pushButton_plusminus">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::NaturalWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -899,7 +992,10 @@
          </widget>
         </item>
         <item row="9" column="0">
-         <widget class="QPushButton" name="pushButton_4">
+         <widget class="AllgaeuButton" name="pushButton_4">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::LightWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -918,7 +1014,10 @@
          </widget>
         </item>
         <item row="10" column="2">
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="AllgaeuButton" name="pushButton_3">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::LightWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -937,7 +1036,10 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QPushButton" name="pushButton_bracket_left_start">
+         <widget class="AllgaeuButton" name="pushButton_bracket_left_start">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::BlueWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -971,7 +1073,10 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QPushButton" name="pushButton_bracket_right_end">
+         <widget class="AllgaeuButton" name="pushButton_bracket_right_end">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::BlueWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -999,7 +1104,10 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QPushButton" name="pushButton_changeDegreesMode">
+         <widget class="AllgaeuButton" name="pushButton_changeDegreesMode">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::BlueWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1030,7 +1138,10 @@
          </widget>
         </item>
         <item row="7" column="0">
-         <widget class="QPushButton" name="pushButton_e">
+         <widget class="AllgaeuButton" name="pushButton_e">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::HoneyWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1058,7 +1169,10 @@
          </widget>
         </item>
         <item row="6" column="2">
-         <widget class="QPushButton" name="pushButton_fact">
+         <widget class="AllgaeuButton" name="pushButton_fact">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1080,7 +1194,10 @@
          </widget>
         </item>
         <item row="6" column="1">
-         <widget class="QPushButton" name="pushButton_mod">
+         <widget class="AllgaeuButton" name="pushButton_mod">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1099,7 +1216,10 @@
          </widget>
         </item>
         <item row="6" column="0">
-         <widget class="QPushButton" name="pushButton_pi">
+         <widget class="AllgaeuButton" name="pushButton_pi">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::HoneyWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1127,7 +1247,10 @@
          </widget>
         </item>
         <item row="5" column="2">
-         <widget class="QPushButton" name="pushButton_edx">
+         <widget class="AllgaeuButton" name="pushButton_edx">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1146,7 +1269,10 @@
          </widget>
         </item>
         <item row="6" column="3">
-         <widget class="QPushButton" name="pushButton_placeholder3_3">
+         <widget class="AllgaeuButton" name="pushButton_placeholder3_3">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::OliveWood</enum>
+          </property>
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -1171,7 +1297,10 @@
          </widget>
         </item>
         <item row="7" column="2">
-         <widget class="QPushButton" name="pushButton_bracket_right">
+         <widget class="AllgaeuButton" name="pushButton_bracket_right">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::NaturalWood</enum>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1190,7 +1319,10 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QPushButton" name="pushButton_placeholder3_4">
+         <widget class="AllgaeuButton" name="pushButton_placeholder3_4">
+          <property name="woodStyle">
+           <enum>AllgaeuButton::NaturalWood</enum>
+          </property>
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -1230,6 +1362,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AllgaeuButton</class>
+   <extends>QPushButton</extends>
+   <header>AllgaeuButton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
