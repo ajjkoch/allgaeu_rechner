@@ -112,10 +112,56 @@ if(NOT ANDROID)
             LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/designer"
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/designer"
         )
+
+        # Keep the regular CMake install rule for explicit installs/packages.
         install(TARGETS AllgaeuButtonDesignerPlugin
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/qt6/plugins/designer
             RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}/qt6/plugins/designer
         )
+
+        # Also deploy the freshly built plugin to the active Qt installation
+        # after each build, so Qt Designer can load it without a manual install.
+        # Override this cache path when Designer uses a custom plugin directory.
+        set(ALLGAEU_QT_DESIGNER_PLUGIN_DIR "" CACHE PATH
+            "Qt Designer plugin directory (defaults to QT_INSTALL_PLUGINS/designer)")
+
+        if(NOT ALLGAEU_QT_DESIGNER_PLUGIN_DIR)
+            find_program(QT_PATHS_EXECUTABLE
+                NAMES qtpaths6 qtpaths
+                HINTS "${QT_HOST_PATH}/bin" "${Qt6_DIR}/../../../bin"
+            )
+            if(QT_PATHS_EXECUTABLE)
+                execute_process(
+                    COMMAND "${QT_PATHS_EXECUTABLE}" --query QT_INSTALL_PLUGINS
+                    RESULT_VARIABLE QT_PATHS_RESULT
+                    OUTPUT_VARIABLE QT_INSTALL_PLUGINS_DIR
+                    OUTPUT_STRIP_TRAILING_WHITESPACE
+                    ERROR_QUIET
+                )
+                if(QT_PATHS_RESULT EQUAL 0 AND QT_INSTALL_PLUGINS_DIR)
+                    set(ALLGAEU_QT_DESIGNER_PLUGIN_DIR
+                        "${QT_INSTALL_PLUGINS_DIR}/designer")
+                endif()
+            endif()
+        endif()
+
+        if(ALLGAEU_QT_DESIGNER_PLUGIN_DIR)
+            message(STATUS
+                "AllgaeuButton Designer plugin will be deployed to: ${ALLGAEU_QT_DESIGNER_PLUGIN_DIR}")
+            add_custom_command(TARGET AllgaeuButtonDesignerPlugin POST_BUILD
+                COMMAND "${CMAKE_COMMAND}" -E make_directory
+                    "${ALLGAEU_QT_DESIGNER_PLUGIN_DIR}"
+                COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+                    "$<TARGET_FILE:AllgaeuButtonDesignerPlugin>"
+                    "${ALLGAEU_QT_DESIGNER_PLUGIN_DIR}/$<TARGET_FILE_NAME:AllgaeuButtonDesignerPlugin>"
+                COMMENT "Deploying AllgaeuButtonDesignerPlugin to Qt Designer plugin directory"
+                VERBATIM
+            )
+        else()
+            message(WARNING
+                "Could not determine Qt Designer plugin directory. "
+                "Set ALLGAEU_QT_DESIGNER_PLUGIN_DIR or install the plugin manually.")
+        endif()
     else()
         message(STATUS "Qt6 UiPlugin not found: Designer plugin target is disabled")
     endif()
