@@ -4,8 +4,8 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QPixmap>
-#include <QFontDatabase>
 #include <QStyleOptionButton>
+#include <QStyle>
 #include <QResource>
 
 static void ensureAlpineResources()
@@ -20,11 +20,8 @@ AllgaeuButton::AllgaeuButton(QWidget *parent)
     : QPushButton(parent)
 {
     ensureAlpineResources();
-    static const int fontId = QFontDatabase::addApplicationFont(QStringLiteral(":/alpine/BreeSerif-Regular.ttf"));
-    Q_UNUSED(fontId);
     setAttribute(Qt::WA_Hover, true);
     setMinimumSize(32, 30);
-    setFont(QFont("Bree Serif", 18, QFont::Bold));
 }
 
 AllgaeuButton::WoodStyle AllgaeuButton::woodStyle() const
@@ -130,69 +127,14 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
     painter.setPen(QPen(QColor("#56351f"), 1.0));
     painter.drawRoundedRect(face.adjusted(2, 2, -2, -3), 8, 8);
 
-    const QString name = objectName();
-    const QColor ink = name == "pushButton_equals" ? QColor("#fff3cf")
-                     : name == "pushButton_clear" ? QColor("#431b12")
-                     : m_woodStyle == DarkWood ? QColor("#fff3cf")
-                     : QColor("#201208");
-    painter.setPen(ink);
-    painter.setFont(font());
-
-    QRect content = face.toRect().adjusted(7, 3, -7, -3);
-    const QIcon displayedIcon = m_alternateState && !m_alternateIcon.isNull()
-        ? m_alternateIcon : icon();
-    const QString displayedText = m_alternateState && !m_alternateText.isEmpty()
-        ? m_alternateText : text();
-    if (!displayedIcon.isNull()) {
-        const QSize actualIconSize = iconSize().isValid() ? iconSize() : QSize(24, 24);
-        const QSize fitted = actualIconSize.boundedTo(content.size());
-        const QRect iconRect(content.center().x() - fitted.width() / 2,
-                             content.center().y() - fitted.height() / 2,
-                             fitted.width(), fitted.height());
-        displayedIcon.paint(&painter, iconRect, Qt::AlignCenter,
-                     isEnabled() ? QIcon::Normal : QIcon::Disabled,
-                     isDown() ? QIcon::On : QIcon::Off);
-    } else if (name == "pushButton_sqrt" && m_alternateState) {
-        painter.drawText(content, Qt::AlignCenter, displayedText);
-    } else if (name == "pushButton_sqrt") {
-        const qreal cx = face.center().x();
-        const qreal cy = face.center().y();
-        QPainterPath radical;
-        constexpr qreal scale = 0.61;
-        painter.save();
-        painter.translate(cx, cy);
-        painter.scale(scale, scale);
-        radical.moveTo(-19, 2);
-        radical.lineTo(-12, 8);
-        radical.lineTo(-4, -9);
-        radical.lineTo(19, -9);
-        painter.setPen(QPen(ink, 3.0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        painter.drawPath(radical);
-        painter.restore();
-        painter.setPen(ink);
-        painter.setFont(QFont("Bree Serif", 14, QFont::Bold));
-        painter.drawText(QRectF(cx - 1, cy - 8, 17, 18), Qt::AlignCenter, QStringLiteral("x"));
-    } else if (name == "pushButton_x2" && m_alternateState) {
-        const qreal cx = face.center().x();
-        const qreal cy = face.center().y();
-        painter.setFont(QFont("Bree Serif", 14, QFont::Bold));
-        painter.drawText(QRectF(cx - 23, cy - 16, 15, 15), Qt::AlignCenter, QStringLiteral("x"));
-        QPainterPath radical;
-        constexpr qreal scale = 0.61;
-        painter.save();
-        painter.translate(cx, cy);
-        painter.scale(scale, scale);
-        radical.moveTo(-10, 1);
-        radical.lineTo(-5, 7);
-        radical.lineTo(1, -8);
-        radical.lineTo(22, -8);
-        painter.setPen(QPen(ink, 2.7, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        painter.drawPath(radical);
-        painter.restore();
-        painter.setPen(ink);
-        painter.setFont(QFont("Bree Serif", 14, QFont::Black));
-        painter.drawText(QRectF(cx + 1, cy - 7, 19, 19), Qt::AlignCenter, QStringLiteral("y"));
-    } else {
-        painter.drawText(content, Qt::AlignCenter | Qt::TextWordWrap, displayedText);
-    }
+    // Let Qt's style engine render the label. Text, font, palette and icon
+    // come from the QPushButton properties configured in mainwindow.ui.
+    QStyleOptionButton option;
+    initStyleOption(&option);
+    option.rect = face.toRect();
+    if (m_alternateState && !m_alternateText.isEmpty())
+        option.text = m_alternateText;
+    if (m_alternateState && !m_alternateIcon.isNull())
+        option.icon = m_alternateIcon;
+    style()->drawControl(QStyle::CE_PushButtonLabel, &option, &painter, this);
 }
