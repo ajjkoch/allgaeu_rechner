@@ -24,7 +24,7 @@ AllgaeuButton::AllgaeuButton(QWidget *parent)
     Q_UNUSED(fontId);
     setAttribute(Qt::WA_Hover, true);
     setMinimumSize(32, 30);
-    setFont(QFont("Bree Serif", 21, QFont::Black));
+    setFont(QFont("Bree Serif", 18, QFont::Bold));
 }
 
 AllgaeuButton::WoodStyle AllgaeuButton::woodStyle() const
@@ -94,7 +94,7 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
                      : m_woodStyle == DarkWood ? QColor("#fff3cf")
                      : QColor("#201208");
     painter.setPen(ink);
-    painter.setFont(QFont("Bree Serif", 21, QFont::Black));
+    painter.setFont(font());
 
     QRect content = face.toRect().adjusted(7, 3, -7, -3);
     if (!icon().isNull()) {
@@ -124,7 +124,7 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
         painter.drawPath(radical);
         painter.restore();
         painter.setPen(ink);
-        painter.setFont(QFont("Bree Serif", 14, QFont::Black));
+        painter.setFont(QFont("Bree Serif", 14, QFont::Bold));
         painter.drawText(QRectF(cx - 1, cy - 8, 17, 18), Qt::AlignCenter, QStringLiteral("x"));
     } else if (name == "pushButton_x2" && property("inverseRoot").toBool()) {
         const qreal cx = face.center().x();
