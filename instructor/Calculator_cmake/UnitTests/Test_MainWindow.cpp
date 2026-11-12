@@ -92,7 +92,7 @@ void CalculatorGuiTests::inversePowerUsesNthRoot()
     QVERIFY(clear);
 
     QTest::mouseClick(inverse, Qt::LeftButton);
-    QVERIFY(power->property("inverseRoot").toBool());
+    QVERIFY(qobject_cast<AllgaeuButton *>(power)->alternateState());
     QTest::mouseClick(window.findChild<QPushButton *>("pushButton_8"), Qt::LeftButton);
     QTest::mouseClick(power, Qt::LeftButton);
     QTest::mouseClick(window.findChild<QPushButton *>("pushButton_3"), Qt::LeftButton);
@@ -1678,14 +1678,14 @@ void CalculatorGuiTests::inverseSquareUsesSquareRootKey()
     inputCursor.movePosition(QTextCursor::End);
     display->setTextCursor(inputCursor);
     QTest::mouseClick(inverse, Qt::LeftButton);
-    QVERIFY(squareRoot->property("inverseSquare").toBool());
+    QVERIFY(qobject_cast<AllgaeuButton *>(squareRoot)->alternateState());
     QTest::mouseClick(squareRoot, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("5^2"));
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("25"));
 
     QTest::mouseClick(inverse, Qt::LeftButton);
-    QVERIFY(!squareRoot->property("inverseSquare").toBool());
+    QVERIFY(!qobject_cast<AllgaeuButton *>(squareRoot)->alternateState());
 }
 
 void CalculatorGuiTests::binomialCoefficientButton()
