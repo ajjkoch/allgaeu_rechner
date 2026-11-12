@@ -1369,6 +1369,8 @@
    <header>AllgaeuButton.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="alpine_resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
