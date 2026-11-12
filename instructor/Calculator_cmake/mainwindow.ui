@@ -265,6 +265,9 @@
           <property name="woodStyle">
            <enum>AllgaeuButton::OliveWood</enum>
           </property>
+          <property name="alternateText">
+           <string>asin</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -421,6 +424,9 @@
          <widget class="AllgaeuButton" name="pushButton_tan">
           <property name="woodStyle">
            <enum>AllgaeuButton::OliveWood</enum>
+          </property>
+          <property name="alternateText">
+           <string>atan</string>
           </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -620,6 +626,9 @@
           <property name="woodStyle">
            <enum>AllgaeuButton::OliveWood</enum>
           </property>
+          <property name="alternateText">
+           <string>acos</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -708,6 +717,9 @@
           <property name="woodStyle">
            <enum>AllgaeuButton::OliveWood</enum>
           </property>
+          <property name="alternateText">
+           <string>x√y</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -752,6 +764,9 @@
           <property name="woodStyle">
            <enum>AllgaeuButton::OliveWood</enum>
           </property>
+          <property name="alternateText">
+           <string>1/%</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -773,6 +788,9 @@
          <widget class="AllgaeuButton" name="pushButton_sqrt">
           <property name="woodStyle">
            <enum>AllgaeuButton::OliveWood</enum>
+          </property>
+          <property name="alternateText">
+           <string>x²</string>
           </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
@@ -1203,8 +1221,11 @@
           <property name="woodStyle">
            <enum>AllgaeuButton::OliveWood</enum>
           </property>
+          <property name="text">
+           <string>C(n, k)</string>
+          </property>
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
