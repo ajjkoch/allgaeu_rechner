@@ -188,47 +188,6 @@ void paintAlpineButton(QPushButton *button)
 
 void apply(QWidget *window)
 {
-    const QMap<QString, QString> roles = {
-        {"pushButton_e", "constant"}, {"pushButton_pi", "constant"},
-        {"pushButton_fact", "function"}, {"pushButton_placeholder3_3", "function"},
-        {"pushButton_0", "digit"}, {"pushButton_1", "digit"},
-        {"pushButton_2", "digit"}, {"pushButton_3", "digit"},
-        {"pushButton_4", "digit"}, {"pushButton_5", "digit"},
-        {"pushButton_6", "digit"}, {"pushButton_7", "digit"},
-        {"pushButton_8", "digit"}, {"pushButton_9", "digit"},
-        {"pushButton_sqrt", "function"}, {"pushButton_x2", "function"},
-        {"pushButton_changeDegreesMode", "control"},
-        {"pushButton_sin", "function"}, {"pushButton_cos", "function"},
-        {"pushButton_tan", "function"}, {"pushButton_log", "function"},
-        {"pushButton_ln", "function"}, {"pushButton_edx", "function"},
-        {"pushButton_mod", "function"}, {"pushButton_percent", "function"},
-        {"pushButton_inv", "function"},
-        {"pushButton_plus", "operator"}, {"pushButton_minus", "operator"},
-        {"pushButton_mul", "operator"}, {"pushButton_divided", "operator"},
-        {"pushButton_equals", "operator"},
-        {"pushButton_clear", "utility"}, {"pushButton_erase_left", "utility"},
-        {"pushButton_plusminus", "utility"}, {"pushButton_placeholder3_4", "utility"},
-        {"pushButton_bracket_left", "utility"}, {"pushButton_bracket_right", "utility"},
-        {"pushButton_decimal", "utility"},
-        {"pushButton_bracket_right_end", "control"},
-        {"pushButton_bracket_left_start", "control"},
-        {"pushButton_cursor_left", "control"}, {"pushButton_cursor_right", "control"},
-        {"pushButton_history_back", "control"}, {"pushButton_history_forward", "control"}
-    };
-
-    // Each key gets a concise, engraved-looking symbol where that improves recognition.
-    // Object names and calculatorActionId remain the only source of action semantics.
-    const QMap<QString, QString> labels = {
-        {"pushButton_plusminus", "±"}, {"pushButton_sqrt", "√"},
-        {"pushButton_x2", "xʸ"}, {"pushButton_edx", "1/x"},
-        {"pushButton_inv", "INV"}, {"pushButton_mul", "×"},
-        {"pushButton_bracket_right_end", "->)"},
-        {"pushButton_bracket_left_start", "(<-"},
-        {"pushButton_cursor_left", "←"},
-        {"pushButton_cursor_right", "→"}, {"pushButton_history_back", "↑"},
-        {"pushButton_history_forward", "↓"}
-    };
-
     const QMap<QString, QString> hints = {
         {"pushButton_pi", "Konstante π einfügen"},
         {"pushButton_sqrt", "Quadratwurzel √x berechnen; mit INV: Quadrat x² berechnen"},
@@ -267,29 +226,17 @@ void apply(QWidget *window)
             font-weight: 700;
         }
     )");
-    // Keep the filter owned by the window and paint every calculator key.
-    auto *paintFilter = new AlpineButtonPaintFilter(window);
+    // Visual properties (wood style, text, font, colors and geometry) belong
+    // exclusively to mainwindow.ui. This function only supplies non-visual hints
+    // and interaction affordances without changing the Designer configuration.
     const auto buttons = window->findChildren<QPushButton *>();
     for (QPushButton *button : buttons) {
-        button->installEventFilter(paintFilter);
         const QString name = button->objectName();
-        if (labels.contains(name))
-            button->setText(labels.value(name));
-        if (roles.contains(name))
-            button->setProperty("role", roles.value(name));
-        // AllgaeuButton appearance (especially woodStyle) is configured in
-        // mainwindow.ui. Do not derive or assign visual styles from role here.
         if (hints.contains(name))
             button->setToolTip(hints.value(name));
-        if (name == "pushButton_edx")
-            button->setText("1/x");
-        if (!qobject_cast<AllgaeuButton *>(button))
-            button->setFont(QFont("Bree Serif", 18, QFont::Bold));
-        // Geometry and size policy are owned by mainwindow.ui / Qt Designer.
         button->setFocusPolicy(Qt::NoFocus);
         button->setCursor(Qt::PointingHandCursor);
         button->setAutoDefault(false);
         button->setDefault(false);
-    }
 }
 } // namespace AlpineTheme
