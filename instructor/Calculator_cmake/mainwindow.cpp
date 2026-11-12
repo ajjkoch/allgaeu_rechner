@@ -203,11 +203,7 @@ MainWindow::MainWindow(QWidget *parent)
     precisionButton->setFocusPolicy(Qt::NoFocus);
     connect(precisionButton, &QPushButton::clicked, this, &MainWindow::decimalPlaces_pressed);
 
-    auto *binomialButton = ui->pushButton_placeholder3_3;
-    binomialButton->setEnabled(true);
-    binomialButton->setText(QStringLiteral("C(n, k)"));
-    binomialButton->setToolTip(tr("Binomialkoeffizient C(n, k) einfügen"));
-    binomialButton->setFocusPolicy(Qt::NoFocus);
+    ui->pushButton_placeholder3_3->setToolTip(tr("Binomialkoeffizient C(n, k) einfügen"));
 
     setRightAlignedText(ui->textEdit, m_strExpression);
 }
@@ -534,28 +530,28 @@ void MainWindow::mod_pressed()
 void MainWindow::inv_pressed()
 {
     if(m_isInverted == false){
-        ui->pushButton_x2->setProperty("inverseRoot", true);
+        ui->pushButton_x2->setAlternateState(true);
         ui->pushButton_x2->setToolTip("x-te Wurzel aus y");
         ui->pushButton_x2->update();
-        ui->pushButton_sqrt->setProperty("inverseSquare", true);
+        ui->pushButton_sqrt->setAlternateState(true);
         ui->pushButton_sqrt->setToolTip("Quadrat x² berechnen");
         ui->pushButton_sqrt->update();
-        ui->pushButton_sin->setText("asin");
-        ui->pushButton_cos->setText("acos");
-        ui->pushButton_tan->setText("atan");
-        ui->pushButton_percent->setText("1/%");
+        ui->pushButton_sin->setAlternateState(true);
+        ui->pushButton_cos->setAlternateState(true);
+        ui->pushButton_tan->setAlternateState(true);
+        ui->pushButton_percent->setAlternateState(true);
         m_isInverted = true;
     }else{
-        ui->pushButton_x2->setProperty("inverseRoot", false);
+        ui->pushButton_x2->setAlternateState(false);
         ui->pushButton_x2->setToolTip("Potenz x hoch y");
         ui->pushButton_x2->update();
-        ui->pushButton_sqrt->setProperty("inverseSquare", false);
+        ui->pushButton_sqrt->setAlternateState(false);
         ui->pushButton_sqrt->setToolTip("Quadratwurzel √x berechnen");
         ui->pushButton_sqrt->update();
-        ui->pushButton_sin->setText("sin");
-        ui->pushButton_cos->setText("cos");
-        ui->pushButton_tan->setText("tan");
-        ui->pushButton_percent->setText("%");
+        ui->pushButton_sin->setAlternateState(false);
+        ui->pushButton_cos->setAlternateState(false);
+        ui->pushButton_tan->setAlternateState(false);
+        ui->pushButton_percent->setAlternateState(false);
         m_isInverted = false;
     }
     calc.setInverted(m_isInverted);
