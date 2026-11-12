@@ -8,15 +8,13 @@
 #include <QStyleOptionButton>
 #include <QResource>
 
-namespace {
-void ensureAlpineResources()
+static void ensureAlpineResources()
 {
     // The Designer plugin is a separate module. Explicitly initialize its
     // compiled-in .qrc before any QPixmap/QFontDatabase resource lookup.
     if (!QResource(QStringLiteral(":/alpine/mid.jpg")).isValid())
         Q_INIT_RESOURCE(alpine_resources);
 }
-} // namespace
 
 AllgaeuButton::AllgaeuButton(QWidget *parent)
     : QPushButton(parent)
