@@ -212,20 +212,6 @@ void apply(QWidget *window)
         {"pushButton_plusminus", "Vorzeichen wechseln"}
     };
 
-    window->setStyleSheet(R"(
-        QMainWindow, QWidget#centralwidget {
-            background: transparent;
-        }
-        QTextEdit#textEdit {
-            background-color: #f6f0d9; color: #28190c;
-            border: 2px solid #6b431f; border-top: 2px solid #f5d99e;
-            border-bottom: 3px solid #39200e; border-radius: 11px;
-            padding: 2px 8px;
-            font-family: "Bree Serif";
-            font-size: 20pt;
-            font-weight: 700;
-        }
-    )");
     // Visual properties (wood style, text, font, colors and geometry) belong
     // exclusively to mainwindow.ui. This function only supplies non-visual hints
     // and interaction affordances without changing the Designer configuration.
@@ -238,5 +224,6 @@ void apply(QWidget *window)
         button->setCursor(Qt::PointingHandCursor);
         button->setAutoDefault(false);
         button->setDefault(false);
+    }
 }
 } // namespace AlpineTheme
