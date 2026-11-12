@@ -131,6 +131,7 @@ if(NOT ANDROID)
         AllgaeuButton.h
         AllgaeuButton.cpp
         mainwindow.ui
+        alpine_resources.qrc
         UnitTests/Test_MainWindow.cpp
     )
 
