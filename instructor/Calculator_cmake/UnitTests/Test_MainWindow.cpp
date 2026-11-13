@@ -1210,7 +1210,7 @@ void CalculatorGuiTests::tangentDomainErrorInRadians()
     QVERIFY(seven);
 
     QTest::mouseClick(mode, Qt::LeftButton);
-    QCOMPARE(mode->text(), QString("rad"));
+    QVERIFY(mode->property("alternateState").toBool());
 
     QTest::mouseClick(tan, Qt::LeftButton);
     QTest::mouseClick(pi, Qt::LeftButton);
@@ -1318,11 +1318,11 @@ void CalculatorGuiTests::angleModeCanToggleBackToDegrees()
     QVERIFY(equals);
     QVERIFY(clear);
 
-    QCOMPARE(mode->text(), QString("grad"));
+    QVERIFY(!mode->property("alternateState").toBool());
 
     // Switch to radians and evaluate sin(pi/2).
     QTest::mouseClick(mode, Qt::LeftButton);
-    QCOMPARE(mode->text(), QString("rad"));
+    QVERIFY(mode->property("alternateState").toBool());
     QTest::mouseClick(sin, Qt::LeftButton);
     QTest::mouseClick(pi, Qt::LeftButton);
     QTest::mouseClick(divide, Qt::LeftButton);
@@ -1333,7 +1333,7 @@ void CalculatorGuiTests::angleModeCanToggleBackToDegrees()
 
     // Switch back to degrees and verify the original interpretation is restored.
     QTest::mouseClick(mode, Qt::LeftButton);
-    QCOMPARE(mode->text(), QString("grad"));
+    QVERIFY(!mode->property("alternateState").toBool());
     QTest::mouseClick(clear, Qt::LeftButton);
     QTest::mouseClick(sin, Qt::LeftButton);
     QTest::mouseClick(window.findChild<QPushButton *>("pushButton_9"), Qt::LeftButton);
@@ -1373,7 +1373,7 @@ void CalculatorGuiTests::inverseTrigonometricFunctionsInRadians()
     QVERIFY(clear);
 
     QTest::mouseClick(mode, Qt::LeftButton);
-    QCOMPARE(mode->text(), QString("rad"));
+    QVERIFY(mode->property("alternateState").toBool());
     QTest::mouseClick(inverse, Qt::LeftButton);
 
     // In radians, inverse trigonometric functions return radian values.
