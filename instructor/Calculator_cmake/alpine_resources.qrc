@@ -4,5 +4,19 @@
     <file alias="mid.jpg">resources/allgaeu_mid.jpg</file>
     <file alias="footer.jpg">resources/allgaeu_footer.jpg</file>
     <file alias="BreeSerif-Regular.ttf">resources/BreeSerif-Regular.ttf</file>
+      <file alias="icons/sqrt.svg">resources/icons/sqrt.svg</file>
+    <file alias="icons/power.svg">resources/icons/power.svg</file>
+    <file alias="icons/nth-root.svg">resources/icons/nth-root.svg</file>
+    <file alias="icons/reciprocal.svg">resources/icons/reciprocal.svg</file>
+    <file alias="icons/factorial.svg">resources/icons/factorial.svg</file>
+    <file alias="icons/percent.svg">resources/icons/percent.svg</file>
+    <file alias="icons/backspace.svg">resources/icons/backspace.svg</file>
+    <file alias="icons/clear.svg">resources/icons/clear.svg</file>
+    <file alias="icons/cursor-left.svg">resources/icons/cursor-left.svg</file>
+    <file alias="icons/cursor-right.svg">resources/icons/cursor-right.svg</file>
+    <file alias="icons/history-back.svg">resources/icons/history-back.svg</file>
+    <file alias="icons/history-forward.svg">resources/icons/history-forward.svg</file>
+    <file alias="icons/plus-minus.svg">resources/icons/plus-minus.svg</file>
+    <file alias="icons/mod.svg">resources/icons/mod.svg</file>
   </qresource>
 </RCC>
