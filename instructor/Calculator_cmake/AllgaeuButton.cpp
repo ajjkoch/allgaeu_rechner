@@ -139,7 +139,7 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
             QStyle::SE_PushButtonContents, &option, this);
         textRect.adjust(3.0, 1.0, -3.0, -1.0);
 
-        QFont labelFont = option.font;
+        QFont labelFont = font();
         const qreal originalPointSize = labelFont.pointSizeF();
         if (originalPointSize > 0.0)
             labelFont.setPointSizeF(originalPointSize + 3.0);
