@@ -46,6 +46,25 @@ MainWindow::MainWindow(QWidget *parent)
     m_decimalPlaces = qBound(0, settings.value("decimalPlaces", 6).toInt(), 15);
     setWindowTitle(QStringLiteral("AllgäuRechner — © 2026 Koch, Achim Johannes Josef"));
 
+    // A short press moves one character; holding a cursor key for one second
+    // moves directly to the beginning or end of the expression.
+    m_cursorLongPressTimer = new QTimer(this);
+    m_cursorLongPressTimer->setSingleShot(true);
+    m_cursorLongPressTimer->setTimerType(Qt::PreciseTimer);
+    m_cursorLongPressTimer->setInterval(1000);
+    connect(m_cursorLongPressTimer, &QTimer::timeout, this, [this]() {
+        QTextCursor cursor = ui->textEdit->textCursor();
+        cursor.movePosition(m_pressedCursorAction == CalculatorAction::CursorLeft
+                                ? QTextCursor::Start
+                                : QTextCursor::End);
+        ui->textEdit->setTextCursor(cursor);
+        ui->textEdit->setFocus();
+        ui->textEdit->ensureCursorVisible();
+        ui->textEdit->setCursorWidth(1);
+        ui->textEdit->repaint();
+        m_cursorLongPressTriggered = true;
+    });
+
     // Discreet support button in the existing alpine header.
     auto *headerLayout = new QHBoxLayout(ui->alpineHeader);
     headerLayout->setContentsMargins(0, 7, 8, 0);
@@ -185,7 +204,28 @@ MainWindow::MainWindow(QWidget *parent)
 
         button->setProperty("calculatorActionId", static_cast<int>(it.value()));
         button->setCheckable(false);
-        connect(button, &QPushButton::clicked, this, [this, button]() {
+
+        const CalculatorAction action = it.value();
+        const bool isCursorButton = action == CalculatorAction::CursorLeft
+                                 || action == CalculatorAction::CursorRight;
+        if (isCursorButton) {
+            connect(button, &QPushButton::pressed, this, [this, action]() {
+                m_pressedCursorAction = action;
+                m_cursorLongPressTriggered = false;
+                m_cursorLongPressTimer->start();
+            });
+            connect(button, &QPushButton::released, this, [this]() {
+                m_cursorLongPressTimer->stop();
+            });
+        }
+
+        connect(button, &QPushButton::clicked, this, [this, button, isCursorButton]() {
+            if (isCursorButton && m_cursorLongPressTriggered) {
+                // The long-press action already moved the cursor. Do not also
+                // execute the ordinary one-character click action on release.
+                m_cursorLongPressTriggered = false;
+                return;
+            }
             const auto action = static_cast<CalculatorAction>(
                 button->property("calculatorActionId").toInt());
             dispatchAction(action);
