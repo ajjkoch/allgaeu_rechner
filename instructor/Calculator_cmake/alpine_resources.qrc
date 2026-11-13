@@ -18,5 +18,6 @@
     <file alias="icons/history-forward.svg">resources/icons/history-forward.svg</file>
     <file alias="icons/plus-minus.svg">resources/icons/plus-minus.svg</file>
     <file alias="icons/mod.svg">resources/icons/mod.svg</file>
+      <file alias="icons/y-power-x.svg">resources/icons/y-power-x.svg</file>
   </qresource>
 </RCC>
