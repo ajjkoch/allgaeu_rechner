@@ -5,7 +5,6 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "AlpineTheme.h"
 #include <QPushButton>
 #include <QTextBlockFormat>
 #include <QSignalBlocker>
@@ -131,7 +130,6 @@ MainWindow::MainWindow(QWidget *parent)
         m_donationOverlay->show();
     });
 
-    AlpineTheme::apply(this);
     ui->textEdit->installEventFilter(this);
 
     // Keep the internal expression synchronized when the user edits the display directly.
@@ -187,7 +185,6 @@ MainWindow::MainWindow(QWidget *parent)
 
         button->setProperty("calculatorActionId", static_cast<int>(it.value()));
         button->setCheckable(false);
-        button->setFocusPolicy(Qt::NoFocus);
         connect(button, &QPushButton::clicked, this, [this, button]() {
             const auto action = static_cast<CalculatorAction>(
                 button->property("calculatorActionId").toInt());
@@ -200,7 +197,6 @@ MainWindow::MainWindow(QWidget *parent)
     precisionButton->setEnabled(true);
     precisionButton->setText("fix");
     precisionButton->setToolTip("Anzahl der Nachkommastellen einstellen");
-    precisionButton->setFocusPolicy(Qt::NoFocus);
     connect(precisionButton, &QPushButton::clicked, this, &MainWindow::decimalPlaces_pressed);
 
     ui->pushButton_placeholder3_3->setToolTip(tr("Binomialkoeffizient C(n, k) einfügen"));
