@@ -23,6 +23,7 @@ private slots:
     void digitButtonsAndAddition();
     void allArithmeticOperatorButtons();
     void cursorEditingAndBackspace();
+    void cursorButtonsLongPressJumpToExpressionEdges();
     void endParenthesisButtonAppendsAtExpressionEnd();
     void startParenthesisButtonInsertsAtExpressionStart();
     void piButtonHasSemanticRole();
@@ -217,6 +218,46 @@ void CalculatorGuiTests::cursorEditingAndBackspace()
 
     QTest::mouseClick(backspace, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("123"));
+}
+
+void CalculatorGuiTests::cursorButtonsLongPressJumpToExpressionEdges()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *left = window.findChild<QPushButton *>("pushButton_cursor_left");
+    auto *right = window.findChild<QPushButton *>("pushButton_cursor_right");
+
+    QVERIFY(display);
+    QVERIFY(left);
+    QVERIFY(right);
+
+    display->setPlainText("12345");
+    QTextCursor cursor = display->textCursor();
+    cursor.setPosition(3);
+    display->setTextCursor(cursor);
+
+    // A short tap still moves exactly one character.
+    QTest::mouseClick(left, Qt::LeftButton);
+    QCOMPARE(display->textCursor().position(), 2);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->textCursor().position(), 3);
+
+    // Holding the left cursor button for more than one second jumps to start.
+    QTest::mousePress(left, Qt::LeftButton);
+    QTest::qWait(1100);
+    QTest::mouseRelease(left, Qt::LeftButton);
+    QCOMPARE(display->textCursor().position(), 0);
+
+    // Holding the right cursor button for more than one second jumps to end.
+    cursor = display->textCursor();
+    cursor.setPosition(2);
+    display->setTextCursor(cursor);
+    QTest::mousePress(right, Qt::LeftButton);
+    QTest::qWait(1100);
+    QTest::mouseRelease(right, Qt::LeftButton);
+    QCOMPARE(display->textCursor().position(), 5);
 }
 
 void CalculatorGuiTests::directDisplayEditing()
