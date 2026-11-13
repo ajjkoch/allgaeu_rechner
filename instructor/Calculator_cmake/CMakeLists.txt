@@ -24,9 +24,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(ANDROID)
-    find_package(Qt6 6 REQUIRED COMPONENTS Core Widgets)
+    find_package(Qt6 6 REQUIRED COMPONENTS Core Widgets Svg)
 else()
-    find_package(Qt6 6 REQUIRED COMPONENTS Core Widgets Test)
+    find_package(Qt6 6 REQUIRED COMPONENTS Core Widgets Svg Test)
 endif()
 
 include(GNUInstallDirs)
@@ -59,6 +59,7 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} PUBLIC
     Qt6::Core
     Qt6::Widgets
+    Qt6::Svg
 )
 
 if(ANDROID)
@@ -104,6 +105,7 @@ if(NOT ANDROID)
         target_link_libraries(AllgaeuButtonDesignerPlugin PRIVATE
             Qt6::Core
             Qt6::Widgets
+            Qt6::Svg
             Qt6::UiPlugin
         )
         set_target_properties(AllgaeuButtonDesignerPlugin PROPERTIES
@@ -208,6 +210,7 @@ if(NOT ANDROID)
     target_link_libraries(CalculatorGuiTests PRIVATE
         Qt6::Core
         Qt6::Widgets
+        Qt6::Svg
         Qt6::Test
     )
 
