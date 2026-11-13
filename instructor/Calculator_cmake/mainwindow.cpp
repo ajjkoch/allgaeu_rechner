@@ -339,13 +339,14 @@ MainWindow::~MainWindow()
 /** @brief Toggles the trigonometric angle unit between degrees and radians. */
 void MainWindow::degreesMode_pressed()
 {
-    const bool degrees = ui->pushButton_changeDegreesMode->text() == "grad";
+    auto *modeButton = ui->pushButton_changeDegreesMode;
+    const bool degrees = !modeButton->alternateState();
     if (degrees) {
         calc.setDegMode(false);
-        ui->pushButton_changeDegreesMode->setText("rad");
+        modeButton->setAlternateState(true);
     } else {
         calc.setDegMode(true);
-        ui->pushButton_changeDegreesMode->setText("grad");
+        modeButton->setAlternateState(false);
     }
 }
 

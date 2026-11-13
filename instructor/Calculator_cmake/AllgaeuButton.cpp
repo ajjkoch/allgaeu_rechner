@@ -7,6 +7,7 @@
 #include <QStyleOptionButton>
 #include <QStyle>
 #include <QResource>
+#include <QResizeEvent>
 
 static void ensureAlpineResources()
 {
@@ -21,7 +22,8 @@ AllgaeuButton::AllgaeuButton(QWidget *parent)
 {
     ensureAlpineResources();
     setAttribute(Qt::WA_Hover, true);
-    setMinimumSize(32, 30);
+    setMinimumSize(52, 30);
+    updateEffectiveIconSize();
 }
 
 AllgaeuButton::WoodStyle AllgaeuButton::woodStyle() const
@@ -80,6 +82,47 @@ void AllgaeuButton::setAlternateState(bool enabled)
     emit alternateStateChanged(enabled);
 }
 
+
+int AllgaeuButton::iconHeight() const { return m_iconHeight; }
+void AllgaeuButton::setIconHeight(int height)
+{
+    const int value = qMax(1, height);
+    if (m_iconHeight == value) return;
+    m_iconHeight = value;
+    updateEffectiveIconSize();
+    emit iconHeightChanged(value);
+}
+int AllgaeuButton::iconWidthMargin() const { return m_iconWidthMargin; }
+void AllgaeuButton::setIconWidthMargin(int margin)
+{
+    const int value = qMax(0, margin);
+    if (m_iconWidthMargin == value) return;
+    m_iconWidthMargin = value;
+    updateEffectiveIconSize();
+    emit iconWidthMarginChanged(value);
+}
+int AllgaeuButton::minimumIconWidth() const { return m_minimumIconWidth; }
+void AllgaeuButton::setMinimumIconWidth(int width)
+{
+    const int value = qMax(1, width);
+    if (m_minimumIconWidth == value) return;
+    m_minimumIconWidth = value;
+    updateEffectiveIconSize();
+    emit minimumIconWidthChanged(value);
+}
+void AllgaeuButton::updateEffectiveIconSize()
+{
+    const int effectiveWidth = qMax(m_minimumIconWidth, width() - m_iconWidthMargin);
+    const QSize effectiveSize(effectiveWidth, m_iconHeight);
+    if (iconSize() != effectiveSize)
+        QPushButton::setIconSize(effectiveSize);
+}
+void AllgaeuButton::resizeEvent(QResizeEvent *event)
+{
+    QPushButton::resizeEvent(event);
+    updateEffectiveIconSize();
+}
+
 void AllgaeuButton::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
@@ -127,9 +170,15 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
     QStyleOptionButton option;
     initStyleOption(&option);
     option.rect = face.toRect();
-    if (m_alternateState && !m_alternateText.isEmpty())
-        option.text = m_alternateText;
-    if (m_alternateState && !m_alternateIcon.isNull())
-        option.icon = m_alternateIcon;
+    if (m_alternateState) {
+        if (!m_alternateText.isEmpty())
+            option.text = m_alternateText;
+        if (!m_alternateIcon.isNull())
+            option.icon = m_alternateIcon;
+    }
+    // Icon takes visual priority. The QPushButton text remains available as
+    // the Designer fallback (and accessible name) when an icon is absent.
+    if (!option.icon.isNull())
+        option.text.clear();
     style()->drawControl(QStyle::CE_PushButtonLabel, &option, &painter, this);
 }

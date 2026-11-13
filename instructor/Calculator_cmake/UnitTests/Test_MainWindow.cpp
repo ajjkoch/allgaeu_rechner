@@ -20,6 +20,7 @@ class CalculatorGuiTests : public QObject
     Q_OBJECT
 
 private slots:
+    void everyKeyHasSvgIconAndUniformTypography();
     void digitButtonsAndAddition();
     void allArithmeticOperatorButtons();
     void cursorEditingAndBackspace();
@@ -161,6 +162,33 @@ void CalculatorGuiTests::piButtonHasSemanticRole()
     auto *pi = window.findChild<QPushButton *>("pushButton_pi");
     QVERIFY(pi);
     QCOMPARE(pi->property("role").toString(), QString("constant"));
+}
+
+
+void CalculatorGuiTests::everyKeyHasSvgIconAndUniformTypography()
+{
+    MainWindow window;
+    window.show();
+
+    const auto buttons = window.findChildren<AllgaeuButton *>();
+    QCOMPARE(buttons.size(), 44);
+    QVERIFY(!buttons.isEmpty());
+
+    const QFont referenceFont = buttons.constFirst()->font();
+    QVERIFY(referenceFont.bold());
+    QCOMPARE(referenceFont.pointSize(), 16);
+
+    for (AllgaeuButton *button : buttons) {
+        QTRY_VERIFY(button->width() > 0);
+        QVERIFY2(!button->icon().isNull(), qPrintable(button->objectName()));
+        QVERIFY(button->font().bold());
+        QCOMPARE(button->font().family(), referenceFont.family());
+        QCOMPARE(button->font().pointSize(), referenceFont.pointSize());
+        QCOMPARE(button->iconHeight(), 32);
+        QCOMPARE(button->iconWidthMargin(), 6);
+        QCOMPARE(button->minimumIconWidth(), 46);
+        QCOMPARE(button->iconSize(), QSize(qMax(46, button->width() - 6), 32));
+    }
 }
 
 void CalculatorGuiTests::digitButtonsAndAddition()
@@ -570,9 +598,9 @@ void CalculatorGuiTests::radiansMode()
     QVERIFY(right);
     QVERIFY(equals);
 
-    QCOMPARE(mode->text(), QString("grad"));
+    QVERIFY(!mode->property("alternateState").toBool());
     QTest::mouseClick(mode, Qt::LeftButton);
-    QCOMPARE(mode->text(), QString("rad"));
+    QVERIFY(mode->property("alternateState").toBool());
 
     // In radians, sin(pi/2) is exactly 1 within floating-point precision.
     QTest::mouseClick(sin, Qt::LeftButton);
