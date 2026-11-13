@@ -25,7 +25,7 @@ private slots:
     void cursorEditingAndBackspace();
     void endParenthesisButtonAppendsAtExpressionEnd();
     void startParenthesisButtonInsertsAtExpressionStart();
-    void piButtonUsesConstantWoodStyle();
+    void piButtonHasSemanticRole();
     void directDisplayEditing();
     void errorRecovery();
     void historyNavigation();
@@ -152,7 +152,7 @@ void CalculatorGuiTests::startParenthesisButtonInsertsAtExpressionStart()
     QCOMPARE(display->textCursor().position(), 1);
 }
 
-void CalculatorGuiTests::piButtonUsesConstantWoodStyle()
+void CalculatorGuiTests::piButtonHasSemanticRole()
 {
     MainWindow window;
     window.show();
