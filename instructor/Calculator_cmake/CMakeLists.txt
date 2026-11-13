@@ -43,8 +43,6 @@ set(PROJECT_SOURCES
     main.cpp
     mainwindow.h
     mainwindow.cpp
-    AlpineTheme.h
-    AlpineTheme.cpp
     AllgaeuButton.h
     AllgaeuButton.cpp
     mainwindow.ui
@@ -196,8 +194,6 @@ if(NOT ANDROID)
     qt_add_executable(CalculatorGuiTests
         mainwindow.h
         mainwindow.cpp
-        AlpineTheme.h
-        AlpineTheme.cpp
         AllgaeuButton.h
         AllgaeuButton.cpp
         mainwindow.ui
