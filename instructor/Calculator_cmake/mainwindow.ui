@@ -494,9 +494,6 @@
           <property name="layoutDirection">
            <enum>Qt::LeftToRight</enum>
           </property>
-          <property name="lineWrapMode">
-           <enum>QTextEdit::NoWrap</enum>
-          </property>
           <property name="text">
            <string>7</string>
           </property>
@@ -1629,6 +1626,9 @@
           </property>
           <property name="layoutDirection">
            <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="lineWrapMode">
+           <enum>QTextEdit::NoWrap</enum>
           </property>
           <property name="inputMethodHints">
            <set>Qt::ImhNone</set>
