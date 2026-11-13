@@ -973,7 +973,7 @@
             <string>control</string>
            </property>
            <property name="toolTip">
-            <string>Cursor nach links bewegen</string>
+            <string>Kurz drücken: eine Position nach links; halten: zum Anfang springen</string>
            </property></widget>
         </item>
         <item row="5" column="0">
@@ -1543,7 +1543,7 @@
             <string>control</string>
            </property>
            <property name="toolTip">
-            <string>Cursor nach rechts bewegen</string>
+            <string>Kurz drücken: eine Position nach rechts; halten: zum Ende springen</string>
            </property></widget>
         </item>
         <item row="8" column="3">
