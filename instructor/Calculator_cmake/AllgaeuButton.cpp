@@ -3,6 +3,8 @@
 
 #include <QPainter>
 #include <QPainterPath>
+#include <QLinearGradient>
+#include <QFontMetricsF>
 #include <QPixmap>
 #include <QStyleOptionButton>
 #include <QStyle>
@@ -122,8 +124,8 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
     painter.restore();
 
 
-    // Let Qt's style engine render the label. Text, font, palette and icon
-    // come from the QPushButton properties configured in mainwindow.ui.
+    // Keep the existing Designer-configured labels and SVG icons, but give
+    // text labels a warm, engraved appearance instead of Qt's flat text.
     QStyleOptionButton option;
     initStyleOption(&option);
     option.rect = face.toRect();
@@ -131,5 +133,73 @@ void AllgaeuButton::paintEvent(QPaintEvent *event)
         option.text = m_alternateText;
     if (m_alternateState && !m_alternateIcon.isNull())
         option.icon = m_alternateIcon;
-    style()->drawControl(QStyle::CE_PushButtonLabel, &option, &painter, this);
+
+    if (!option.text.isEmpty() && option.icon.isNull()) {
+        QRectF textRect = style()->subElementRect(
+            QStyle::SE_PushButtonContents, &option, this);
+        textRect.adjust(3.0, 1.0, -3.0, -1.0);
+
+        QFont labelFont = option.font;
+        const qreal originalPointSize = labelFont.pointSizeF();
+        if (originalPointSize > 0.0)
+            labelFont.setPointSizeF(originalPointSize + 3.0);
+        labelFont.setBold(true);
+
+        // Longer captions keep the same visual weight while being reduced
+        // only as much as needed to stay comfortably inside the wooden key.
+        if (originalPointSize > 0.0) {
+            QFontMetricsF metrics(labelFont);
+            while (metrics.horizontalAdvance(option.text) > textRect.width() - 4.0
+                   && labelFont.pointSizeF() > originalPointSize) {
+                labelFont.setPointSizeF(
+                    qMax(originalPointSize, labelFont.pointSizeF() - 0.5));
+                metrics = QFontMetricsF(labelFont);
+            }
+        }
+
+        const QFontMetricsF metrics(labelFont);
+        const qreal x = textRect.center().x()
+                      - metrics.horizontalAdvance(option.text) / 2.0;
+        const qreal baseline = textRect.center().y()
+                             + (metrics.ascent() - metrics.descent()) / 2.0;
+
+        QPainterPath lettering;
+        lettering.addText(QPointF(x, baseline), labelFont, option.text);
+        const QRectF letteringBounds = lettering.boundingRect();
+
+        if (!lettering.isEmpty()) {
+            painter.save();
+            painter.setRenderHint(QPainter::TextAntialiasing, true);
+
+            const bool darkWood = m_woodStyle == DarkWood;
+            const QColor lowerEdge = darkWood
+                ? QColor(18, 8, 3, 245)
+                : QColor(30, 15, 7, 235);
+            const QColor upperEdge = darkWood
+                ? QColor(255, 225, 164, 245)
+                : QColor(247, 218, 168, 235);
+
+            // The offset edges create the shallow cut: a warm rim catches
+            // the light at the upper-left, while the lower-right stays dark.
+            painter.fillPath(lettering.translated(1.25, 1.35), lowerEdge);
+            painter.fillPath(lettering.translated(-0.8, -0.8), upperEdge);
+
+            QLinearGradient carvedInk(letteringBounds.topLeft(),
+                                      letteringBounds.bottomRight());
+            if (darkWood) {
+                carvedInk.setColorAt(0.0, QColor(255, 211, 126));
+                carvedInk.setColorAt(0.55, QColor(220, 151, 65));
+                carvedInk.setColorAt(1.0, QColor(157, 91, 37));
+            } else {
+                carvedInk.setColorAt(0.0, QColor(91, 56, 31));
+                carvedInk.setColorAt(0.52, QColor(61, 35, 19));
+                carvedInk.setColorAt(1.0, QColor(39, 21, 12));
+            }
+            painter.fillPath(lettering, carvedInk);
+            painter.restore();
+        }
+    } else {
+        // SVG artwork remains rendered by Qt, completely unchanged.
+        style()->drawControl(QStyle::CE_PushButtonLabel, &option, &painter, this);
+    }
 }
