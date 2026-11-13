@@ -949,7 +949,7 @@ void CalculatorGuiTests::inversePercentageMode()
     QVERIFY(percentButton);
     QVERIFY(percentButton->alternateState());
     QVERIFY(!percentButton->alternateIcon().isNull());
-    QVERIFY(percentButton->alternateText().isEmpty());
+    QCOMPARE(percentButton->alternateText(), QString("1/x"));
     QTest::mouseClick(two, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);
@@ -964,7 +964,7 @@ void CalculatorGuiTests::inversePercentageMode()
     QTest::mouseClick(inverse, Qt::LeftButton);
     QVERIFY(!percentButton->alternateState());
     QVERIFY(!percentButton->icon().isNull());
-    QVERIFY(percentButton->text().isEmpty());
+    QCOMPARE(percentButton->text(), QString("%"));
     QTest::mouseClick(two, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);
