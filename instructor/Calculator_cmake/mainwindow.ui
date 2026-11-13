@@ -233,7 +233,10 @@
          <number>5</number>
         </property>
         <item row="7" column="1">
-         <widget class="AllgaeuButton" name="pushButton_bracket_left">
+         <widget class="AllgaeuButton" name="pushButton_bracket_left">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -269,10 +272,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>utility</string>
+           </property></widget>
         </item>
         <item row="11" column="1">
-         <widget class="AllgaeuButton" name="pushButton_0">
+         <widget class="AllgaeuButton" name="pushButton_0">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -308,10 +317,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>digit</string>
+           </property></widget>
         </item>
         <item row="4" column="0">
-         <widget class="AllgaeuButton" name="pushButton_sin">
+         <widget class="AllgaeuButton" name="pushButton_sin">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -350,10 +365,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property></widget>
         </item>
         <item row="2" column="2">
-         <widget class="AllgaeuButton" name="pushButton_history_back">
+         <widget class="AllgaeuButton" name="pushButton_history_back">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -374,9 +395,9 @@
             <kerning>true</kerning>
            </font>
           </property>
-          <property name="text">
-           <string>^</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/history-back.svg</normaloff>:/alpine/icons/history-back.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -389,10 +410,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>control</string>
+           </property>
+           <property name="toolTip">
+            <string>Vorherigen Verlaufseintrag anzeigen</string>
+           </property></widget>
         </item>
         <item row="3" column="3">
-         <widget class="AllgaeuButton" name="pushButton_erase_left">
+         <widget class="AllgaeuButton" name="pushButton_erase_left">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -413,9 +443,9 @@
             <kerning>true</kerning>
            </font>
           </property>
-          <property name="text">
-           <string>&lt;-</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/backspace.svg</normaloff>:/alpine/icons/backspace.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -428,10 +458,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>utility</string>
+           </property>
+           <property name="toolTip">
+            <string>Zeichen links vom Cursor löschen</string>
+           </property></widget>
         </item>
         <item row="8" column="0">
-         <widget class="AllgaeuButton" name="pushButton_7">
+         <widget class="AllgaeuButton" name="pushButton_7">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -470,10 +509,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>digit</string>
+           </property></widget>
         </item>
         <item row="9" column="3">
-         <widget class="AllgaeuButton" name="pushButton_minus">
+         <widget class="AllgaeuButton" name="pushButton_minus">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -509,10 +554,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>operator</string>
+           </property></widget>
         </item>
         <item row="11" column="2">
-         <widget class="AllgaeuButton" name="pushButton_decimal">
+         <widget class="AllgaeuButton" name="pushButton_decimal">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -548,10 +599,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>utility</string>
+           </property></widget>
         </item>
         <item row="10" column="1">
-         <widget class="AllgaeuButton" name="pushButton_2">
+         <widget class="AllgaeuButton" name="pushButton_2">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -587,10 +644,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>digit</string>
+           </property></widget>
         </item>
         <item row="4" column="2">
-         <widget class="AllgaeuButton" name="pushButton_tan">
+         <widget class="AllgaeuButton" name="pushButton_tan">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -629,10 +692,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property></widget>
         </item>
         <item row="3" column="2">
-         <widget class="AllgaeuButton" name="pushButton_clear">
+         <widget class="AllgaeuButton" name="pushButton_clear">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -653,9 +722,9 @@
             <kerning>true</kerning>
            </font>
           </property>
-          <property name="text">
-           <string>C</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/clear.svg</normaloff>:/alpine/icons/clear.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -668,10 +737,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>utility</string>
+           </property>
+           <property name="toolTip">
+            <string>Eingabe vollständig löschen</string>
+           </property></widget>
         </item>
         <item row="2" column="3">
-         <widget class="AllgaeuButton" name="pushButton_history_forward">
+         <widget class="AllgaeuButton" name="pushButton_history_forward">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -692,9 +770,9 @@
             <kerning>true</kerning>
            </font>
           </property>
-          <property name="text">
-           <string>v</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/history-forward.svg</normaloff>:/alpine/icons/history-forward.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -707,10 +785,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>control</string>
+           </property>
+           <property name="toolTip">
+            <string>Nächsten Verlaufseintrag anzeigen</string>
+           </property></widget>
         </item>
         <item row="8" column="1">
-         <widget class="AllgaeuButton" name="pushButton_8">
+         <widget class="AllgaeuButton" name="pushButton_8">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -746,10 +833,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>digit</string>
+           </property></widget>
         </item>
         <item row="10" column="0">
-         <widget class="AllgaeuButton" name="pushButton_1">
+         <widget class="AllgaeuButton" name="pushButton_1">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -785,10 +878,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>digit</string>
+           </property></widget>
         </item>
         <item row="10" column="3">
-         <widget class="AllgaeuButton" name="pushButton_plus">
+         <widget class="AllgaeuButton" name="pushButton_plus">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -824,10 +923,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>operator</string>
+           </property></widget>
         </item>
         <item row="1" column="2">
-         <widget class="AllgaeuButton" name="pushButton_cursor_left">
+         <widget class="AllgaeuButton" name="pushButton_cursor_left">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -848,9 +953,9 @@
             <kerning>true</kerning>
            </font>
           </property>
-          <property name="text">
-           <string>&lt;</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/cursor-left.svg</normaloff>:/alpine/icons/cursor-left.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -863,10 +968,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>control</string>
+           </property>
+           <property name="toolTip">
+            <string>Kurz drücken: eine Position nach links; halten: zum Anfang springen</string>
+           </property></widget>
         </item>
         <item row="5" column="0">
-         <widget class="AllgaeuButton" name="pushButton_log">
+         <widget class="AllgaeuButton" name="pushButton_log">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -902,10 +1016,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property></widget>
         </item>
         <item row="11" column="3">
-         <widget class="AllgaeuButton" name="pushButton_equals">
+         <widget class="AllgaeuButton" name="pushButton_equals">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -941,10 +1061,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>operator</string>
+           </property>
+           <property name="toolTip">
+            <string>Ausdruck berechnen</string>
+           </property></widget>
         </item>
         <item row="4" column="1">
-         <widget class="AllgaeuButton" name="pushButton_cos">
+         <widget class="AllgaeuButton" name="pushButton_cos">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -983,10 +1112,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property></widget>
         </item>
         <item row="9" column="2">
-         <widget class="AllgaeuButton" name="pushButton_6">
+         <widget class="AllgaeuButton" name="pushButton_6">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1022,10 +1157,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>digit</string>
+           </property></widget>
         </item>
         <item row="5" column="1">
-         <widget class="AllgaeuButton" name="pushButton_ln">
+         <widget class="AllgaeuButton" name="pushButton_ln">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1061,10 +1202,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property></widget>
         </item>
         <item row="4" column="3">
-         <widget class="AllgaeuButton" name="pushButton_inv">
+         <widget class="AllgaeuButton" name="pushButton_inv">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1100,10 +1247,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property>
+           <property name="toolTip">
+            <string>Umkehrfunktionen aktivieren</string>
+           </property></widget>
         </item>
         <item row="3" column="0">
-         <widget class="AllgaeuButton" name="pushButton_x2">
+         <widget class="AllgaeuButton" name="pushButton_x2">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1124,9 +1280,9 @@
             <kerning>true</kerning>
            </font>
           </property>
-          <property name="text">
-           <string>y^x</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/y-power-x.svg</normaloff>:/alpine/icons/y-power-x.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -1136,16 +1292,24 @@
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
           </property>
-          <property name="alternateText">
-           <string>x√y</string>
-          </property>
+          <property name="alternateText"><string></string></property>
+          <property name="alternateIcon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/nth-root.svg</normaloff>:/alpine/icons/nth-root.svg</iconset></property>
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property>
+           <property name="toolTip">
+            <string>Potenz x hoch y; mit INV: x-te Wurzel aus y</string>
+           </property></widget>
         </item>
         <item row="7" column="3">
-         <widget class="AllgaeuButton" name="pushButton_divided">
+         <widget class="AllgaeuButton" name="pushButton_divided">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1181,10 +1345,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>operator</string>
+           </property></widget>
         </item>
         <item row="5" column="3">
-         <widget class="AllgaeuButton" name="pushButton_percent">
+         <widget class="AllgaeuButton" name="pushButton_percent">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1205,9 +1375,9 @@
             <kerning>true</kerning>
            </font>
           </property>
-          <property name="text">
-           <string>%</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/percent.svg</normaloff>:/alpine/icons/percent.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -1217,16 +1387,24 @@
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
           </property>
-          <property name="alternateText">
-           <string>1/%</string>
-          </property>
+          <property name="alternateText"><string></string></property>
+          <property name="alternateIcon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/reciprocal.svg</normaloff>:/alpine/icons/reciprocal.svg</iconset></property>
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property>
+           <property name="toolTip">
+            <string>Prozentfunktion</string>
+           </property></widget>
         </item>
         <item row="3" column="1">
-         <widget class="AllgaeuButton" name="pushButton_sqrt">
+         <widget class="AllgaeuButton" name="pushButton_sqrt">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1247,9 +1425,9 @@
             <kerning>true</kerning>
            </font>
           </property>
-          <property name="text">
-           <string>sqrt</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/sqrt.svg</normaloff>:/alpine/icons/sqrt.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -1259,16 +1437,24 @@
           <property name="woodStyle">
            <enum>AllgaeuButton::HoneyWood</enum>
           </property>
-          <property name="alternateText">
-           <string>x²</string>
-          </property>
+          <property name="alternateText"><string></string></property>
+          <property name="alternateIcon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/power.svg</normaloff>:/alpine/icons/power.svg</iconset></property>
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property>
+           <property name="toolTip">
+            <string>Quadratwurzel √x berechnen; mit INV: Quadrat x² berechnen</string>
+           </property></widget>
         </item>
         <item row="9" column="1">
-         <widget class="AllgaeuButton" name="pushButton_5">
+         <widget class="AllgaeuButton" name="pushButton_5">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1304,10 +1490,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>digit</string>
+           </property></widget>
         </item>
         <item row="1" column="3">
-         <widget class="AllgaeuButton" name="pushButton_cursor_right">
+         <widget class="AllgaeuButton" name="pushButton_cursor_right">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1331,9 +1523,9 @@
           <property name="autoFillBackground">
            <bool>false</bool>
           </property>
-          <property name="text">
-           <string>&gt;</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/cursor-right.svg</normaloff>:/alpine/icons/cursor-right.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -1346,10 +1538,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>control</string>
+           </property>
+           <property name="toolTip">
+            <string>Kurz drücken: eine Position nach rechts; halten: zum Ende springen</string>
+           </property></widget>
         </item>
         <item row="8" column="3">
-         <widget class="AllgaeuButton" name="pushButton_mul">
+         <widget class="AllgaeuButton" name="pushButton_mul">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1385,7 +1586,10 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>operator</string>
+           </property></widget>
         </item>
         <item row="0" column="0" colspan="4">
          <widget class="QTextEdit" name="textEdit">
@@ -1423,6 +1627,9 @@
           <property name="layoutDirection">
            <enum>Qt::LeftToRight</enum>
           </property>
+          <property name="lineWrapMode">
+           <enum>QTextEdit::NoWrap</enum>
+          </property>
           <property name="inputMethodHints">
            <set>Qt::ImhNone</set>
           </property>
@@ -1441,7 +1648,10 @@
          </widget>
         </item>
         <item row="8" column="2">
-         <widget class="AllgaeuButton" name="pushButton_9">
+         <widget class="AllgaeuButton" name="pushButton_9">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1477,10 +1687,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>digit</string>
+           </property></widget>
         </item>
         <item row="11" column="0">
-         <widget class="AllgaeuButton" name="pushButton_plusminus">
+         <widget class="AllgaeuButton" name="pushButton_plusminus">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1501,9 +1717,9 @@
             <kerning>true</kerning>
            </font>
           </property>
-          <property name="text">
-           <string>+/-</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/plus-minus.svg</normaloff>:/alpine/icons/plus-minus.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -1516,10 +1732,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>utility</string>
+           </property>
+           <property name="toolTip">
+            <string>Vorzeichen wechseln</string>
+           </property></widget>
         </item>
         <item row="9" column="0">
-         <widget class="AllgaeuButton" name="pushButton_4">
+         <widget class="AllgaeuButton" name="pushButton_4">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1555,10 +1780,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>digit</string>
+           </property></widget>
         </item>
         <item row="10" column="2">
-         <widget class="AllgaeuButton" name="pushButton_3">
+         <widget class="AllgaeuButton" name="pushButton_3">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1594,7 +1825,10 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>digit</string>
+           </property></widget>
         </item>
         <item row="1" column="0">
          <widget class="AllgaeuButton" name="pushButton_bracket_left_start">
@@ -1642,7 +1876,13 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>control</string>
+           </property>
+           <property name="toolTip">
+            <string>Öffnende Klammer am Anfang des gesamten Ausdrucks einfügen</string>
+           </property></widget>
         </item>
         <item row="1" column="1">
          <widget class="AllgaeuButton" name="pushButton_bracket_right_end">
@@ -1684,10 +1924,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>control</string>
+           </property>
+           <property name="toolTip">
+            <string>Schließende Klammer am Ende des Ausdrucks einfügen</string>
+           </property></widget>
         </item>
         <item row="2" column="0">
-         <widget class="AllgaeuButton" name="pushButton_changeDegreesMode">
+         <widget class="AllgaeuButton" name="pushButton_changeDegreesMode">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1729,7 +1978,13 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>control</string>
+           </property>
+           <property name="toolTip">
+            <string>Winkelmaß zwischen Grad und Radiant wechseln</string>
+           </property></widget>
         </item>
         <item row="7" column="0">
          <widget class="AllgaeuButton" name="pushButton_e">
@@ -1771,7 +2026,13 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>constant</string>
+           </property>
+           <property name="toolTip">
+            <string>Eulersche Zahl e einfügen</string>
+           </property></widget>
         </item>
         <item row="6" column="2">
          <widget class="AllgaeuButton" name="pushButton_fact">
@@ -1798,9 +2059,9 @@
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
-          <property name="text">
-           <string>fak</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/factorial.svg</normaloff>:/alpine/icons/factorial.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -1813,10 +2074,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property>
+           <property name="toolTip">
+            <string>Fakultät n! berechnen</string>
+           </property></widget>
         </item>
         <item row="6" column="1">
-         <widget class="AllgaeuButton" name="pushButton_mod">
+         <widget class="AllgaeuButton" name="pushButton_mod">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1837,9 +2107,9 @@
             <kerning>true</kerning>
            </font>
           </property>
-          <property name="text">
-           <string>mod</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/mod.svg</normaloff>:/alpine/icons/mod.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -1852,10 +2122,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property>
+           <property name="toolTip">
+            <string>Modulo – Rest einer Division</string>
+           </property></widget>
         </item>
         <item row="6" column="0">
-         <widget class="AllgaeuButton" name="pushButton_pi">
+         <widget class="AllgaeuButton" name="pushButton_pi">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1894,10 +2173,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>constant</string>
+           </property>
+           <property name="toolTip">
+            <string>Konstante π einfügen</string>
+           </property></widget>
         </item>
         <item row="5" column="2">
-         <widget class="AllgaeuButton" name="pushButton_edx">
+         <widget class="AllgaeuButton" name="pushButton_edx">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -1918,9 +2206,9 @@
             <kerning>true</kerning>
            </font>
           </property>
-          <property name="text">
-           <string>1/x</string>
-          </property>
+          <property name="text"><string></string></property>
+          <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/reciprocal.svg</normaloff>:/alpine/icons/reciprocal.svg</iconset></property>
+          <property name="iconSize"><size><width>26</width><height>26</height></size></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -1933,10 +2221,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property>
+           <property name="toolTip">
+            <string>Kehrwert 1/x berechnen</string>
+           </property></widget>
         </item>
         <item row="6" column="3">
-         <widget class="AllgaeuButton" name="pushButton_placeholder3_3">
+         <widget class="AllgaeuButton" name="pushButton_placeholder3_3">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -1978,10 +2275,19 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>function</string>
+           </property>
+           <property name="toolTip">
+            <string>Binomialkoeffizient C(n, k) berechnen</string>
+           </property></widget>
         </item>
         <item row="7" column="2">
-         <widget class="AllgaeuButton" name="pushButton_bracket_right">
+         <widget class="AllgaeuButton" name="pushButton_bracket_right">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -2017,10 +2323,16 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>utility</string>
+           </property></widget>
         </item>
         <item row="2" column="1">
-         <widget class="AllgaeuButton" name="pushButton_placeholder3_4">
+         <widget class="AllgaeuButton" name="pushButton_placeholder3_4">          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -2065,7 +2377,10 @@
           <property name="alternateState">
            <bool>false</bool>
           </property>
-         </widget>
+         
+           <property name="role" stdset="0">
+            <string>utility</string>
+           </property></widget>
         </item>
        </layout>
       </item>

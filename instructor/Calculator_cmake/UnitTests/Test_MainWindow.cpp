@@ -23,9 +23,11 @@ private slots:
     void digitButtonsAndAddition();
     void allArithmeticOperatorButtons();
     void cursorEditingAndBackspace();
+    void cursorButtonsLongPressJumpToExpressionEdges();
+    void longExpressionKeepsCursorVisibleWithoutWrapping();
     void endParenthesisButtonAppendsAtExpressionEnd();
     void startParenthesisButtonInsertsAtExpressionStart();
-    void piButtonUsesConstantWoodStyle();
+    void piButtonHasSemanticRole();
     void directDisplayEditing();
     void errorRecovery();
     void historyNavigation();
@@ -152,7 +154,7 @@ void CalculatorGuiTests::startParenthesisButtonInsertsAtExpressionStart()
     QCOMPARE(display->textCursor().position(), 1);
 }
 
-void CalculatorGuiTests::piButtonUsesConstantWoodStyle()
+void CalculatorGuiTests::piButtonHasSemanticRole()
 {
     MainWindow window;
     window.show();
@@ -217,6 +219,87 @@ void CalculatorGuiTests::cursorEditingAndBackspace()
 
     QTest::mouseClick(backspace, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("123"));
+}
+
+void CalculatorGuiTests::cursorButtonsLongPressJumpToExpressionEdges()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *left = window.findChild<QPushButton *>("pushButton_cursor_left");
+    auto *right = window.findChild<QPushButton *>("pushButton_cursor_right");
+
+    QVERIFY(display);
+    QVERIFY(left);
+    QVERIFY(right);
+
+    display->setPlainText("12345");
+    QTextCursor cursor = display->textCursor();
+    cursor.setPosition(3);
+    display->setTextCursor(cursor);
+
+    // A short tap still moves exactly one character.
+    QTest::mouseClick(left, Qt::LeftButton);
+    QCOMPARE(display->textCursor().position(), 2);
+    QTest::mouseClick(right, Qt::LeftButton);
+    QCOMPARE(display->textCursor().position(), 3);
+
+    // Holding the left cursor button for more than one second jumps to start.
+    QTest::mousePress(left, Qt::LeftButton);
+    QTest::qWait(1100);
+    QTest::mouseRelease(left, Qt::LeftButton);
+    QCOMPARE(display->textCursor().position(), 0);
+
+    // Holding the right cursor button for more than one second jumps to end.
+    cursor = display->textCursor();
+    cursor.setPosition(2);
+    display->setTextCursor(cursor);
+    QTest::mousePress(right, Qt::LeftButton);
+    QTest::qWait(1100);
+    QTest::mouseRelease(right, Qt::LeftButton);
+    QCOMPARE(display->textCursor().position(), 5);
+}
+
+void CalculatorGuiTests::longExpressionKeepsCursorVisibleWithoutWrapping()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *left = window.findChild<QPushButton *>("pushButton_cursor_left");
+    auto *right = window.findChild<QPushButton *>("pushButton_cursor_right");
+
+    QVERIFY(display);
+    QVERIFY(left);
+    QVERIFY(right);
+    QCOMPARE(display->lineWrapMode(), QTextEdit::NoWrap);
+
+    const QString expression = QStringLiteral("1234567890+").repeated(12);
+    display->setPlainText(expression);
+
+    // The caret must remain visible while traversing an expression that is
+    // considerably wider than the display, including both ends.
+    QTextCursor cursor = display->textCursor();
+    cursor.movePosition(QTextCursor::Start);
+    display->setTextCursor(cursor);
+    display->ensureCursorVisible();
+    QVERIFY(display->cursorRect().intersects(display->viewport()->rect()));
+
+    for (int i = 0; i < 8; ++i)
+        QTest::mouseClick(right, Qt::LeftButton);
+    QVERIFY(display->cursorRect().intersects(display->viewport()->rect()));
+
+    cursor = display->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    display->setTextCursor(cursor);
+    display->ensureCursorVisible();
+    QVERIFY(display->cursorRect().intersects(display->viewport()->rect()));
+
+    for (int i = 0; i < 8; ++i)
+        QTest::mouseClick(left, Qt::LeftButton);
+    QVERIFY(display->cursorRect().intersects(display->viewport()->rect()));
+    QCOMPARE(display->toPlainText(), expression);
 }
 
 void CalculatorGuiTests::directDisplayEditing()
@@ -876,8 +959,11 @@ void CalculatorGuiTests::inversePercentageMode()
     QVERIFY(clear);
 
     QTest::mouseClick(inverse, Qt::LeftButton);
-    QVERIFY(qobject_cast<AllgaeuButton *>(percent)->alternateState());
-    QCOMPARE(qobject_cast<AllgaeuButton *>(percent)->alternateText(), QString("1/%"));
+    auto *percentButton = qobject_cast<AllgaeuButton *>(percent);
+    QVERIFY(percentButton);
+    QVERIFY(percentButton->alternateState());
+    QVERIFY(!percentButton->alternateIcon().isNull());
+    QVERIFY(percentButton->alternateText().isEmpty());
     QTest::mouseClick(two, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);
@@ -890,8 +976,9 @@ void CalculatorGuiTests::inversePercentageMode()
 
     QTest::mouseClick(clear, Qt::LeftButton);
     QTest::mouseClick(inverse, Qt::LeftButton);
-    QVERIFY(!qobject_cast<AllgaeuButton *>(percent)->alternateState());
-    QCOMPARE(percent->text(), QString("%"));
+    QVERIFY(!percentButton->alternateState());
+    QVERIFY(!percentButton->icon().isNull());
+    QVERIFY(percentButton->text().isEmpty());
     QTest::mouseClick(two, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);
     QTest::mouseClick(zero, Qt::LeftButton);

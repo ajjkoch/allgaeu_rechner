@@ -16,6 +16,7 @@
 class QTextEdit;
 class QWidget;
 class QLineEdit;
+class QTimer;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -60,6 +61,9 @@ private:
     QWidget *m_precisionOverlay = nullptr;
     QLineEdit *m_precisionInput = nullptr;
     QWidget *m_donationOverlay = nullptr;
+    QTimer *m_cursorLongPressTimer = nullptr;
+    bool m_cursorLongPressTriggered = false;
+    CalculatorAction m_pressedCursorAction = CalculatorAction::CursorLeft;
     QString formatResult(double result) const;
     QVector<QString> m_history;
     /** @brief Replaces the editor contents and right-aligns the text.

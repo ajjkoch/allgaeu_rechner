@@ -43,6 +43,7 @@ jobs:
             g++ \
             qt6-base-dev \
             qt6-base-dev-tools \
+            qt6-svg-dev \
             gcovr
 
       - name: Configure calculator application
