@@ -2440,6 +2440,7 @@
           <property name="iconHeight"><number>32</number></property>
           <property name="iconWidthMargin"><number>6</number></property>
           <property name="minimumIconWidth"><number>46</number></property>
+          <property name="toolTip"><string>Binomialkoeffizient C(n, k) einfügen</string></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>
@@ -2552,6 +2553,7 @@
           <property name="iconHeight"><number>32</number></property>
           <property name="iconWidthMargin"><number>6</number></property>
           <property name="minimumIconWidth"><number>46</number></property>
+          <property name="toolTip"><string>Anzahl der Nachkommastellen einstellen</string></property>
           <property name="autoDefault">
            <bool>false</bool>
           </property>

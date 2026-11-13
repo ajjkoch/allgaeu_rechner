@@ -234,12 +234,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // The intended free key is in the second keypad row.
     auto *precisionButton = ui->pushButton_placeholder3_4;
-    precisionButton->setEnabled(true);
-    precisionButton->setText("fix");
-    precisionButton->setToolTip("Anzahl der Nachkommastellen einstellen");
     connect(precisionButton, &QPushButton::clicked, this, &MainWindow::decimalPlaces_pressed);
 
-    ui->pushButton_placeholder3_3->setToolTip(tr("Binomialkoeffizient C(n, k) einfügen"));
 
     setRightAlignedText(ui->textEdit, m_strExpression);
 }
