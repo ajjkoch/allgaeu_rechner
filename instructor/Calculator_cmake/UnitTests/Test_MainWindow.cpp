@@ -24,6 +24,7 @@ private slots:
     void allArithmeticOperatorButtons();
     void cursorEditingAndBackspace();
     void cursorButtonsLongPressJumpToExpressionEdges();
+    void longExpressionKeepsCursorVisibleWithoutWrapping();
     void endParenthesisButtonAppendsAtExpressionEnd();
     void startParenthesisButtonInsertsAtExpressionStart();
     void piButtonHasSemanticRole();
@@ -258,6 +259,47 @@ void CalculatorGuiTests::cursorButtonsLongPressJumpToExpressionEdges()
     QTest::qWait(1100);
     QTest::mouseRelease(right, Qt::LeftButton);
     QCOMPARE(display->textCursor().position(), 5);
+}
+
+void CalculatorGuiTests::longExpressionKeepsCursorVisibleWithoutWrapping()
+{
+    MainWindow window;
+    window.show();
+
+    auto *display = window.findChild<QTextEdit *>("textEdit");
+    auto *left = window.findChild<QPushButton *>("pushButton_cursor_left");
+    auto *right = window.findChild<QPushButton *>("pushButton_cursor_right");
+
+    QVERIFY(display);
+    QVERIFY(left);
+    QVERIFY(right);
+    QCOMPARE(display->lineWrapMode(), QTextEdit::NoWrap);
+
+    const QString expression = QStringLiteral("1234567890+").repeated(12);
+    display->setPlainText(expression);
+
+    // The caret must remain visible while traversing an expression that is
+    // considerably wider than the display, including both ends.
+    QTextCursor cursor = display->textCursor();
+    cursor.movePosition(QTextCursor::Start);
+    display->setTextCursor(cursor);
+    display->ensureCursorVisible();
+    QVERIFY(display->cursorRect().intersects(display->viewport()->rect()));
+
+    for (int i = 0; i < 8; ++i)
+        QTest::mouseClick(right, Qt::LeftButton);
+    QVERIFY(display->cursorRect().intersects(display->viewport()->rect()));
+
+    cursor = display->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    display->setTextCursor(cursor);
+    display->ensureCursorVisible();
+    QVERIFY(display->cursorRect().intersects(display->viewport()->rect()));
+
+    for (int i = 0; i < 8; ++i)
+        QTest::mouseClick(left, Qt::LeftButton);
+    QVERIFY(display->cursorRect().intersects(display->viewport()->rect()));
+    QCOMPARE(display->toPlainText(), expression);
 }
 
 void CalculatorGuiTests::directDisplayEditing()
