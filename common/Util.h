@@ -74,7 +74,7 @@ static bool compareDoubles(double a, double b, double epsilon = 1e-9)
  *   mod           floating-point remainder\n *   root          x-th root (y root x means x-th root of y)
  *   %             percentage (a % b means a * b / 100)
  *   ^             right-associative exponentiation
- *   !             factorial
+ *   !             factorial; !! double factorial
  *
  * Supported functions:
  *   sqrt, sin, cos, tan, asin, acos, atan, log, ln, exp, edx
@@ -372,27 +372,40 @@ private:
             return base;
         }
 
-        /** @brief Parses postfix factorial operators.
+        /** @brief Parses factorial (!) and double-factorial (!!) postfix operators.
          * @throws std::domain_error unless the operand is a non-negative integer.
-         * @throws std::overflow_error when the factorial exceeds the supported range.
+         * @throws std::overflow_error when the result exceeds the supported range.
          */
         double parsePostfix()
         {
             double value = parsePrimary();
             while (consume('!')) {
+                const bool doubleFactorial = consume('!');
                 if (value < 0.0 || std::floor(value) != value) {
                     throw std::domain_error(
                         "Factorial requires a non-negative integer");
                 }
-                if (value > 170.0) {
-                    throw std::overflow_error("Factorial result is out of range");
-                }
 
                 double result = 1.0;
-                for (int i = 2; i <= static_cast<int>(value); ++i) {
-                    result *= i;
+                const int operand = static_cast<int>(value);
+                if (doubleFactorial) {
+                    for (int i = operand; i > 1; i -= 2) {
+                        result *= i;
+                        if (!std::isfinite(result)) {
+                            throw std::overflow_error(
+                                "Double factorial result is out of range");
+                        }
+                    }
+                    value = checked(result);
+                } else {
+                    if (value > 170.0) {
+                        throw std::overflow_error("Factorial result is out of range");
+                    }
+                    for (int i = 2; i <= operand; ++i) {
+                        result *= i;
+                    }
+                    value = checked(result);
                 }
-                value = checked(result);
             }
             return value;
         }
