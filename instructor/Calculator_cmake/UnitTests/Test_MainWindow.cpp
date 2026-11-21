@@ -1742,8 +1742,10 @@ void CalculatorGuiTests::factorialButton()
     QVERIFY(seven);
 
     QTest::mouseClick(inverse, Qt::LeftButton);
-    QCOMPARE(factorial->text(), QString("n!!"));
-    QVERIFY(factorial->icon().isNull());
+    auto *factorialButton = qobject_cast<AllgaeuButton *>(factorial);
+    QVERIFY(factorialButton);
+    QVERIFY(factorialButton->alternateState());
+    QVERIFY(!factorialButton->alternateIcon().isNull());
 
     QTest::mouseClick(clear, Qt::LeftButton);
     QTest::mouseClick(seven, Qt::LeftButton);
@@ -1753,8 +1755,7 @@ void CalculatorGuiTests::factorialButton()
     QCOMPARE(display->toPlainText(), QString("105"));
 
     QTest::mouseClick(inverse, Qt::LeftButton);
-    QCOMPARE(factorial->text(), QString("n!"));
-    QVERIFY(!factorial->icon().isNull());
+    QVERIFY(!factorialButton->alternateState());
 }
 
 void CalculatorGuiTests::inverseSquareUsesSquareRootKey()
