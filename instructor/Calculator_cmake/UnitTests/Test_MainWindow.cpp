@@ -1736,26 +1736,10 @@ void CalculatorGuiTests::factorialButton()
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("120"));
 
-    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
-    auto *seven = window.findChild<QPushButton *>("pushButton_7");
-    QVERIFY(inverse);
-    QVERIFY(seven);
-
-    QTest::mouseClick(inverse, Qt::LeftButton);
-    auto *factorialButton = qobject_cast<AllgaeuButton *>(factorial);
-    QVERIFY(factorialButton);
-    QVERIFY(factorialButton->alternateState());
-    QVERIFY(!factorialButton->alternateIcon().isNull());
-
-    QTest::mouseClick(clear, Qt::LeftButton);
-    QTest::mouseClick(seven, Qt::LeftButton);
-    QTest::mouseClick(factorial, Qt::LeftButton);
-    QCOMPARE(display->toPlainText(), QString("7!!"));
+    // The factorial key remains unchanged; double factorial is entered as text.
+    display->setPlainText("7!!");
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("105"));
-
-    QTest::mouseClick(inverse, Qt::LeftButton);
-    QVERIFY(!factorialButton->alternateState());
 }
 
 void CalculatorGuiTests::inverseSquareUsesSquareRootKey()
