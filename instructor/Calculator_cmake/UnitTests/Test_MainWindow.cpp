@@ -1721,12 +1721,14 @@ void CalculatorGuiTests::factorialButton()
     auto *display = window.findChild<QTextEdit *>("textEdit");
     auto *five = window.findChild<QPushButton *>("pushButton_5");
     auto *factorial = window.findChild<QPushButton *>("pushButton_fact");
+    auto *inverse = window.findChild<QPushButton *>("pushButton_inv");
     auto *equals = window.findChild<QPushButton *>("pushButton_equals");
     auto *clear = window.findChild<QPushButton *>("pushButton_clear");
 
     QVERIFY(display);
     QVERIFY(five);
     QVERIFY(factorial);
+    QVERIFY(inverse);
     QVERIFY(equals);
     QVERIFY(clear);
 
@@ -1740,6 +1742,30 @@ void CalculatorGuiTests::factorialButton()
     display->setPlainText("7!!");
     QTest::mouseClick(equals, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("105"));
+
+    // INV changes the factorial key to its inverse-factorial operation.
+    auto *factorialButton = qobject_cast<AllgaeuButton *>(factorial);
+    QVERIFY(factorialButton);
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QVERIFY(factorialButton->alternateState());
+    QVERIFY(!factorialButton->alternateIcon().isNull());
+
+    display->setPlainText("5042");
+    QTest::mouseClick(factorial, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("7! + 2"));
+    QTest::mouseClick(equals, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("5042"));
+
+    display->setPlainText("5402");
+    QTest::mouseClick(factorial, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("7! + 362"));
+
+    display->setPlainText("720");
+    QTest::mouseClick(factorial, Qt::LeftButton);
+    QCOMPARE(display->toPlainText(), QString("6!"));
+
+    QTest::mouseClick(inverse, Qt::LeftButton);
+    QVERIFY(!factorialButton->alternateState());
 }
 
 void CalculatorGuiTests::inverseSquareUsesSquareRootKey()
