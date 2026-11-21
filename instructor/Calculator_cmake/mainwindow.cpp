@@ -22,6 +22,7 @@
 #include <QSettings>
 #include <QGraphicsOpacityEffect>
 #include <cmath>
+#include <cstdint>
 
 
 
@@ -291,7 +292,10 @@ void MainWindow::dispatchAction(CalculatorAction action)
     case CalculatorAction::Inverse: inv_pressed(); break;
     case CalculatorAction::Modulo: mod_pressed(); break;
     case CalculatorAction::Factorial:
-        insertRightAlignedText(ui->textEdit, m_isInverted ? "!!" : "!");
+        if (m_isInverted)
+            inverseFactorial_pressed();
+        else
+            insertRightAlignedText(ui->textEdit, "!");
         break;
     case CalculatorAction::BinomialCoefficient:
         insertRightAlignedText(ui->textEdit, " nCr ");
@@ -575,6 +579,8 @@ void MainWindow::inv_pressed()
         ui->pushButton_cos->setAlternateState(true);
         ui->pushButton_tan->setAlternateState(true);
         ui->pushButton_percent->setAlternateState(true);
+        ui->pushButton_fact->setAlternateState(true);
+        ui->pushButton_fact->setToolTip("Inverse Fakultät: größte passende Fakultät mit Rest");
         m_isInverted = true;
     }else{
         ui->pushButton_x2->setAlternateState(false);
@@ -587,9 +593,55 @@ void MainWindow::inv_pressed()
         ui->pushButton_cos->setAlternateState(false);
         ui->pushButton_tan->setAlternateState(false);
         ui->pushButton_percent->setAlternateState(false);
+        ui->pushButton_fact->setAlternateState(false);
+        ui->pushButton_fact->setToolTip("Fakultät n! berechnen");
         m_isInverted = false;
     }
     calc.setInverted(m_isInverted);
+}
+
+/**
+ * @brief Decomposes the current positive integer into its greatest factorial and remainder.
+ *
+ * The display is replaced by an equivalent expression such as "7! + 2".
+ * Values are limited to the exact-integer range of double, the calculator's
+ * numeric representation.
+ */
+void MainWindow::inverseFactorial_pressed()
+{
+    try {
+        const double value = calc.evaluate(
+            ui->textEdit->toPlainText().toStdString());
+        constexpr double maxExactInteger = 9007199254740991.0;
+
+        if (!std::isfinite(value) || value < 1.0 ||
+            std::floor(value) != value || value > maxExactInteger) {
+            throw std::domain_error(
+                "Inverse factorial requires a positive integer up to 2^53-1");
+        }
+
+        const std::uint64_t number = static_cast<std::uint64_t>(value);
+        std::uint64_t factorial = 1;
+        unsigned int n = 1;
+
+        // Division in the condition prevents integer overflow.
+        while (factorial <= number / (n + 1)) {
+            ++n;
+            factorial *= n;
+        }
+
+        const std::uint64_t remainder = number - factorial;
+        m_strExpression = QString::number(n) + "!";
+        if (remainder != 0)
+            m_strExpression += " + " + QString::number(remainder);
+
+        m_isError = false;
+    } catch (const std::exception &e) {
+        m_strExpression = QString::fromUtf8(e.what());
+        m_isError = true;
+    }
+
+    setRightAlignedText(ui->textEdit, m_strExpression);
 }
 
 /** @brief Evaluates the reciprocal of the current expression and displays the result or error. */
