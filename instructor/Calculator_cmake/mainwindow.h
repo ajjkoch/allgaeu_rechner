@@ -112,6 +112,8 @@ private slots:
     void mod_pressed();
     /** @brief Evaluates the reciprocal of the current expression and displays the result or error. */
     void edx_pressed();
+    /** @brief Decomposes a positive integer into its greatest factorial and remainder. */
+    void inverseFactorial_pressed();
     /** @brief Toggles inverse trigonometric keys and inverse percentage mode. */
     void inv_pressed();
     /** @brief Inserts the percentage operator. */
