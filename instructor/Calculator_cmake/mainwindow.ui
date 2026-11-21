@@ -2222,6 +2222,7 @@
           </property>
           <property name="text"><string>n!</string></property>
           <property name="icon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/factorial.svg</normaloff>:/alpine/icons/factorial.svg</iconset></property>
+          <property name="alternateIcon"><iconset resource="alpine_resources.qrc"><normaloff>:/alpine/icons/factorial-inverse.svg</normaloff>:/alpine/icons/factorial-inverse.svg</iconset></property>
           <property name="iconSize"><size><width>46</width><height>32</height></size></property>
           <property name="iconHeight"><number>32</number></property>
           <property name="iconWidthMargin"><number>6</number></property>
