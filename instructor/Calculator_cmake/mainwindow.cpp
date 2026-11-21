@@ -575,8 +575,6 @@ void MainWindow::inv_pressed()
         ui->pushButton_cos->setAlternateState(true);
         ui->pushButton_tan->setAlternateState(true);
         ui->pushButton_percent->setAlternateState(true);
-        ui->pushButton_fact->setAlternateIcon(QIcon(":/alpine/icons/double-factorial.svg"));
-        ui->pushButton_fact->setAlternateState(true);
         m_isInverted = true;
     }else{
         ui->pushButton_x2->setAlternateState(false);
@@ -589,7 +587,6 @@ void MainWindow::inv_pressed()
         ui->pushButton_cos->setAlternateState(false);
         ui->pushButton_tan->setAlternateState(false);
         ui->pushButton_percent->setAlternateState(false);
-        ui->pushButton_fact->setAlternateState(false);
         m_isInverted = false;
     }
     calc.setInverted(m_isInverted);
