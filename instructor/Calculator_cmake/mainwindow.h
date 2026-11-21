@@ -7,7 +7,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QIcon>
 #include <QString>
 #include <QVector>
 #include <QEvent>
@@ -57,7 +56,6 @@ private:
     Calculator calc;
     bool m_isError;
     bool m_isInverted;
-    QIcon m_factorialIcon;
     int m_hpos;
     int m_decimalPlaces;
     QWidget *m_precisionOverlay = nullptr;
