@@ -1722,11 +1722,13 @@ void CalculatorGuiTests::factorialButton()
     auto *five = window.findChild<QPushButton *>("pushButton_5");
     auto *factorial = window.findChild<QPushButton *>("pushButton_fact");
     auto *equals = window.findChild<QPushButton *>("pushButton_equals");
+    auto *clear = window.findChild<QPushButton *>("pushButton_clear");
 
     QVERIFY(display);
     QVERIFY(five);
     QVERIFY(factorial);
     QVERIFY(equals);
+    QVERIFY(clear);
 
     QTest::mouseClick(five, Qt::LeftButton);
     QTest::mouseClick(factorial, Qt::LeftButton);
@@ -1743,6 +1745,7 @@ void CalculatorGuiTests::factorialButton()
     QCOMPARE(factorial->text(), QString("n!!"));
     QVERIFY(factorial->icon().isNull());
 
+    QTest::mouseClick(clear, Qt::LeftButton);
     QTest::mouseClick(seven, Qt::LeftButton);
     QTest::mouseClick(factorial, Qt::LeftButton);
     QCOMPARE(display->toPlainText(), QString("7!!"));
