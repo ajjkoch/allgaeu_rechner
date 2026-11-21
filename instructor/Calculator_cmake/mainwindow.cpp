@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_decimalPlaces(6)
 {
     ui->setupUi(this);
+    m_factorialIcon = ui->pushButton_fact->icon();
     ui->centralwidget->installEventFilter(this);
     QSettings settings("AllgaeuRechner", "Calculator");
     m_decimalPlaces = qBound(0, settings.value("decimalPlaces", 6).toInt(), 15);
@@ -290,7 +291,9 @@ void MainWindow::dispatchAction(CalculatorAction action)
     case CalculatorAction::NaturalLog: ln_pressed(); break;
     case CalculatorAction::Inverse: inv_pressed(); break;
     case CalculatorAction::Modulo: mod_pressed(); break;
-    case CalculatorAction::Factorial: insertRightAlignedText(ui->textEdit, "!"); break;
+    case CalculatorAction::Factorial:
+        insertRightAlignedText(ui->textEdit, m_isInverted ? "!!" : "!");
+        break;
     case CalculatorAction::BinomialCoefficient:
         insertRightAlignedText(ui->textEdit, " nCr ");
         break;
@@ -573,6 +576,8 @@ void MainWindow::inv_pressed()
         ui->pushButton_cos->setAlternateState(true);
         ui->pushButton_tan->setAlternateState(true);
         ui->pushButton_percent->setAlternateState(true);
+        ui->pushButton_fact->setIcon(QIcon());
+        ui->pushButton_fact->setText("n!!");
         m_isInverted = true;
     }else{
         ui->pushButton_x2->setAlternateState(false);
@@ -585,6 +590,8 @@ void MainWindow::inv_pressed()
         ui->pushButton_cos->setAlternateState(false);
         ui->pushButton_tan->setAlternateState(false);
         ui->pushButton_percent->setAlternateState(false);
+        ui->pushButton_fact->setIcon(m_factorialIcon);
+        ui->pushButton_fact->setText("n!");
         m_isInverted = false;
     }
     calc.setInverted(m_isInverted);
