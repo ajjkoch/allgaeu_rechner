@@ -9,6 +9,7 @@
     <file alias="icons/nth-root.svg">resources/icons/nth-root.svg</file>
     <file alias="icons/reciprocal.svg">resources/icons/reciprocal.svg</file>
     <file alias="icons/factorial.svg">resources/icons/factorial.svg</file>
+    <file alias="icons/factorial-inverse.svg">resources/icons/factorial-inverse.svg</file>
     <file alias="icons/percent.svg">resources/icons/percent.svg</file>
     <file alias="icons/backspace.svg">resources/icons/backspace.svg</file>
     <file alias="icons/clear.svg">resources/icons/clear.svg</file>
