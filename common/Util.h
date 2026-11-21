@@ -386,6 +386,14 @@ private:
                         "Factorial requires a non-negative integer");
                 }
 
+                if (doubleFactorial && value > 300.0) {
+                    throw std::overflow_error(
+                        "Double factorial result is out of range");
+                }
+                if (!doubleFactorial && value > 170.0) {
+                    throw std::overflow_error("Factorial result is out of range");
+                }
+
                 double result = 1.0;
                 const int operand = static_cast<int>(value);
                 if (doubleFactorial) {
@@ -398,9 +406,6 @@ private:
                     }
                     value = checked(result);
                 } else {
-                    if (value > 170.0) {
-                        throw std::overflow_error("Factorial result is out of range");
-                    }
                     for (int i = 2; i <= operand; ++i) {
                         result *= i;
                     }
