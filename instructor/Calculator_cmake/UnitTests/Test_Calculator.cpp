@@ -677,8 +677,14 @@ void CalculatorTests::test_calculator_instances_are_independent()
 
 void CalculatorTests::test_repeated_factorial_and_precedence()
 {
-    // Repeated postfix factorial applies from left to right: (3!)! = 6! = 720.
-    QCOMPARE(m_calculator.evaluate("3!!"), 720.0);
+    // A pair of postfix exclamation marks means double factorial, not factorial twice.
+    QCOMPARE(m_calculator.evaluate("3!!"), 3.0);
+    QCOMPARE(m_calculator.evaluate("4!!"), 8.0);
+    QCOMPARE(m_calculator.evaluate("7!!"), 105.0);
+    QCOMPARE(m_calculator.evaluate("8!!"), 384.0);
+    QCOMPARE(m_calculator.evaluate("0!!"), 1.0);
+    QCOMPARE(m_calculator.evaluate("1!!"), 1.0);
+    QCOMPARE(m_calculator.evaluate("3!"), 6.0);
 
     // Factorial binds more tightly than a leading unary minus and exponentiation.
     QCOMPARE(m_calculator.evaluate("-3!"), -6.0);
