@@ -1,0 +1,77 @@
+@startuml
+title AllgäuRechner – Klassendiagramm
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+class MainWindow {
+  - ui : Ui::MainWindow*
+  - m_strExpression : QString
+  - calc : Calculator
+  - m_isError : bool
+  - m_isInverted : bool
+  - m_hpos : int
+  - m_decimalPlaces : int
+  - m_history : QVector<QString>
+  + dispatchAction(action : CalculatorAction) : void
+  + formatResult(result : double) : QString
+  + equals_pressed() : void
+  + inv_pressed() : void
+  + inverseFactorial_pressed() : void
+}
+
+class Calculator {
+  - m_degrees : bool
+  - m_inverted : bool
+  + evaluate(expression : string) : long double
+  + setDegMode(isDegrees : bool) : void
+  + setInverted(isInverted : bool) : void
+}
+
+class "Calculator::Parser" as Parser {
+  - m_expression : string&
+  - m_position : size_t
+  - m_degrees : bool
+  - m_inverted : bool
+  - maxRecursionDepth : size_t = 256
+  + parse() : double
+  - parseAdditionSubtraction() : double
+  - parseMultiplicationDivision() : double
+  - parseUnary() : double
+  - parsePower() : double
+  - parsePostfix() : double
+  - parsePrimary() : double
+  - parseFunction() : double
+}
+
+class QPushButton
+class AllgaeuButton {
+  - m_woodStyle : WoodStyle
+  - m_alternateText : QString
+  - m_alternateIcon : QIcon
+  - m_alternateState : bool
+  + setAlternateState(enabled : bool) : void
+  + setWoodStyle(style : WoodStyle) : void
+  + paintEvent(event) : void
+}
+
+class "Ui::MainWindow" as UiMainWindow
+class "QMainWindow" as QMainWindow
+
+MainWindow --|> QMainWindow
+AllgaeuButton --|> QPushButton
+MainWindow *-- Calculator : besitzt
+MainWindow --> UiMainWindow : UI-Zugriff
+Calculator ..> Parser : erzeugt je Auswertung
+note right of Parser
+  Private, verschachtelte Klasse
+  innerhalb von Calculator.
+end note
+note bottom of MainWindow
+  Die GUI verarbeitet Eingabe,
+  Zustand und Darstellung.
+end note
+note bottom of Calculator
+  Der Rechnerkern wertet Ausdrücke
+  unabhängig von Qt-Widgets aus.
+end note
+@enduml
