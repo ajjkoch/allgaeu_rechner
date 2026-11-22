@@ -111,7 +111,62 @@ Das folgende Diagramm zeigt die wesentlichen Abhängigkeiten der Anwendung. Die 
 
 Das Klassendiagramm zeigt die zentralen Klassen und ihre Beziehungen. Der Parser ist als private, innerhalb von `Calculator` definierte Klasse implementiert. `MainWindow` hält eine Instanz des Rechners und nutzt die Qt-Designer-Oberfläche. `AllgaeuButton` erweitert `QPushButton`.
 
-![Klassendiagramm des AllgäuRechners](diagrams/class-diagram.svg)
+```mermaid
+classDiagram
+    class QMainWindow
+    class MainWindow {
+        -Ui::MainWindow* ui
+        -QString m_strExpression
+        -Calculator calc
+        -bool m_isError
+        -bool m_isInverted
+        -int m_hpos
+        -int m_decimalPlaces
+        -QVector~QString~ m_history
+        +dispatchAction(action)
+        +formatResult(result)
+        +equals_pressed()
+        +inv_pressed()
+        +inverseFactorial_pressed()
+    }
+    class Calculator {
+        -bool m_degrees
+        -bool m_inverted
+        +evaluate(expression) long double
+        +setDegMode(isDegrees)
+        +setInverted(isInverted)
+    }
+    class Parser {
+        <<private nested class>>
+        -string expression
+        -size_t position
+        -bool degrees
+        -bool inverted
+        -size_t maxRecursionDepth
+        +parse() double
+        -parseAdditionSubtraction()
+        -parseMultiplicationDivision()
+        -parseUnary()
+        -parsePower()
+        -parsePostfix()
+        -parsePrimary()
+        -parseFunction()
+    }
+    class QPushButton
+    class AllgaeuButton {
+        -WoodStyle m_woodStyle
+        -QString m_alternateText
+        -QIcon m_alternateIcon
+        -bool m_alternateState
+        +setAlternateState(enabled)
+        +setWoodStyle(style)
+        +paintEvent(event)
+    }
+    MainWindow --|> QMainWindow
+    AllgaeuButton --|> QPushButton
+    MainWindow *-- Calculator : owns
+    Calculator ..> Parser : creates per evaluation
+```
 
 *PlantUML-Quelldatei: [class-diagram.puml](diagrams/class-diagram.puml)*
 
