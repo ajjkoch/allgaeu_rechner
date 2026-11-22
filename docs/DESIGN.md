@@ -103,50 +103,9 @@ Die Implementierung liegt derzeit in einer Header-Datei. Eine spätere Aufteilun
 
 Das folgende Diagramm zeigt die wesentlichen Abhängigkeiten der Anwendung. Die Pfeile bezeichnen die Nutzung bzw. Abhängigkeit einer Komponente.
 
-```plantuml
-@startuml
-title AllgäuRechner – Komponentenübersicht
+![Komponentenübersicht des AllgäuRechners](diagrams/components.svg)
 
-skinparam componentStyle rectangle
-skinparam shadowing false
-
-package "Anwendung" {
-  [main.cpp] as Entry
-  [MainWindow] as GUI
-  [mainwindow.ui] as UI
-  [AlpineTheme] as Theme
-  [AllgaeuButton] as Button
-  [alpine_resources.qrc] as Resources
-}
-
-package "Berechnung" {
-  [Calculator] as Core
-  [Parser] as Parser
-}
-
-package "Plattform / Build" {
-  [Qt 6 Widgets] as Qt
-  [CMake] as Build
-  [Qt Test] as Tests
-}
-
-Entry --> Qt : startet
-Entry --> GUI : erzeugt
-GUI --> UI : setupUi()
-GUI --> Core : evaluate()
-GUI --> Theme : verwendet
-GUI --> Button : verwendet
-GUI --> Resources : Ressourcen
-Core --> Parser : delegiert
-GUI --> Qt : Fenster / Events
-UI ..> Qt : Widget-Definition
-Build ..> GUI : kompiliert
-Build ..> Core : bindet ein
-Tests ..> GUI : GUI-Tests
-Tests ..> Core : Rechenverhalten
-
-@enduml
-```
+*PlantUML-Quelldatei: [components.puml](diagrams/components.puml)*
 
 ## 6. Ablauf einer Berechnung
 
@@ -154,41 +113,9 @@ Ein Ausdruck wird zunächst in der Anzeige aufgebaut. Die Eingabe kann von den B
 
 Der Parser verarbeitet den Ausdruck und liefert entweder einen numerischen Wert oder eine Ausnahme. Das Hauptfenster übernimmt anschließend die Darstellung des Ergebnisses oder der Fehlermeldung.
 
-```plantuml
-@startuml
-title AllgäuRechner – Ablauf einer Berechnung
+![Ablauf einer Berechnung](diagrams/calculation-flow.svg)
 
-actor Benutzer
-participant "MainWindow" as GUI
-participant "Anzeige
-(QTextEdit)" as Display
-participant "Calculator" as Core
-participant "Parser" as Parser
-
-Benutzer -> GUI : Ziffern / Operatoren eingeben
-GUI -> Display : Ausdruck aktualisieren
-
-Benutzer -> GUI : "="
-GUI -> Display : Ausdruck auslesen
-Display --> GUI : Ausdruck als Text
-
-GUI -> Core : evaluate(Ausdruck)
-Core -> Parser : parse und auswerten
-
-alt Ausdruck gültig
-  Parser --> Core : numerisches Ergebnis
-  Core --> GUI : Ergebnis
-  GUI -> GUI : Ergebnis formatieren
-  GUI -> Display : Ergebnis anzeigen
-else Syntax- oder Rechenfehler
-  Parser --> Core : Exception
-  Core --> GUI : Exception weiterreichen
-  GUI -> GUI : Fehlerzustand setzen
-  GUI -> Display : Fehlermeldung anzeigen
-end
-
-@enduml
-```
+*PlantUML-Quelldatei: [calculation-flow.puml](diagrams/calculation-flow.puml)*
 
 ## 7. Mathematischer Parser
 
