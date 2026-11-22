@@ -129,13 +129,13 @@ Der Parser verarbeitet den Ausdruck und liefert entweder einen numerischen Wert 
 
 Die vollständige formale Grammatik in BNF, einschließlich Operatorpräzedenz, Assoziativität und semantischer Bedingungen, ist in der [Parser-Dokumentation](PARSER.md) beschrieben.
 
-### 7.1 Grundprinzip
+### 8.1 Grundprinzip
 
 Der Rechnerkern verwendet einen rekursiven Parser (Recursive-Descent-Parser). Die Grammatik wird durch mehrere Parse-Funktionen abgebildet, die jeweils eine Ebene der Operatorpräzedenz behandeln.
 
 Der Parser liest den Ausdruck von links nach rechts. Er überspringt Leerzeichen, erkennt Zahlen und Funktionsnamen, verarbeitet Klammern und prüft am Ende, ob der gesamte Ausdruck verbraucht wurde. Unerwartete Restzeichen führen zu einem Syntaxfehler.
 
-### 7.2 Operatoren und Funktionen
+### 8.2 Operatoren und Funktionen
 
 Der implementierte Funktionsumfang umfasst unter anderem:
 
@@ -157,7 +157,7 @@ Der implementierte Funktionsumfang umfasst unter anderem:
 
 Die genaue Schreibweise im Ausdruck ist die interne Parsernotation. Die Oberfläche kann dafür mathematisch gestaltete Symbole anzeigen.
 
-### 7.3 Präzedenz und Assoziativität
+### 8.3 Präzedenz und Assoziativität
 
 Die Aufteilung in Parse-Funktionen legt fest, in welcher Reihenfolge Operationen ausgeführt werden. Insbesondere gelten folgende Regeln:
 
@@ -168,7 +168,7 @@ Die Aufteilung in Parse-Funktionen legt fest, in welcher Reihenfolge Operationen
 - Fakultät und Doppelfakultät sind Postfix-Operatoren und werden nach ihrem Operanden ausgewertet.
 - Klammern erlauben die explizite Gruppierung von Teilausdrücken.
 
-### 7.4 Fakultät und Doppelfakultät
+### 8.4 Fakultät und Doppelfakultät
 
 Die Fakultät wird durch ein einzelnes Ausrufezeichen dargestellt:
 
@@ -181,7 +181,7 @@ Die Doppelfakultät verwendet zwei unmittelbar aufeinanderfolgende Ausrufezeiche
 
 Die beiden Operatoren sind syntaktisch getrennt. Der Parser erkennt nach dem ersten `!`, ob direkt ein zweites `!` folgt. Die Doppelfakultät ist daher nicht mit einer zweimaligen Anwendung der Fakultät zu verwechseln.
 
-### 7.5 Inverse Fakultät
+### 8.5 Inverse Fakultät
 
 Die inverse Fakultätsfunktion ist eine Bedienfunktion der INV-Tastenbelegung. Sie sucht zu einer positiven ganzen Zahl die größte Fakultät, die nicht größer als die Eingabe ist, und ergänzt gegebenenfalls den verbleibenden Rest.
 
@@ -195,7 +195,7 @@ Beispiele:
 
 Ein Rest von null wird nicht angezeigt. Die inverse Fakultät ist von der mathematischen Doppelfakultät zu unterscheiden: Sie ist eine Zerlegung einer Zahl in Fakultätswert plus Rest und kein weiterer Postfix-Operator.
 
-### 7.6 Winkelmodus und inverse Funktionen
+### 8.6 Winkelmodus und inverse Funktionen
 
 Trigonometrische Funktionen verwenden standardmäßig Grad. Über den Winkelmodus kann auf Radiant umgeschaltet werden. Der Modus wird vom Hauptfenster an den Rechnerkern übergeben.
 
@@ -262,23 +262,23 @@ Die GUI-Tests werden auf Desktop-Systemen mit Qt Test ausgeführt. Die Tests sol
 
 ## 13. Wesentliche Entwurfsentscheidungen
 
-### 12.1 Ausdruck statt unmittelbarer Einzeloperation
+### 13.1 Ausdruck statt unmittelbarer Einzeloperation
 
 Die Eingabe wird als vollständiger Ausdruck behandelt. Das ermöglicht Klammern, verschachtelte Funktionen und eine einheitliche Operatorpräzedenz. Die GUI muss dadurch nicht selbst die Reihenfolge der Rechenoperationen implementieren.
 
-### 12.2 Qt-Oberfläche und Berechnung getrennt halten
+### 13.2 Qt-Oberfläche und Berechnung getrennt halten
 
 Der Rechnerkern soll unabhängig von Widgets bleiben. Das vereinfacht mathematische Tests und hält die Berechnungslogik unabhängig von der konkreten Plattformdarstellung.
 
-### 12.3 Oberfläche deklarativ gestalten
+### 13.3 Oberfläche deklarativ gestalten
 
 Die Verwendung von Qt Designer hält die Anordnung der Oberfläche bearbeitbar. Spezialisierte Widgets wie `AllgaeuButton` ergänzen die Standard-Widgets nur dort, wo das Verhalten es erfordert.
 
-### 12.4 Alternative Tastenfunktionen
+### 13.4 Alternative Tastenfunktionen
 
 Die INV-Funktion nutzt einen alternativen Zustand der jeweiligen Taste. Damit bleibt die Bedienoberfläche kompakt und die Zuordnung von Grund- und Zusatzfunktion sichtbar.
 
-### 12.5 Grenzen explizit prüfen
+### 13.5 Grenzen explizit prüfen
 
 Der Parser prüft ungültige mathematische Eingaben, numerische Überläufe und zu tiefe Verschachtelung. Damit werden Fehler möglichst früh erkannt und nicht als scheinbar gültige Ergebnisse dargestellt.
 
