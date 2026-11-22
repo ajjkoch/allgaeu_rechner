@@ -99,7 +99,7 @@ Der Rechnerkern hält den Winkelmodus und den Zustand der inversen Prozentrechnu
 
 Die Implementierung liegt derzeit in einer Header-Datei. Eine spätere Aufteilung in eigene Header- und Quelldateien wäre möglich, ist aber keine Voraussetzung für das bestehende Schnittstellendesign.
 
-## 5. Komponentenübersicht (PlantUML)
+## 5. Komponentenübersicht
 
 Das folgende Diagramm zeigt die wesentlichen Abhängigkeiten der Anwendung. Die Pfeile bezeichnen die Nutzung bzw. Abhängigkeit einer Komponente.
 
@@ -107,7 +107,15 @@ Das folgende Diagramm zeigt die wesentlichen Abhängigkeiten der Anwendung. Die 
 
 *PlantUML-Quelldatei: [components.puml](diagrams/components.puml)*
 
-## 6. Ablauf einer Berechnung
+## 6. Klassendiagramm
+
+Das Klassendiagramm zeigt die zentralen Klassen und ihre Beziehungen. Der Parser ist als private, innerhalb von `Calculator` definierte Klasse implementiert. `MainWindow` hält eine Instanz des Rechners und nutzt die Qt-Designer-Oberfläche. `AllgaeuButton` erweitert `QPushButton`.
+
+![Klassendiagramm des AllgäuRechners](diagrams/class-diagram.svg)
+
+*PlantUML-Quelldatei: [class-diagram.puml](diagrams/class-diagram.puml)*
+
+## 7. Ablauf einer Berechnung
 
 Ein Ausdruck wird zunächst in der Anzeige aufgebaut. Die Eingabe kann von den Bildschirmtasten oder über die Tastatur stammen. Beim Auslösen der Berechnung liest das Hauptfenster den vollständigen Text aus dem Anzeige-Editor und übergibt ihn an den Rechnerkern.
 
@@ -117,7 +125,9 @@ Der Parser verarbeitet den Ausdruck und liefert entweder einen numerischen Wert 
 
 *PlantUML-Quelldatei: [calculation-flow.puml](diagrams/calculation-flow.puml)*
 
-## 7. Mathematischer Parser
+## 8. Mathematischer Parser
+
+Die vollständige formale Grammatik in BNF, einschließlich Operatorpräzedenz, Assoziativität und semantischer Bedingungen, ist in der [Parser-Dokumentation](PARSER.md) beschrieben.
 
 ### 7.1 Grundprinzip
 
@@ -191,7 +201,7 @@ Trigonometrische Funktionen verwenden standardmäßig Grad. Über den Winkelmodu
 
 Die INV-Taste schaltet alternative Funktionen frei, beispielsweise Arkussinus statt Sinus. Der INV-Zustand ist ein Bedienzustand; die eigentliche Berechnung wird weiterhin durch den Rechnerkern ausgeführt.
 
-## 8. Zustands- und Eingabeverwaltung
+## 9. Zustands- und Eingabeverwaltung
 
 Das Hauptfenster hält den Zustand der Interaktion. Dazu gehören:
 
@@ -209,7 +219,7 @@ Die Nachkommastelleneinstellung wird über `QSettings` gespeichert. Der zulässi
 
 Die Ergebnisformatierung entfernt überflüssige abschließende Nullen. Für sehr große Werte wird eine wissenschaftliche Schreibweise verwendet.
 
-## 9. Fehlerbehandlung und numerische Grenzen
+## 10. Fehlerbehandlung und numerische Grenzen
 
 Der Parser unterscheidet Syntaxfehler und mathematisch nicht definierte Operationen. Beispiele sind:
 
@@ -225,7 +235,7 @@ Fehler werden über C++-Ausnahmen an die GUI weitergegeben. Das Hauptfenster fä
 
 Die Berechnung basiert auf Gleitkommaarithmetik. Daher sind Rundungsabweichungen bei bestimmten Dezimalwerten möglich. Die Anzahl der angezeigten Nachkommastellen ist nicht mit der internen Rechengenauigkeit gleichzusetzen.
 
-## 10. Build und Plattformen
+## 11. Build und Plattformen
 
 Das Projekt verwendet CMake und Qt 6. Die CMake-Konfiguration aktiviert die Qt-Automatisierung für MOC, UIC und RCC. Dadurch werden Qt-Metadaten, die Designer-Oberfläche und Ressourcen während des Builds verarbeitet.
 
@@ -233,7 +243,7 @@ Für Android werden die Paketinformationen und SDK-Zielwerte über die CMake-Kon
 
 Die GitHub-Actions-Workflows übernehmen Build, Tests und den Android-Paketierungsprozess. Versionsinformationen werden aus der Datei `VERSION` gelesen.
 
-## 11. Qualitätssicherung und Tests
+## 12. Qualitätssicherung und Tests
 
 Die Tests prüfen sowohl mathematisches Verhalten als auch die Interaktion der GUI. Zu den relevanten Testbereichen gehören:
 
@@ -250,7 +260,7 @@ Die Tests prüfen sowohl mathematisches Verhalten als auch die Interaktion der G
 
 Die GUI-Tests werden auf Desktop-Systemen mit Qt Test ausgeführt. Die Tests sollten bei Änderungen am Parser und an der Tastenbelegung gemeinsam betrachtet werden: Eine korrekte mathematische Funktion allein garantiert noch nicht, dass die entsprechende Taste den richtigen Ausdruck erzeugt.
 
-## 12. Wesentliche Entwurfsentscheidungen
+## 13. Wesentliche Entwurfsentscheidungen
 
 ### 12.1 Ausdruck statt unmittelbarer Einzeloperation
 
@@ -272,7 +282,7 @@ Die INV-Funktion nutzt einen alternativen Zustand der jeweiligen Taste. Damit bl
 
 Der Parser prüft ungültige mathematische Eingaben, numerische Überläufe und zu tiefe Verschachtelung. Damit werden Fehler möglichst früh erkannt und nicht als scheinbar gültige Ergebnisse dargestellt.
 
-## 13. Mögliche Weiterentwicklung
+## 14. Mögliche Weiterentwicklung
 
 Die folgenden Punkte sind Ansatzpunkte für spätere Architekturarbeit und keine Behauptung über bereits implementierte Funktionen:
 
@@ -283,7 +293,7 @@ Die folgenden Punkte sind Ansatzpunkte für spätere Architekturarbeit und keine
 - Numerische Datentypen und Genauigkeitsgrenzen für wissenschaftliche Anwendungsfälle weiter untersuchen.
 - Barrierefreiheit, Tastaturnavigation und Internationalisierung systematisch prüfen.
 
-## 14. Verzeichnis- und Dateiorientierung
+## 15. Verzeichnis- und Dateiorientierung
 
 | Pfad | Verantwortung |
 | --- | --- |
