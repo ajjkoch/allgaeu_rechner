@@ -65,6 +65,10 @@ freue ich mich über einen freiwilligen Beitrag. Jeder Beitrag zählt. Vielen Da
 
 - GitHub Actions
 
+## Documentation
+
+The German user manual is available in [docs/BEDIENUNGSANLEITUNG.md](docs/BEDIENUNGSANLEITUNG.md).
+
 ## Build and Testing
 
 See `instructor/Calculator_cmake/TESTING.md` for build and testing instructions.
