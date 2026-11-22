@@ -1,0 +1,36 @@
+@startuml
+title AllgäuRechner – Komponentenübersicht
+skinparam componentStyle rectangle
+skinparam shadowing false
+package "Anwendung" {
+  [main.cpp] as Entry
+  [MainWindow] as GUI
+  [mainwindow.ui] as UI
+  [AlpineTheme] as Theme
+  [AllgaeuButton] as Button
+  [alpine_resources.qrc] as Resources
+}
+package "Berechnung" {
+  [Calculator] as Core
+  [Parser] as Parser
+}
+package "Plattform / Build" {
+  [Qt 6 Widgets] as Qt
+  [CMake] as Build
+  [Qt Test] as Tests
+}
+Entry --> Qt : startet
+Entry --> GUI : erzeugt
+GUI --> UI : setupUi()
+GUI --> Core : evaluate()
+GUI --> Theme : verwendet
+GUI --> Button : verwendet
+GUI --> Resources : Ressourcen
+Core --> Parser : delegiert
+GUI --> Qt : Fenster / Events
+UI ..> Qt : Widget-Definition
+Build ..> GUI : kompiliert
+Build ..> Core : bindet ein
+Tests ..> GUI : GUI-Tests
+Tests ..> Core : Rechenverhalten
+@enduml
