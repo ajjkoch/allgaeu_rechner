@@ -95,7 +95,7 @@ Die Zahlenerkennung erfolgt mit `std::strtod`. Damit werden Dezimalzahlen einsch
                      | <digits> <digit>
 
 <digit>            ::= "0" | "1" | "2" | "3" | "4"
-                     | "5" | "6" | "7" | "8" | "9>
+                     | "5" | "6" | "7" | "8" | "9"
 ```
 
 Leerraum (Whitespace) wird an den Stellen übersprungen, an denen der Parser ein Zeichen oder Schlüsselwort konsumiert. Eine Besonderheit ist die Kurzschreibweise für die Kreiszahl: Eine Zahl kann direkt und ohne Zwischenraum mit `pi` verbunden werden, beispielsweise `2pi`. Eine allgemeine implizite Multiplikation – etwa `2(3+4)` oder `2sin(30)` – ist nicht implementiert.
