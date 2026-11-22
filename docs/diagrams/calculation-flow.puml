@@ -1,0 +1,26 @@
+@startuml
+title AllgäuRechner – Ablauf einer Berechnung
+actor Benutzer
+participant "MainWindow" as GUI
+participant "Anzeige\n(QTextEdit)" as Display
+participant "Calculator" as Core
+participant "Parser" as Parser
+Benutzer -> GUI : Ziffern / Operatoren eingeben
+GUI -> Display : Ausdruck aktualisieren
+Benutzer -> GUI : "="
+GUI -> Display : Ausdruck auslesen
+Display --> GUI : Ausdruck als Text
+GUI -> Core : evaluate(Ausdruck)
+Core -> Parser : parse und auswerten
+alt Ausdruck gültig
+  Parser --> Core : numerisches Ergebnis
+  Core --> GUI : Ergebnis
+  GUI -> GUI : Ergebnis formatieren
+  GUI -> Display : Ergebnis anzeigen
+else Syntax- oder Rechenfehler
+  Parser --> Core : Exception
+  Core --> GUI : Exception weiterreichen
+  GUI -> GUI : Fehlerzustand setzen
+  GUI -> Display : Fehlermeldung anzeigen
+end
+@enduml
