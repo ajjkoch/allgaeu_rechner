@@ -11,7 +11,71 @@ Dieses Dokument beschreibt die mathematische Ausdruckssprache, die der Parser de
 
 Die Grammatik beschreibt die syntaktische Struktur. Zusätzliche mathematische Bedingungen – etwa dass eine Fakultät nur für nichtnegative ganze Zahlen definiert ist – werden bei der Auswertung geprüft und sind deshalb nicht vollständig durch BNF ausdrückbar.
 
-## 2. Notation
+## 2. Die Ausdruckssprache – unabhängig von der Bedienoberfläche
+
+Im Mittelpunkt steht nicht die Bedienung einzelner Rechnertasten, sondern das Schreiben und Auswerten eines **mathematischen Ausdrucks (expression)**. Ein Ausdruck ist eine Zeichenfolge, die Zahlen, Konstanten, Operatoren, Funktionen und Klammern kombiniert und als Ganzes einen Zahlenwert ergibt.
+
+Beispiel:
+
+```text
+sqrt(25) mod 7 * pi
+```
+
+Die Auswertung folgt den Regeln der Operatorpräzedenz. `sqrt(25)` ergibt zunächst 5. Danach wird `5 mod 7` berechnet; das Ergebnis wird anschließend mit `pi` multipliziert. Der Ausdruck ergibt also (5\pi\), ungefähr 15,707963.
+
+Ein Ausdruck kann damit unabhängig davon formuliert werden, ob er über die Bildschirmtasten des AllgäuRechners, über eine Tastatur oder aus einer anderen Anwendung kommt. Der Parser erhält lediglich eine Zeichenfolge und wertet sie aus.
+
+### 2.1 Was gehört zur Syntax?
+
+Die Syntax legt fest, **wie** ein Ausdruck geschrieben werden muss:
+
+- Zahlen werden als Dezimalzahlen geschrieben, zum Beispiel `25`, `3.14` oder `.5`.
+- Binäre Operatoren verbinden zwei Teilausdrücke, zum Beispiel `3 * 4` oder `10 mod 3`.
+- Funktionen werden mit ihrem Namen und einem Argument in runden Klammern geschrieben, zum Beispiel `sqrt(25)` oder `sin(30)`.
+- Klammern gruppieren Teilausdrücke, zum Beispiel `sqrt((3 + 2) * 5)`.
+- Konstanten werden als `pi` und `e` geschrieben.
+- Leerzeichen dürfen zur besseren Lesbarkeit verwendet werden.
+
+Ein Ausdruck ist nicht dasselbe wie ein mathematischer Textabsatz oder ein kleines Programm. Die aktuelle Grammatik kennt beispielsweise keine Variablen, Zuweisungen, Kommentare, Funktionsdefinitionen oder mehrere durch Zeilenumbrüche getrennte Anweisungen.
+
+### 2.2 Zusammengesetzte Ausdrücke
+
+Die folgenden Beispiele zeigen typische Schreibweisen:
+
+| Ausdruck | Bedeutung |
+| --- | --- |
+| `sqrt(25) mod 7 * pi` | Rest der Division von 5 durch 7, anschließend mal π |
+| `(12 + 8) / 4` | Klammerausdruck vor der Division |
+| `sin(30) + cos(60)` | Summe zweier trigonometrischer Funktionswerte |
+| `2^3^2` | Potenzierung von rechts nach links |
+| `5! + 3!!` | Summe aus Fakultät und Doppelfakultät |
+| `10 nCr 3` | Binomialkoeffizient „10 über 3“ |
+| `27 root 3` | dritte Wurzel aus 27 |
+| `2pi + e` | erlaubte Kurzschreibweise für 2 · π plus e |
+
+Die Operatoren `mod`, `nCr` und `root` werden wie andere binäre Operatoren zwischen ihre Operanden geschrieben. Die Funktionsschreibweise ist dagegen ein Präfix mit Klammerargument: erst der Funktionsname, dann die öffnende Klammer, der Ausdruck und die schließende Klammer.
+
+### 2.3 Syntax und mathematische Bedeutung sind zwei Ebenen
+
+Die Syntax beantwortet, ob eine Zeichenfolge strukturell ein gültiger Ausdruck ist. Die semantische Prüfung beantwortet, ob die damit verlangte Rechnung mathematisch ausgeführt werden kann.
+
+Beispielsweise ist `5.5!` in der Form eines Ausdrucks mit Postfix-Fakultät geschrieben. Die Auswertung lehnt ihn dennoch ab, weil die Fakultät nur für nichtnegative ganze Zahlen unterstützt wird. Ebenso ist `1 / 0` syntaktisch ein korrekt aufgebauter Ausdruck, aber mathematisch nicht definiert.
+
+### 2.4 Unabhängigkeit vom AllgäuRechner
+
+Der eigentliche Parser ist in `common/Util.h` als C++-Klasse `Calculator` implementiert. Diese Datei verwendet Standard-C++-Bibliotheken und ist nicht von Qt, Widgets oder der grafischen Oberfläche abhängig. Die Grammatik kann deshalb grundsätzlich auch in einem anderen C++-Programm verwendet werden, das diese Klasse einbindet.
+
+Die **Ausdruckssyntax ist weitgehend eine eigenständige mathematische Sprache**. Einige Auswertungsdetails sind allerdings konfigurierbar bzw. durch den Rechner geprägt:
+
+- Trigonometrische Funktionen verwenden je nach Einstellung Grad oder Radiant.
+- Der INV-Zustand verändert die Bedeutung des Prozentoperators.
+- Die Funktions- und Operatornamen entsprechen dem derzeitigen Funktionsumfang dieses Parsers.
+
+Der Parser selbst enthält keine Dateiverarbeitung. Ein anderes Programm könnte aber beispielsweise eine Textdatei zeilenweise einlesen und jede nichtleere Zeile als einzelnen Ausdruck an `Calculator::evaluate()` übergeben. Damit ließen sich Rechenlisten oder einfache Ausdruckssammlungen aus Textdateien auswerten, ohne die Qt-Oberfläche zu verwenden.
+
+Dafür müsste die aufrufende Anwendung die Datei öffnen, Zeilen trennen, Kommentare oder Leerzeilen – falls gewünscht – selbst behandeln und die Ergebnisse ausgeben. Die aktuelle Grammatik definiert weder ein Dateiformat noch eine Sprache mit Variablen oder mehreren Anweisungen. Eine solche dateibasierte Auswertung wäre also eine Nutzung des vorhandenen Ausdrucksparsers durch ein separates Programm und noch keine eingebaute Funktion des AllgäuRechners.
+
+## 3. Notation
 
 Die Grammatik verwendet eine lesbare BNF-Notation:
 
